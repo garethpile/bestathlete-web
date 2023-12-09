@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Auth, API, graphqlOperation } from "aws-amplify";
 
-import { createCustomer360DSL, getCustomerByID } from "../Apollo/queries";
+import { customersByIdCustomer } from "../graphql/queries";
+import { createCustomer } from "../graphql/mutations";
+
 import axios from "axios";
 
 import Header from "../Components/Header";
@@ -44,6 +46,7 @@ const LandingPage = () => {
   });
 
   const [customerId, setCustomerId] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const [redirect, setRedirect] = useState(false);
   const [stravaInfo, setStravaInfo] = useState("");
@@ -58,22 +61,52 @@ const LandingPage = () => {
       const userName = authenticatedUser.username;
       // Attempt to get 360DSL Customer .....
       const customerData = await API.graphql(
-        graphqlOperation(getCustomerByID, { id: userName })
+        graphqlOperation(customersByIdCustomer, { idCustomer: userName })
       );
       // If the 360 Customer does not exist ....
-      if (!customerData.data.getCUSTOMER360DSL) {
-       //  console.log( "Customer does not exist .... Lets' create new customer ...." );
+      if (!customerData.data.customersByIdCustomer) {
+        console.log("Customer does not exist .... Lets' create new customer ....");
 
         const newCustomer = await API.graphql(
-          graphqlOperation(createCustomer360DSL, {
-            id: userName,
+          graphqlOperation(createCustomer, {
+            idCustomer: userName,
             EmailAddress: userEmail,
             MobileNumber: "+27821234567",
-            Male: true,
+            Gender: "_",
             FirstName: "-",
             LastName: "-",
             Country: "South Africa",
             DateOfBirth: "1901-01-01",
+            TrainingDays: {
+              SaturdayTrain: true,
+              SaturdayTrainHours: 1,
+              SundayTrain: true,
+              SundayTrainHours: 1,
+              MondayTrain: true,
+              MondayTrainHours: 1,
+              TuesdayTrain: true,
+              TuesdayTrainHours: 1,
+              WednesdayTrain: true,
+              WednesdayTrainHours: 1,
+              ThursdayTrain: true,
+              ThursdayTrainHours: 1,
+              FridayTrain: true,
+              FridayTrainHours: 1
+            }
+          })
+        );
+
+        setCustomerEntity({
+          ...customerEntity,
+          idCustomer: userName,
+          EmailAddress: userEmail,
+          MobileNumber: "+27821234567",
+          Male: "-",
+          FirstName: "-",
+          LastName: "-",
+          Country: "South Africa",
+          DateOfBirth: "1901-01-01",
+          TrainingDays: {
             SaturdayTrain: true,
             SaturdayTrainHours: 1,
             SundayTrain: true,
@@ -88,88 +121,68 @@ const LandingPage = () => {
             ThursdayTrainHours: 1,
             FridayTrain: true,
             FridayTrainHours: 1,
-          })
-        );
-
-        setCustomerEntity({
-          ...customerEntity,
-          id: userName,
-          EmailAddress: userEmail,
-          MobileNumber: "+27821234567",
-          Male: true,
-          FirstName: "-",
-          LastName: "-",
-          Country: "South Africa",
-          DateOfBirth: "1901-01-01",
-          SaturdayTrain: true,
-          SaturdayTrainHours: 1,
-          SundayTrain: true,
-          SundayTrainHours: 1,
-          MondayTrain: true,
-          MondayTrainHours: 1,
-          TuesdayTrain: true,
-          TuesdayTrainHours: 1,
-          WednesdayTrain: true,
-          WednesdayTrainHours: 1,
-          ThursdayTrain: true,
-          ThursdayTrainHours: 1,
-          FridayTrain: true,
-          FridayTrainHours: 1,
-          _version: 1,
+            _version: 1
+          }
         });
-       // console.log( "Newly created customer copied into customerEntity: ",customerEntity);
+        // console.log( "Newly created customer copied into customerEntity: ",customerEntity);
         setRedirect(true);
+        setIsLoading(false);
       } else {
         // Else Customer exists ....
-       // console.log("Customer exsists ....");
-         console.log( "Customer Data returned: ", customerData.data.getCUSTOMER360DSL );
+        console.log("<LandingPage>: Customer exsists ....");
+        console.log("<LandingPage>: Customer Data returned: ", customerData.data.customersByIdCustomer.items[0]);
+        const customerDataEntity = customerData.data.customersByIdCustomer.items[0];
         setCustomerEntity({
           ...customerEntity,
-          id: userName,
-          EmailAddress: customerData.data.getCUSTOMER360DSL.EmailAddress,
-          MobileNumber: customerData.data.getCUSTOMER360DSL.MobileNumber,
-          Male: customerData.data.getCUSTOMER360DSL.Male,
-          FirstName: customerData.data.getCUSTOMER360DSL.FirstName,
-          LastName: customerData.data.getCUSTOMER360DSL.LastName,
-          Country: customerData.data.getCUSTOMER360DSL.Country,
-          DateOfBirth: customerData.data.getCUSTOMER360DSL.DateOfBirth,
-          SaturdayTrain:
-            customerData.data.getCUSTOMER360DSL.TrainingDays.SaturdayTrain,
-          SaturdayTrainHours:
-            customerData.data.getCUSTOMER360DSL.TrainingDays.SaturdayTrainHours,
-          SundayTrain:
-            customerData.data.getCUSTOMER360DSL.TrainingDays.SundayTrain,
-          SundayTrainHours:
-            customerData.data.getCUSTOMER360DSL.TrainingDays.SundayTrainHours,
-          MondayTrain:
-            customerData.data.getCUSTOMER360DSL.TrainingDays.MondayTrain,
-          MondayTrainHours:
-            customerData.data.getCUSTOMER360DSL.TrainingDays.MondayTrainHours,
-          TuesdayTrain:
-            customerData.data.getCUSTOMER360DSL.TrainingDays.TuesdayTrain,
-          TuesdayTrainHours:
-            customerData.data.getCUSTOMER360DSL.TrainingDays.TuesdayTrainHours,
-          WednesdayTrain:
-            customerData.data.getCUSTOMER360DSL.TrainingDays.WednesdayTrain,
-          WednesdayTrainHours:
-            customerData.data.getCUSTOMER360DSL.TrainingDays
-              .WednesdayTrainHours,
-          ThursdayTrain:
-            customerData.data.getCUSTOMER360DSL.TrainingDays.ThursdayTrain,
-          ThursdayTrainHours:
-            customerData.data.getCUSTOMER360DSL.TrainingDays.ThursdayTrainHours,
-          FridayTrain:
-            customerData.data.getCUSTOMER360DSL.TrainingDays.FridayTrain,
-          FridayTrainHours:
-            customerData.data.getCUSTOMER360DSL.TrainingDays.FridayTrainHours,
-          _version: customerData.data.getCUSTOMER360DSL._version,
+          idCustomer: userName,
+          EmailAddress: customerDataEntity.hasOwnProperty('EmailAddress') ? customerDataEntity.EmailAddress : '',
+          MobileNumber: customerDataEntity.hasOwnProperty('MobileNumber') ? customerDataEntity.MobileNumber : '',
+          Gender: customerDataEntity.hasOwnProperty('Gender') ? customerDataEntity.Gender : '',
+          FirstName: customerDataEntity.hasOwnProperty('FirstName') ? customerDataEntity.FirstName : '',
+          LastName: customerDataEntity.hasOwnProperty('LastName') ? customerDataEntity.LastName : '',
+          Country: customerDataEntity.hasOwnProperty('Country') ? customerDataEntity.Country : 'South Africa',
+          DateOfBirth: customerDataEntity.hasOwnProperty('DateOfBirth') ? customerDataEntity.DateOfBirth : '1901-01-01',
+          TrainingDays: {
+
+            SaturdayTrain:
+              customerDataEntity.hasOwnProperty('TrainingDays.SaturdayTrain') ? customerDataEntity.TrainingDays.SaturdayTrain : true,
+
+            SaturdayTrainHours:
+              customerDataEntity.hasOwnProperty('TrainingDays.SaturdayTrainHours') ? customerDataEntity.TrainingDays.SaturdayTrainHours : 1,
+            SundayTrain:
+              customerDataEntity.hasOwnProperty('TrainingDays.SundayTrain') ? customerDataEntity.TrainingDays.SundayTrain : true,
+            SundayTrainHours:
+              customerDataEntity.hasOwnProperty('TrainingDays.SundayTrainHours') ? customerDataEntity.TrainingDays.SundayTrainHours : 1,
+            MondayTrain:
+              customerDataEntity.hasOwnProperty('TrainingDays.MondayTrain') ? customerDataEntity.TrainingDays.MondayTrain : true,
+            MondayTrainHours:
+              customerDataEntity.hasOwnProperty('TrainingDays.MondayTrainHours') ? customerDataEntity.TrainingDays.MondayTrainHours : 1,
+            TuesdayTrain:
+              customerDataEntity.hasOwnProperty('TrainingDays.TuesdayTrain') ? customerDataEntity.TrainingDays.TuesdayTrain : true,
+            TuesdayTrainHours:
+              customerDataEntity.hasOwnProperty('TrainingDays.TuesdayTrainHours') ? customerDataEntity.TrainingDays.TuesdayTrainHours : 1,
+            WednesdayTrain:
+              customerDataEntity.hasOwnProperty('TrainingDays.WednesdayTrain') ? customerDataEntity.TrainingDays.WednesdayTrain : true,
+            WednesdayTrainHours:
+              customerDataEntity.hasOwnProperty('TrainingDays.WednesdayTrainHours') ? customerDataEntity.TrainingDays.WednesdayTrainHours : 1,
+            ThursdayTrain:
+              customerDataEntity.hasOwnProperty('TrainingDays.ThursdayTrain') ? customerDataEntity.TrainingDays.ThursdayTrain : true,
+            ThursdayTrainHours:
+              customerDataEntity.hasOwnProperty('TrainingDays.ThursdayTrainHours') ? customerDataEntity.TrainingDays.ThursdayTrainHours : 1,
+            FridayTrain:
+              customerDataEntity.hasOwnProperty('TrainingDays.FridayTrain') ? customerDataEntity.TrainingDays.FridayTrain : true,
+            FridayTrainHours:
+              customerDataEntity.hasOwnProperty('TrainingDays.FridayTrainHours') ? customerDataEntity.TrainingDays.FridayTrainHours : 1,
+            _version: customerDataEntity._version
+          }
         });
 
-        customerDataVersion = customerData.data.getCUSTOMER360DSL?._version;
+        customerDataVersion = customerDataEntity?._version;
         console.log("Customer version (Landing Page): ", customerDataVersion);
+        setIsLoading(false);
       }
     } catch (error) {
-      console.log("Error retrieving CUSTOMER360DSL entity: ", error);
+      console.log("Error retrieving customer entity: ", error);
       alert(
         `Apologies! There was a technical error. Please email info@360dsl.co.za`
       );
@@ -228,16 +241,20 @@ const LandingPage = () => {
   }, []);
   return (
     <BrowserRouter>
+
       <Header
         customerId={customerId}
         customerEntity={customerEntity}
         cognitoEntity={cognitoEntity}
       ></Header>
-      {redirect ? (
-        <Profile setRedirect={setRedirect} customerEntity={customerEntity} />
+
+      {/* If loading, display a loading message */}
+      {isLoading ? (
+        <div>Loading sleep data...</div>
       ) : (
+        // Render the Routes only when not loading
         <Routes>
-          <Route path="/Profile" element={<Profile />} />
+          <Route path="/Profile" element={<Profile setRedirect={setRedirect} customerEntity={customerEntity} />} />
           <Route
             path="/ThirdParty"
             element={<ThirdParty customerEntity={customerEntity} />}

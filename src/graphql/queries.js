@@ -1,700 +1,16 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getACTIVITIESGARMIN = /* GraphQL */ `
-  query GetACTIVITIESGARMIN($id: ID!) {
-    getACTIVITIESGARMIN(id: $id) {
+export const getCustomer = /* GraphQL */ `
+  query GetCustomer($id: ID!) {
+    getCustomer(id: $id) {
       id
-      UserId360DSL
-      GarminAccountId
-      GarminActivityId
-      GarminActivityDescription
-      GarminActivityType
-      GarminActivityStartTime
-      GarminActivityDistance
-      GarminActivityDuration
-      GarminAveragePaceInMinutesPerKilometer
-      GarminActiveKilocalories
-      GarminAverageHeartRateInBeatsPerMinute
-      GarminActivity
-      GarminActivityRPE
-      GarminActivityFatigue
-      GarminActivityAthleteFeedback
-      GarminActivityAthleteEffort
-      GarminActivityAthleteBody
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listACTIVITIESGARMINs = /* GraphQL */ `
-  query ListACTIVITIESGARMINs(
-    $filter: ModelACTIVITIESGARMINFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listACTIVITIESGARMINs(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        UserId360DSL
-        GarminAccountId
-        GarminActivityId
-        GarminActivityDescription
-        GarminActivityType
-        GarminActivityStartTime
-        GarminActivityDistance
-        GarminActivityDuration
-        GarminAveragePaceInMinutesPerKilometer
-        GarminActiveKilocalories
-        GarminAverageHeartRateInBeatsPerMinute
-        GarminActivity
-        GarminActivityRPE
-        GarminActivityFatigue
-        GarminActivityAthleteFeedback
-        GarminActivityAthleteEffort
-        GarminActivityAthleteBody
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const activitiesgarminByGarminAccountId = /* GraphQL */ `
-  query ActivitiesgarminByGarminAccountId(
-    $GarminAccountId: String
-    $sortDirection: ModelSortDirection
-    $filter: ModelACTIVITIESGARMINFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    activitiesgarminByGarminAccountId(
-      GarminAccountId: $GarminAccountId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        UserId360DSL
-        GarminAccountId
-        GarminActivityId
-        GarminActivityDescription
-        GarminActivityType
-        GarminActivityStartTime
-        GarminActivityDistance
-        GarminActivityDuration
-        GarminAveragePaceInMinutesPerKilometer
-        GarminActiveKilocalories
-        GarminAverageHeartRateInBeatsPerMinute
-        GarminActivity
-        GarminActivityRPE
-        GarminActivityFatigue
-        GarminActivityAthleteFeedback
-        GarminActivityAthleteEffort
-        GarminActivityAthleteBody
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const activitiesgarminByGarminActivityStartTime = /* GraphQL */ `
-  query ActivitiesgarminByGarminActivityStartTime(
-    $GarminActivityStartTime: Int
-    $sortDirection: ModelSortDirection
-    $filter: ModelACTIVITIESGARMINFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    activitiesgarminByGarminActivityStartTime(
-      GarminActivityStartTime: $GarminActivityStartTime
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        UserId360DSL
-        GarminAccountId
-        GarminActivityId
-        GarminActivityDescription
-        GarminActivityType
-        GarminActivityStartTime
-        GarminActivityDistance
-        GarminActivityDuration
-        GarminAveragePaceInMinutesPerKilometer
-        GarminActiveKilocalories
-        GarminAverageHeartRateInBeatsPerMinute
-        GarminActivity
-        GarminActivityRPE
-        GarminActivityFatigue
-        GarminActivityAthleteFeedback
-        GarminActivityAthleteEffort
-        GarminActivityAthleteBody
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const syncACTIVITIESGARMINS = /* GraphQL */ `
-  query SyncACTIVITIESGARMINS(
-    $filter: ModelACTIVITIESGARMINFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncACTIVITIESGARMINS(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        UserId360DSL
-        GarminAccountId
-        GarminActivityId
-        GarminActivityDescription
-        GarminActivityType
-        GarminActivityStartTime
-        GarminActivityDistance
-        GarminActivityDuration
-        GarminAveragePaceInMinutesPerKilometer
-        GarminActiveKilocalories
-        GarminAverageHeartRateInBeatsPerMinute
-        GarminActivity
-        GarminActivityRPE
-        GarminActivityFatigue
-        GarminActivityAthleteFeedback
-        GarminActivityAthleteEffort
-        GarminActivityAthleteBody
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const getCUSTOMER3RDPARTY = /* GraphQL */ `
-  query GetCUSTOMER3RDPARTY($id: ID!) {
-    getCUSTOMER3RDPARTY(id: $id) {
-      id
-      Application
-      ApplicationSync
-      ApplicationRefreshToken
-      ApplicationTokenExpiryDate
-      ApplicationAccessToken
-      customer360dslID
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listCUSTOMER3RDPARTYs = /* GraphQL */ `
-  query ListCUSTOMER3RDPARTYs(
-    $filter: ModelCUSTOMER3RDPARTYFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listCUSTOMER3RDPARTYs(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        Application
-        ApplicationSync
-        ApplicationRefreshToken
-        ApplicationTokenExpiryDate
-        ApplicationAccessToken
-        customer360dslID
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const syncCUSTOMER3RDPARTIES = /* GraphQL */ `
-  query SyncCUSTOMER3RDPARTIES(
-    $filter: ModelCUSTOMER3RDPARTYFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncCUSTOMER3RDPARTIES(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        Application
-        ApplicationSync
-        ApplicationRefreshToken
-        ApplicationTokenExpiryDate
-        ApplicationAccessToken
-        customer360dslID
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const getACTIVITIESTP = /* GraphQL */ `
-  query GetACTIVITIESTP($id: ID!) {
-    getACTIVITIESTP(id: $id) {
-      id
-      UserId360DSL
-      TPActivityId
-      TPActivityOwnerId
-      TPActivityDescription
-      TPActivityType
-      TPActivityDate
-      TPActivityMovingTime
-      TPActivityDistance
-      TPActivityAverageHeartRate
-      TPActivityTSS
-      TPActivityCalories
-      TPActivityElevationGain
-      TPActivityAverageSpeed
-      TPActivityAverageCadence
-      TPActivityAverageTemp
-      TPActivityLocation
-      TPActivity
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ACTIVITIES360DSL {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const listACTIVITIESTPs = /* GraphQL */ `
-  query ListACTIVITIESTPs(
-    $filter: ModelACTIVITIESTPFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listACTIVITIESTPs(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        UserId360DSL
-        TPActivityId
-        TPActivityOwnerId
-        TPActivityDescription
-        TPActivityType
-        TPActivityDate
-        TPActivityMovingTime
-        TPActivityDistance
-        TPActivityAverageHeartRate
-        TPActivityTSS
-        TPActivityCalories
-        TPActivityElevationGain
-        TPActivityAverageSpeed
-        TPActivityAverageCadence
-        TPActivityAverageTemp
-        TPActivityLocation
-        TPActivity
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const syncACTIVITIESTPS = /* GraphQL */ `
-  query SyncACTIVITIESTPS(
-    $filter: ModelACTIVITIESTPFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncACTIVITIESTPS(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        UserId360DSL
-        TPActivityId
-        TPActivityOwnerId
-        TPActivityDescription
-        TPActivityType
-        TPActivityDate
-        TPActivityMovingTime
-        TPActivityDistance
-        TPActivityAverageHeartRate
-        TPActivityTSS
-        TPActivityCalories
-        TPActivityElevationGain
-        TPActivityAverageSpeed
-        TPActivityAverageCadence
-        TPActivityAverageTemp
-        TPActivityLocation
-        TPActivity
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const getACTIVITIESSTRAVA = /* GraphQL */ `
-  query GetACTIVITIESSTRAVA($id: ID!) {
-    getACTIVITIESSTRAVA(id: $id) {
-      id
-      UserId360DSL
-      StravaActivityId
-      StravaActivityOwnerId
-      StravaActivityDescription
-      StravaActivityType
-      StravaActivityDate
-      StravaActivityMovingTime
-      StravaActivityDistance
-      StravaActivityAverageHeartRate
-      StravaActivitySufferScore
-      StravaActivityCalories
-      StravaActivityElevationGain
-      StravaActivityAverageSpeed
-      StravaActivityAverageCadence
-      StravaActivityAvergeTemp
-      StravaActivityLocation
-      StravaActivity
-      StravaActivityZones
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listACTIVITIESSTRAVAs = /* GraphQL */ `
-  query ListACTIVITIESSTRAVAs(
-    $filter: ModelACTIVITIESSTRAVAFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listACTIVITIESSTRAVAs(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        UserId360DSL
-        StravaActivityId
-        StravaActivityOwnerId
-        StravaActivityDescription
-        StravaActivityType
-        StravaActivityDate
-        StravaActivityMovingTime
-        StravaActivityDistance
-        StravaActivityAverageHeartRate
-        StravaActivitySufferScore
-        StravaActivityCalories
-        StravaActivityElevationGain
-        StravaActivityAverageSpeed
-        StravaActivityAverageCadence
-        StravaActivityAvergeTemp
-        StravaActivityLocation
-        StravaActivity
-        StravaActivityZones
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const syncACTIVITIESSTRAVAS = /* GraphQL */ `
-  query SyncACTIVITIESSTRAVAS(
-    $filter: ModelACTIVITIESSTRAVAFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncACTIVITIESSTRAVAS(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        UserId360DSL
-        StravaActivityId
-        StravaActivityOwnerId
-        StravaActivityDescription
-        StravaActivityType
-        StravaActivityDate
-        StravaActivityMovingTime
-        StravaActivityDistance
-        StravaActivityAverageHeartRate
-        StravaActivitySufferScore
-        StravaActivityCalories
-        StravaActivityElevationGain
-        StravaActivityAverageSpeed
-        StravaActivityAverageCadence
-        StravaActivityAvergeTemp
-        StravaActivityLocation
-        StravaActivity
-        StravaActivityZones
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const getACTIVITIES360DSL = /* GraphQL */ `
-  query GetACTIVITIES360DSL($id: ID!) {
-    getACTIVITIES360DSL(id: $id) {
-      id
-      UserId360DSL
-      ActivityDescription
-      ActivityType
-      ActivityDate
-      ActivityMovingTime
-      ActivityDistance
-      ActivityAverageHeartRate
-      ActivityStressScore
-      ActivityCalories
-      ActivityElevationGain
-      ActivityAverageSpeed
-      ActivityAverageCadence
-      ActivityAverageTemp
-      ActivityLocation
-      ActivityRPE
-      ActivityFatigueLevel
-      ActivityPhysicalLevel
-      ActivityStravaActivityId
-      ActivityStravaOwnerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ACTIVITIESSTRAVA {
-        id
-        UserId360DSL
-        StravaActivityId
-        StravaActivityOwnerId
-        StravaActivityDescription
-        StravaActivityType
-        StravaActivityDate
-        StravaActivityMovingTime
-        StravaActivityDistance
-        StravaActivityAverageHeartRate
-        StravaActivitySufferScore
-        StravaActivityCalories
-        StravaActivityElevationGain
-        StravaActivityAverageSpeed
-        StravaActivityAverageCadence
-        StravaActivityAvergeTemp
-        StravaActivityLocation
-        StravaActivity
-        StravaActivityZones
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      ACTIVITIES360DSLCUSTOMER360DSLS {
-        nextToken
-        startedAt
-      }
-    }
-  }
-`;
-export const listACTIVITIES360DSLs = /* GraphQL */ `
-  query ListACTIVITIES360DSLs(
-    $filter: ModelACTIVITIES360DSLFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listACTIVITIES360DSLs(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const syncACTIVITIES360DSLS = /* GraphQL */ `
-  query SyncACTIVITIES360DSLS(
-    $filter: ModelACTIVITIES360DSLFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncACTIVITIES360DSLS(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const getCUSTOMER360DSL = /* GraphQL */ `
-  query GetCUSTOMER360DSL($id: ID!) {
-    getCUSTOMER360DSL(id: $id) {
-      id
-      UserId360DSL
+      idCustomer
       LastName
       FirstName
       EmailAddress
       MobileNumber
-      Male
+      Gender
       DateOfBirth
       Country
       TrainingDays {
@@ -712,59 +28,53 @@ export const getCUSTOMER360DSL = /* GraphQL */ `
         SaturdayTrainHours
         SundayTrain
         SundayTrainHours
+        __typename
       }
       NonTrainingPeriod {
-        valid
-        startDate
-        endDate
+        NonTrainingPeriodId
+        StartDate
+        EndDate
+        Valid
+        __typename
       }
       ThirdPartyApplications {
-        application
-        applicationSync
-        applicationPartyId
-        applicationRequestOauthToken
-        applicationRequestOauthSecret
-        applicationUserOauthToken
-        applicationUserOauthSecret
-        applicationUserOauthRefreshToken
-        applicationUserOauthTokenExpiryDate
+        Application
+        ApplicationSync
+        ApplicationPartyId
+        ApplicationRequestOauthToken
+        ApplicationRequestOauthSecret
+        ApplicationUserOauthToken
+        ApplicationUserOauthSecret
+        ApplicationUserOauthRefreshToken
+        ApplicationUserOauthTokenExpiryDate
+        __typename
       }
       MetricsDateCapture
       MetricSick
       MetricInjury
       MetricSleep
       MetricWorkLifeBalance
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
-      CUSTOMER3RDPARTIES {
-        nextToken
-        startedAt
-      }
-      activities360dsls {
-        nextToken
-        startedAt
-      }
+      __typename
     }
   }
 `;
-export const listCUSTOMER360DSLs = /* GraphQL */ `
-  query ListCUSTOMER360DSLs(
-    $filter: ModelCUSTOMER360DSLFilterInput
+export const listCustomers = /* GraphQL */ `
+  query ListCustomers(
+    $filter: ModelCustomerFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listCUSTOMER360DSLs(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listCustomers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        UserId360DSL
+        idCustomer
         LastName
         FirstName
         EmailAddress
         MobileNumber
-        Male
+        Gender
         DateOfBirth
         Country
         MetricsDateCapture
@@ -772,26 +82,453 @@ export const listCUSTOMER360DSLs = /* GraphQL */ `
         MetricInjury
         MetricSleep
         MetricWorkLifeBalance
-        _version
-        _deleted
-        _lastChangedAt
         createdAt
         updatedAt
+        __typename
       }
       nextToken
-      startedAt
+      __typename
     }
   }
 `;
-export const customer360dslByEmail = /* GraphQL */ `
-  query Customer360dslByEmail(
-    $EmailAddress: AWSEmail
-    $sortDirection: ModelSortDirection
-    $filter: ModelCUSTOMER360DSLFilterInput
+export const getWorkout = /* GraphQL */ `
+  query GetWorkout($id: ID!) {
+    getWorkout(id: $id) {
+      id
+      idCustomer
+      WorkoutDescription
+      WorkoutType
+      WorkoutDateTime
+      WorkoutMovingTime
+      WorkoutDistance
+      WorkoutAverageHeartRate
+      WorkoutStressScore
+      WorkoutCalories
+      WorkoutElevationGain
+      WorkoutAverageSpeed
+      WorkoutAverageCadence
+      WorkoutAverageTemp
+      WorkoutLocation
+      WorkoutRPE
+      WorkoutPhysicalLevel
+      WorkoutWeatherLevel
+      WorkoutHydrationLevel
+      WorkoutCaloriesEatenPerHour
+      WorkoutAthleteFeedback
+      WorkoutStravaActivityId
+      WorkoutGarminActivityId
+      WorkoutTPWorkoutId
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listWorkouts = /* GraphQL */ `
+  query ListWorkouts(
+    $filter: ModelWorkoutFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    customer360dslByEmail(
+    listWorkouts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        idCustomer
+        WorkoutDescription
+        WorkoutType
+        WorkoutDateTime
+        WorkoutMovingTime
+        WorkoutDistance
+        WorkoutAverageHeartRate
+        WorkoutStressScore
+        WorkoutCalories
+        WorkoutElevationGain
+        WorkoutAverageSpeed
+        WorkoutAverageCadence
+        WorkoutAverageTemp
+        WorkoutLocation
+        WorkoutRPE
+        WorkoutPhysicalLevel
+        WorkoutWeatherLevel
+        WorkoutHydrationLevel
+        WorkoutCaloriesEatenPerHour
+        WorkoutAthleteFeedback
+        WorkoutStravaActivityId
+        WorkoutGarminActivityId
+        WorkoutTPWorkoutId
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getEvent = /* GraphQL */ `
+  query GetEvent($id: ID!) {
+    getEvent(id: $id) {
+      id
+      idCustomer
+      EventName
+      EventDate
+      EventType
+      EventSubType
+      EventDistance
+      EventPriority
+      EventDescription
+      EventGoalTime
+      EventGoalDistance
+      EventGoalPlace
+      EventGoalFinish
+      EventGoalPB
+      EventGoalOther
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listEvents = /* GraphQL */ `
+  query ListEvents(
+    $filter: ModelEventFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listEvents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        idCustomer
+        EventName
+        EventDate
+        EventType
+        EventSubType
+        EventDistance
+        EventPriority
+        EventDescription
+        EventGoalTime
+        EventGoalDistance
+        EventGoalPlace
+        EventGoalFinish
+        EventGoalPB
+        EventGoalOther
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getStravaActivities = /* GraphQL */ `
+  query GetStravaActivities($id: ID!) {
+    getStravaActivities(id: $id) {
+      id
+      StravaActivityId
+      StravaActivityOwnerId
+      StravaActivityDescription
+      StravaActivityType
+      StravaActivityDateTime
+      StravaActivityMovingTime
+      StravaActivityDistance
+      StravaActivityAverageHeartRate
+      StravaActivitySufferScore
+      StravaActivityCalories
+      StravaActivityElevationGain
+      StravaActivityAverageSpeed
+      StravaActivityAverageCadence
+      StravaActivityAvergeTemp
+      StravaActivityLocation
+      StravaActivity
+      StravaActivityZones
+      StravaActivityAthleteFeedback
+      StravaActivityRPE
+      StravaActivityFatigue
+      StravaActivityAthleteEffort
+      StravaActivityAthleteBody
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listStravaActivities = /* GraphQL */ `
+  query ListStravaActivities(
+    $filter: ModelStravaActivitiesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listStravaActivities(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        StravaActivityId
+        StravaActivityOwnerId
+        StravaActivityDescription
+        StravaActivityType
+        StravaActivityDateTime
+        StravaActivityMovingTime
+        StravaActivityDistance
+        StravaActivityAverageHeartRate
+        StravaActivitySufferScore
+        StravaActivityCalories
+        StravaActivityElevationGain
+        StravaActivityAverageSpeed
+        StravaActivityAverageCadence
+        StravaActivityAvergeTemp
+        StravaActivityLocation
+        StravaActivity
+        StravaActivityZones
+        StravaActivityAthleteFeedback
+        StravaActivityRPE
+        StravaActivityFatigue
+        StravaActivityAthleteEffort
+        StravaActivityAthleteBody
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getGarminActivities = /* GraphQL */ `
+  query GetGarminActivities($id: ID!) {
+    getGarminActivities(id: $id) {
+      id
+      GarminAccountId
+      GarminActivityId
+      GarminActivityDescription
+      GarminActivityType
+      GarminActivityStartTime
+      GarminActivityDistance
+      GarminActivityDuration
+      GarminAveragePaceInMinutesPerKilometer
+      GarminActiveKilocalories
+      GarminAverageHeartRateInBeatsPerMinute
+      GarminActivity
+      GarminActivityRPE
+      GarminActivityFatigue
+      GarminActivityAthleteFeedback
+      GarminActivityAthleteEffort
+      GarminActivityAthleteBody
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listGarminActivities = /* GraphQL */ `
+  query ListGarminActivities(
+    $filter: ModelGarminActivitiesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listGarminActivities(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        GarminAccountId
+        GarminActivityId
+        GarminActivityDescription
+        GarminActivityType
+        GarminActivityStartTime
+        GarminActivityDistance
+        GarminActivityDuration
+        GarminAveragePaceInMinutesPerKilometer
+        GarminActiveKilocalories
+        GarminAverageHeartRateInBeatsPerMinute
+        GarminActivity
+        GarminActivityRPE
+        GarminActivityFatigue
+        GarminActivityAthleteFeedback
+        GarminActivityAthleteEffort
+        GarminActivityAthleteBody
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getGarminMetrics = /* GraphQL */ `
+  query GetGarminMetrics($id: ID!) {
+    getGarminMetrics(id: $id) {
+      id
+      idCustomer
+      GarminAccountId
+      GarminUserAccessToken
+      GarminSummaryId
+      GarminMetricType
+      GarminMetricData
+      GarminMetricDate
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listGarminMetrics = /* GraphQL */ `
+  query ListGarminMetrics(
+    $filter: ModelGarminMetricsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listGarminMetrics(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        idCustomer
+        GarminAccountId
+        GarminUserAccessToken
+        GarminSummaryId
+        GarminMetricType
+        GarminMetricData
+        GarminMetricDate
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getNonTrainingDays = /* GraphQL */ `
+  query GetNonTrainingDays($id: ID!) {
+    getNonTrainingDays(id: $id) {
+      id
+      idCustomer
+      Valid
+      NonTrainingType
+      StartDate
+      EndDate
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listNonTrainingDays = /* GraphQL */ `
+  query ListNonTrainingDays(
+    $filter: ModelNonTrainingDaysFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listNonTrainingDays(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        idCustomer
+        Valid
+        NonTrainingType
+        StartDate
+        EndDate
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getMetric = /* GraphQL */ `
+  query GetMetric($id: ID!) {
+    getMetric(id: $id) {
+      id
+      idCustomer
+      MetricName
+      MetricDate
+      MetricType
+      MetricValue
+      MetricSource
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listMetrics = /* GraphQL */ `
+  query ListMetrics(
+    $filter: ModelMetricFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMetrics(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        idCustomer
+        MetricName
+        MetricDate
+        MetricType
+        MetricValue
+        MetricSource
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const customersByIdCustomer = /* GraphQL */ `
+  query CustomersByIdCustomer(
+    $idCustomer: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelCustomerFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    customersByIdCustomer(
+      idCustomer: $idCustomer
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        idCustomer
+        LastName
+        FirstName
+        EmailAddress
+        MobileNumber
+        Gender
+        DateOfBirth
+        Country
+        MetricsDateCapture
+        MetricSick
+        MetricInjury
+        MetricSleep
+        MetricWorkLifeBalance
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const customersByEmailAddress = /* GraphQL */ `
+  query CustomersByEmailAddress(
+    $EmailAddress: AWSEmail!
+    $sortDirection: ModelSortDirection
+    $filter: ModelCustomerFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    customersByEmailAddress(
       EmailAddress: $EmailAddress
       sortDirection: $sortDirection
       filter: $filter
@@ -800,12 +537,12 @@ export const customer360dslByEmail = /* GraphQL */ `
     ) {
       items {
         id
-        UserId360DSL
+        idCustomer
         LastName
         FirstName
         EmailAddress
         MobileNumber
-        Male
+        Gender
         DateOfBirth
         Country
         MetricsDateCapture
@@ -813,81 +550,299 @@ export const customer360dslByEmail = /* GraphQL */ `
         MetricInjury
         MetricSleep
         MetricWorkLifeBalance
-        _version
-        _deleted
-        _lastChangedAt
         createdAt
         updatedAt
+        __typename
       }
       nextToken
-      startedAt
+      __typename
     }
   }
 `;
-export const syncCUSTOMER360DSLS = /* GraphQL */ `
-  query SyncCUSTOMER360DSLS(
-    $filter: ModelCUSTOMER360DSLFilterInput
+export const workoutsByIdCustomerAndWorkoutDateTime = /* GraphQL */ `
+  query WorkoutsByIdCustomerAndWorkoutDateTime(
+    $idCustomer: String!
+    $WorkoutDateTime: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelWorkoutFilterInput
     $limit: Int
     $nextToken: String
-    $lastSync: AWSTimestamp
   ) {
-    syncCUSTOMER360DSLS(
+    workoutsByIdCustomerAndWorkoutDateTime(
+      idCustomer: $idCustomer
+      WorkoutDateTime: $WorkoutDateTime
+      sortDirection: $sortDirection
       filter: $filter
       limit: $limit
       nextToken: $nextToken
-      lastSync: $lastSync
     ) {
       items {
         id
-        UserId360DSL
-        LastName
-        FirstName
-        EmailAddress
-        MobileNumber
-        Male
-        DateOfBirth
-        Country
-        MetricsDateCapture
-        MetricSick
-        MetricInjury
-        MetricSleep
-        MetricWorkLifeBalance
-        _version
-        _deleted
-        _lastChangedAt
+        idCustomer
+        WorkoutDescription
+        WorkoutType
+        WorkoutDateTime
+        WorkoutMovingTime
+        WorkoutDistance
+        WorkoutAverageHeartRate
+        WorkoutStressScore
+        WorkoutCalories
+        WorkoutElevationGain
+        WorkoutAverageSpeed
+        WorkoutAverageCadence
+        WorkoutAverageTemp
+        WorkoutLocation
+        WorkoutRPE
+        WorkoutPhysicalLevel
+        WorkoutWeatherLevel
+        WorkoutHydrationLevel
+        WorkoutCaloriesEatenPerHour
+        WorkoutAthleteFeedback
+        WorkoutStravaActivityId
+        WorkoutGarminActivityId
+        WorkoutTPWorkoutId
         createdAt
         updatedAt
+        __typename
       }
       nextToken
-      startedAt
+      __typename
     }
   }
 `;
-export const syncACTIVITIES360DSLCUSTOMER360DSLS = /* GraphQL */ `
-  query SyncACTIVITIES360DSLCUSTOMER360DSLS(
-    $filter: ModelACTIVITIES360DSLCUSTOMER360DSLFilterInput
+export const eventsByIdCustomerAndEventDate = /* GraphQL */ `
+  query EventsByIdCustomerAndEventDate(
+    $idCustomer: String!
+    $EventDate: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelEventFilterInput
     $limit: Int
     $nextToken: String
-    $lastSync: AWSTimestamp
   ) {
-    syncACTIVITIES360DSLCUSTOMER360DSLS(
+    eventsByIdCustomerAndEventDate(
+      idCustomer: $idCustomer
+      EventDate: $EventDate
+      sortDirection: $sortDirection
       filter: $filter
       limit: $limit
       nextToken: $nextToken
-      lastSync: $lastSync
     ) {
       items {
         id
-        activities360dslID
-        customer360dslID
-        _version
-        _deleted
-        _lastChangedAt
+        idCustomer
+        EventName
+        EventDate
+        EventType
+        EventSubType
+        EventDistance
+        EventPriority
+        EventDescription
+        EventGoalTime
+        EventGoalDistance
+        EventGoalPlace
+        EventGoalFinish
+        EventGoalPB
+        EventGoalOther
         createdAt
         updatedAt
+        __typename
       }
       nextToken
-      startedAt
+      __typename
+    }
+  }
+`;
+export const stravaActivitiesByStravaActivityIdAndStravaActivityDateTime = /* GraphQL */ `
+  query StravaActivitiesByStravaActivityIdAndStravaActivityDateTime(
+    $StravaActivityId: String!
+    $StravaActivityDateTime: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelStravaActivitiesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    stravaActivitiesByStravaActivityIdAndStravaActivityDateTime(
+      StravaActivityId: $StravaActivityId
+      StravaActivityDateTime: $StravaActivityDateTime
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        StravaActivityId
+        StravaActivityOwnerId
+        StravaActivityDescription
+        StravaActivityType
+        StravaActivityDateTime
+        StravaActivityMovingTime
+        StravaActivityDistance
+        StravaActivityAverageHeartRate
+        StravaActivitySufferScore
+        StravaActivityCalories
+        StravaActivityElevationGain
+        StravaActivityAverageSpeed
+        StravaActivityAverageCadence
+        StravaActivityAvergeTemp
+        StravaActivityLocation
+        StravaActivity
+        StravaActivityZones
+        StravaActivityAthleteFeedback
+        StravaActivityRPE
+        StravaActivityFatigue
+        StravaActivityAthleteEffort
+        StravaActivityAthleteBody
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const garminActivitiesByGarminActivityIdAndGarminActivityStartTime = /* GraphQL */ `
+  query GarminActivitiesByGarminActivityIdAndGarminActivityStartTime(
+    $GarminActivityId: String!
+    $GarminActivityStartTime: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelGarminActivitiesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    garminActivitiesByGarminActivityIdAndGarminActivityStartTime(
+      GarminActivityId: $GarminActivityId
+      GarminActivityStartTime: $GarminActivityStartTime
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        GarminAccountId
+        GarminActivityId
+        GarminActivityDescription
+        GarminActivityType
+        GarminActivityStartTime
+        GarminActivityDistance
+        GarminActivityDuration
+        GarminAveragePaceInMinutesPerKilometer
+        GarminActiveKilocalories
+        GarminAverageHeartRateInBeatsPerMinute
+        GarminActivity
+        GarminActivityRPE
+        GarminActivityFatigue
+        GarminActivityAthleteFeedback
+        GarminActivityAthleteEffort
+        GarminActivityAthleteBody
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const garminMetricsByIdCustomerAndGarminMetricDate = /* GraphQL */ `
+  query GarminMetricsByIdCustomerAndGarminMetricDate(
+    $idCustomer: String!
+    $GarminMetricDate: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelGarminMetricsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    garminMetricsByIdCustomerAndGarminMetricDate(
+      idCustomer: $idCustomer
+      GarminMetricDate: $GarminMetricDate
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        idCustomer
+        GarminAccountId
+        GarminUserAccessToken
+        GarminSummaryId
+        GarminMetricType
+        GarminMetricData
+        GarminMetricDate
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const nonTrainingDaysByIdCustomer = /* GraphQL */ `
+  query NonTrainingDaysByIdCustomer(
+    $idCustomer: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelNonTrainingDaysFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    nonTrainingDaysByIdCustomer(
+      idCustomer: $idCustomer
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        idCustomer
+        Valid
+        NonTrainingType
+        StartDate
+        EndDate
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const metricsByIdCustomerAndMetricDate = /* GraphQL */ `
+  query MetricsByIdCustomerAndMetricDate(
+    $idCustomer: String!
+    $MetricDate: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelMetricFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    metricsByIdCustomerAndMetricDate(
+      idCustomer: $idCustomer
+      MetricDate: $MetricDate
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        idCustomer
+        MetricName
+        MetricDate
+        MetricType
+        MetricValue
+        MetricSource
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
     }
   }
 `;

@@ -3,10 +3,10 @@
 
 const awsmobile = {
     "aws_project_region": "eu-west-1",
-    "aws_appsync_graphqlEndpoint": "https://egrryqwz6vhpxptr6x2yofgz3i.appsync-api.eu-west-1.amazonaws.com/graphql",
+    "aws_appsync_graphqlEndpoint": "https://qciohjhxuvgchjsvrpghrcdsqy.appsync-api.eu-west-1.amazonaws.com/graphql",
     "aws_appsync_region": "eu-west-1",
     "aws_appsync_authenticationType": "API_KEY",
-    "aws_appsync_apiKey": "da2-4xo5fy5qyfdkjmggbzhw2bu6qe",
+    "aws_appsync_apiKey": "da2-dxhgvlyc6fgpbpplwelihkd5x4",
     "aws_cloud_logic_custom": [
         {
             "name": "Garmin360dsl",

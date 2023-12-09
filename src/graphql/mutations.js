@@ -1,646 +1,19 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createACTIVITIESGARMIN = /* GraphQL */ `
-  mutation CreateACTIVITIESGARMIN(
-    $input: CreateACTIVITIESGARMINInput!
-    $condition: ModelACTIVITIESGARMINConditionInput
+export const createCustomer = /* GraphQL */ `
+  mutation CreateCustomer(
+    $input: CreateCustomerInput!
+    $condition: ModelCustomerConditionInput
   ) {
-    createACTIVITIESGARMIN(input: $input, condition: $condition) {
+    createCustomer(input: $input, condition: $condition) {
       id
-      UserId360DSL
-      GarminAccountId
-      GarminActivityId
-      GarminActivityDescription
-      GarminActivityType
-      GarminActivityStartTime
-      GarminActivityDistance
-      GarminActivityDuration
-      GarminAveragePaceInMinutesPerKilometer
-      GarminActiveKilocalories
-      GarminAverageHeartRateInBeatsPerMinute
-      GarminActivity
-      GarminActivityRPE
-      GarminActivityFatigue
-      GarminActivityAthleteFeedback
-      GarminActivityAthleteEffort
-      GarminActivityAthleteBody
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateACTIVITIESGARMIN = /* GraphQL */ `
-  mutation UpdateACTIVITIESGARMIN(
-    $input: UpdateACTIVITIESGARMINInput!
-    $condition: ModelACTIVITIESGARMINConditionInput
-  ) {
-    updateACTIVITIESGARMIN(input: $input, condition: $condition) {
-      id
-      UserId360DSL
-      GarminAccountId
-      GarminActivityId
-      GarminActivityDescription
-      GarminActivityType
-      GarminActivityStartTime
-      GarminActivityDistance
-      GarminActivityDuration
-      GarminAveragePaceInMinutesPerKilometer
-      GarminActiveKilocalories
-      GarminAverageHeartRateInBeatsPerMinute
-      GarminActivity
-      GarminActivityRPE
-      GarminActivityFatigue
-      GarminActivityAthleteFeedback
-      GarminActivityAthleteEffort
-      GarminActivityAthleteBody
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteACTIVITIESGARMIN = /* GraphQL */ `
-  mutation DeleteACTIVITIESGARMIN(
-    $input: DeleteACTIVITIESGARMINInput!
-    $condition: ModelACTIVITIESGARMINConditionInput
-  ) {
-    deleteACTIVITIESGARMIN(input: $input, condition: $condition) {
-      id
-      UserId360DSL
-      GarminAccountId
-      GarminActivityId
-      GarminActivityDescription
-      GarminActivityType
-      GarminActivityStartTime
-      GarminActivityDistance
-      GarminActivityDuration
-      GarminAveragePaceInMinutesPerKilometer
-      GarminActiveKilocalories
-      GarminAverageHeartRateInBeatsPerMinute
-      GarminActivity
-      GarminActivityRPE
-      GarminActivityFatigue
-      GarminActivityAthleteFeedback
-      GarminActivityAthleteEffort
-      GarminActivityAthleteBody
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createCUSTOMER3RDPARTY = /* GraphQL */ `
-  mutation CreateCUSTOMER3RDPARTY(
-    $input: CreateCUSTOMER3RDPARTYInput!
-    $condition: ModelCUSTOMER3RDPARTYConditionInput
-  ) {
-    createCUSTOMER3RDPARTY(input: $input, condition: $condition) {
-      id
-      Application
-      ApplicationSync
-      ApplicationRefreshToken
-      ApplicationTokenExpiryDate
-      ApplicationAccessToken
-      customer360dslID
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateCUSTOMER3RDPARTY = /* GraphQL */ `
-  mutation UpdateCUSTOMER3RDPARTY(
-    $input: UpdateCUSTOMER3RDPARTYInput!
-    $condition: ModelCUSTOMER3RDPARTYConditionInput
-  ) {
-    updateCUSTOMER3RDPARTY(input: $input, condition: $condition) {
-      id
-      Application
-      ApplicationSync
-      ApplicationRefreshToken
-      ApplicationTokenExpiryDate
-      ApplicationAccessToken
-      customer360dslID
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteCUSTOMER3RDPARTY = /* GraphQL */ `
-  mutation DeleteCUSTOMER3RDPARTY(
-    $input: DeleteCUSTOMER3RDPARTYInput!
-    $condition: ModelCUSTOMER3RDPARTYConditionInput
-  ) {
-    deleteCUSTOMER3RDPARTY(input: $input, condition: $condition) {
-      id
-      Application
-      ApplicationSync
-      ApplicationRefreshToken
-      ApplicationTokenExpiryDate
-      ApplicationAccessToken
-      customer360dslID
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createACTIVITIESTP = /* GraphQL */ `
-  mutation CreateACTIVITIESTP(
-    $input: CreateACTIVITIESTPInput!
-    $condition: ModelACTIVITIESTPConditionInput
-  ) {
-    createACTIVITIESTP(input: $input, condition: $condition) {
-      id
-      UserId360DSL
-      TPActivityId
-      TPActivityOwnerId
-      TPActivityDescription
-      TPActivityType
-      TPActivityDate
-      TPActivityMovingTime
-      TPActivityDistance
-      TPActivityAverageHeartRate
-      TPActivityTSS
-      TPActivityCalories
-      TPActivityElevationGain
-      TPActivityAverageSpeed
-      TPActivityAverageCadence
-      TPActivityAverageTemp
-      TPActivityLocation
-      TPActivity
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ACTIVITIES360DSL {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const updateACTIVITIESTP = /* GraphQL */ `
-  mutation UpdateACTIVITIESTP(
-    $input: UpdateACTIVITIESTPInput!
-    $condition: ModelACTIVITIESTPConditionInput
-  ) {
-    updateACTIVITIESTP(input: $input, condition: $condition) {
-      id
-      UserId360DSL
-      TPActivityId
-      TPActivityOwnerId
-      TPActivityDescription
-      TPActivityType
-      TPActivityDate
-      TPActivityMovingTime
-      TPActivityDistance
-      TPActivityAverageHeartRate
-      TPActivityTSS
-      TPActivityCalories
-      TPActivityElevationGain
-      TPActivityAverageSpeed
-      TPActivityAverageCadence
-      TPActivityAverageTemp
-      TPActivityLocation
-      TPActivity
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ACTIVITIES360DSL {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const deleteACTIVITIESTP = /* GraphQL */ `
-  mutation DeleteACTIVITIESTP(
-    $input: DeleteACTIVITIESTPInput!
-    $condition: ModelACTIVITIESTPConditionInput
-  ) {
-    deleteACTIVITIESTP(input: $input, condition: $condition) {
-      id
-      UserId360DSL
-      TPActivityId
-      TPActivityOwnerId
-      TPActivityDescription
-      TPActivityType
-      TPActivityDate
-      TPActivityMovingTime
-      TPActivityDistance
-      TPActivityAverageHeartRate
-      TPActivityTSS
-      TPActivityCalories
-      TPActivityElevationGain
-      TPActivityAverageSpeed
-      TPActivityAverageCadence
-      TPActivityAverageTemp
-      TPActivityLocation
-      TPActivity
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ACTIVITIES360DSL {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const createACTIVITIESSTRAVA = /* GraphQL */ `
-  mutation CreateACTIVITIESSTRAVA(
-    $input: CreateACTIVITIESSTRAVAInput!
-    $condition: ModelACTIVITIESSTRAVAConditionInput
-  ) {
-    createACTIVITIESSTRAVA(input: $input, condition: $condition) {
-      id
-      UserId360DSL
-      StravaActivityId
-      StravaActivityOwnerId
-      StravaActivityDescription
-      StravaActivityType
-      StravaActivityDate
-      StravaActivityMovingTime
-      StravaActivityDistance
-      StravaActivityAverageHeartRate
-      StravaActivitySufferScore
-      StravaActivityCalories
-      StravaActivityElevationGain
-      StravaActivityAverageSpeed
-      StravaActivityAverageCadence
-      StravaActivityAvergeTemp
-      StravaActivityLocation
-      StravaActivity
-      StravaActivityZones
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateACTIVITIESSTRAVA = /* GraphQL */ `
-  mutation UpdateACTIVITIESSTRAVA(
-    $input: UpdateACTIVITIESSTRAVAInput!
-    $condition: ModelACTIVITIESSTRAVAConditionInput
-  ) {
-    updateACTIVITIESSTRAVA(input: $input, condition: $condition) {
-      id
-      UserId360DSL
-      StravaActivityId
-      StravaActivityOwnerId
-      StravaActivityDescription
-      StravaActivityType
-      StravaActivityDate
-      StravaActivityMovingTime
-      StravaActivityDistance
-      StravaActivityAverageHeartRate
-      StravaActivitySufferScore
-      StravaActivityCalories
-      StravaActivityElevationGain
-      StravaActivityAverageSpeed
-      StravaActivityAverageCadence
-      StravaActivityAvergeTemp
-      StravaActivityLocation
-      StravaActivity
-      StravaActivityZones
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteACTIVITIESSTRAVA = /* GraphQL */ `
-  mutation DeleteACTIVITIESSTRAVA(
-    $input: DeleteACTIVITIESSTRAVAInput!
-    $condition: ModelACTIVITIESSTRAVAConditionInput
-  ) {
-    deleteACTIVITIESSTRAVA(input: $input, condition: $condition) {
-      id
-      UserId360DSL
-      StravaActivityId
-      StravaActivityOwnerId
-      StravaActivityDescription
-      StravaActivityType
-      StravaActivityDate
-      StravaActivityMovingTime
-      StravaActivityDistance
-      StravaActivityAverageHeartRate
-      StravaActivitySufferScore
-      StravaActivityCalories
-      StravaActivityElevationGain
-      StravaActivityAverageSpeed
-      StravaActivityAverageCadence
-      StravaActivityAvergeTemp
-      StravaActivityLocation
-      StravaActivity
-      StravaActivityZones
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createACTIVITIES360DSL = /* GraphQL */ `
-  mutation CreateACTIVITIES360DSL(
-    $input: CreateACTIVITIES360DSLInput!
-    $condition: ModelACTIVITIES360DSLConditionInput
-  ) {
-    createACTIVITIES360DSL(input: $input, condition: $condition) {
-      id
-      UserId360DSL
-      ActivityDescription
-      ActivityType
-      ActivityDate
-      ActivityMovingTime
-      ActivityDistance
-      ActivityAverageHeartRate
-      ActivityStressScore
-      ActivityCalories
-      ActivityElevationGain
-      ActivityAverageSpeed
-      ActivityAverageCadence
-      ActivityAverageTemp
-      ActivityLocation
-      ActivityRPE
-      ActivityFatigueLevel
-      ActivityPhysicalLevel
-      ActivityStravaActivityId
-      ActivityStravaOwnerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ACTIVITIESSTRAVA {
-        id
-        UserId360DSL
-        StravaActivityId
-        StravaActivityOwnerId
-        StravaActivityDescription
-        StravaActivityType
-        StravaActivityDate
-        StravaActivityMovingTime
-        StravaActivityDistance
-        StravaActivityAverageHeartRate
-        StravaActivitySufferScore
-        StravaActivityCalories
-        StravaActivityElevationGain
-        StravaActivityAverageSpeed
-        StravaActivityAverageCadence
-        StravaActivityAvergeTemp
-        StravaActivityLocation
-        StravaActivity
-        StravaActivityZones
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      ACTIVITIES360DSLCUSTOMER360DSLS {
-        nextToken
-        startedAt
-      }
-    }
-  }
-`;
-export const updateACTIVITIES360DSL = /* GraphQL */ `
-  mutation UpdateACTIVITIES360DSL(
-    $input: UpdateACTIVITIES360DSLInput!
-    $condition: ModelACTIVITIES360DSLConditionInput
-  ) {
-    updateACTIVITIES360DSL(input: $input, condition: $condition) {
-      id
-      UserId360DSL
-      ActivityDescription
-      ActivityType
-      ActivityDate
-      ActivityMovingTime
-      ActivityDistance
-      ActivityAverageHeartRate
-      ActivityStressScore
-      ActivityCalories
-      ActivityElevationGain
-      ActivityAverageSpeed
-      ActivityAverageCadence
-      ActivityAverageTemp
-      ActivityLocation
-      ActivityRPE
-      ActivityFatigueLevel
-      ActivityPhysicalLevel
-      ActivityStravaActivityId
-      ActivityStravaOwnerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ACTIVITIESSTRAVA {
-        id
-        UserId360DSL
-        StravaActivityId
-        StravaActivityOwnerId
-        StravaActivityDescription
-        StravaActivityType
-        StravaActivityDate
-        StravaActivityMovingTime
-        StravaActivityDistance
-        StravaActivityAverageHeartRate
-        StravaActivitySufferScore
-        StravaActivityCalories
-        StravaActivityElevationGain
-        StravaActivityAverageSpeed
-        StravaActivityAverageCadence
-        StravaActivityAvergeTemp
-        StravaActivityLocation
-        StravaActivity
-        StravaActivityZones
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      ACTIVITIES360DSLCUSTOMER360DSLS {
-        nextToken
-        startedAt
-      }
-    }
-  }
-`;
-export const deleteACTIVITIES360DSL = /* GraphQL */ `
-  mutation DeleteACTIVITIES360DSL(
-    $input: DeleteACTIVITIES360DSLInput!
-    $condition: ModelACTIVITIES360DSLConditionInput
-  ) {
-    deleteACTIVITIES360DSL(input: $input, condition: $condition) {
-      id
-      UserId360DSL
-      ActivityDescription
-      ActivityType
-      ActivityDate
-      ActivityMovingTime
-      ActivityDistance
-      ActivityAverageHeartRate
-      ActivityStressScore
-      ActivityCalories
-      ActivityElevationGain
-      ActivityAverageSpeed
-      ActivityAverageCadence
-      ActivityAverageTemp
-      ActivityLocation
-      ActivityRPE
-      ActivityFatigueLevel
-      ActivityPhysicalLevel
-      ActivityStravaActivityId
-      ActivityStravaOwnerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ACTIVITIESSTRAVA {
-        id
-        UserId360DSL
-        StravaActivityId
-        StravaActivityOwnerId
-        StravaActivityDescription
-        StravaActivityType
-        StravaActivityDate
-        StravaActivityMovingTime
-        StravaActivityDistance
-        StravaActivityAverageHeartRate
-        StravaActivitySufferScore
-        StravaActivityCalories
-        StravaActivityElevationGain
-        StravaActivityAverageSpeed
-        StravaActivityAverageCadence
-        StravaActivityAvergeTemp
-        StravaActivityLocation
-        StravaActivity
-        StravaActivityZones
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      ACTIVITIES360DSLCUSTOMER360DSLS {
-        nextToken
-        startedAt
-      }
-    }
-  }
-`;
-export const createCUSTOMER360DSL = /* GraphQL */ `
-  mutation CreateCUSTOMER360DSL(
-    $input: CreateCUSTOMER360DSLInput!
-    $condition: ModelCUSTOMER360DSLConditionInput
-  ) {
-    createCUSTOMER360DSL(input: $input, condition: $condition) {
-      id
-      UserId360DSL
+      idCustomer
       LastName
       FirstName
       EmailAddress
       MobileNumber
-      Male
+      Gender
       DateOfBirth
       Country
       TrainingDays {
@@ -658,57 +31,51 @@ export const createCUSTOMER360DSL = /* GraphQL */ `
         SaturdayTrainHours
         SundayTrain
         SundayTrainHours
+        __typename
       }
       NonTrainingPeriod {
-        valid
-        startDate
-        endDate
+        NonTrainingPeriodId
+        StartDate
+        EndDate
+        Valid
+        __typename
       }
       ThirdPartyApplications {
-        application
-        applicationSync
-        applicationPartyId
-        applicationRequestOauthToken
-        applicationRequestOauthSecret
-        applicationUserOauthToken
-        applicationUserOauthSecret
-        applicationUserOauthRefreshToken
-        applicationUserOauthTokenExpiryDate
+        Application
+        ApplicationSync
+        ApplicationPartyId
+        ApplicationRequestOauthToken
+        ApplicationRequestOauthSecret
+        ApplicationUserOauthToken
+        ApplicationUserOauthSecret
+        ApplicationUserOauthRefreshToken
+        ApplicationUserOauthTokenExpiryDate
+        __typename
       }
       MetricsDateCapture
       MetricSick
       MetricInjury
       MetricSleep
       MetricWorkLifeBalance
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
-      CUSTOMER3RDPARTIES {
-        nextToken
-        startedAt
-      }
-      activities360dsls {
-        nextToken
-        startedAt
-      }
+      __typename
     }
   }
 `;
-export const updateCUSTOMER360DSL = /* GraphQL */ `
-  mutation UpdateCUSTOMER360DSL(
-    $input: UpdateCUSTOMER360DSLInput!
-    $condition: ModelCUSTOMER360DSLConditionInput
+export const updateCustomer = /* GraphQL */ `
+  mutation UpdateCustomer(
+    $input: UpdateCustomerInput!
+    $condition: ModelCustomerConditionInput
   ) {
-    updateCUSTOMER360DSL(input: $input, condition: $condition) {
+    updateCustomer(input: $input, condition: $condition) {
       id
-      UserId360DSL
+      idCustomer
       LastName
       FirstName
       EmailAddress
       MobileNumber
-      Male
+      Gender
       DateOfBirth
       Country
       TrainingDays {
@@ -726,57 +93,51 @@ export const updateCUSTOMER360DSL = /* GraphQL */ `
         SaturdayTrainHours
         SundayTrain
         SundayTrainHours
+        __typename
       }
       NonTrainingPeriod {
-        valid
-        startDate
-        endDate
+        NonTrainingPeriodId
+        StartDate
+        EndDate
+        Valid
+        __typename
       }
       ThirdPartyApplications {
-        application
-        applicationSync
-        applicationPartyId
-        applicationRequestOauthToken
-        applicationRequestOauthSecret
-        applicationUserOauthToken
-        applicationUserOauthSecret
-        applicationUserOauthRefreshToken
-        applicationUserOauthTokenExpiryDate
+        Application
+        ApplicationSync
+        ApplicationPartyId
+        ApplicationRequestOauthToken
+        ApplicationRequestOauthSecret
+        ApplicationUserOauthToken
+        ApplicationUserOauthSecret
+        ApplicationUserOauthRefreshToken
+        ApplicationUserOauthTokenExpiryDate
+        __typename
       }
       MetricsDateCapture
       MetricSick
       MetricInjury
       MetricSleep
       MetricWorkLifeBalance
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
-      CUSTOMER3RDPARTIES {
-        nextToken
-        startedAt
-      }
-      activities360dsls {
-        nextToken
-        startedAt
-      }
+      __typename
     }
   }
 `;
-export const deleteCUSTOMER360DSL = /* GraphQL */ `
-  mutation DeleteCUSTOMER360DSL(
-    $input: DeleteCUSTOMER360DSLInput!
-    $condition: ModelCUSTOMER360DSLConditionInput
+export const deleteCustomer = /* GraphQL */ `
+  mutation DeleteCustomer(
+    $input: DeleteCustomerInput!
+    $condition: ModelCustomerConditionInput
   ) {
-    deleteCUSTOMER360DSL(input: $input, condition: $condition) {
+    deleteCustomer(input: $input, condition: $condition) {
       id
-      UserId360DSL
+      idCustomer
       LastName
       FirstName
       EmailAddress
       MobileNumber
-      Male
+      Gender
       DateOfBirth
       Country
       TrainingDays {
@@ -794,236 +155,587 @@ export const deleteCUSTOMER360DSL = /* GraphQL */ `
         SaturdayTrainHours
         SundayTrain
         SundayTrainHours
+        __typename
       }
       NonTrainingPeriod {
-        valid
-        startDate
-        endDate
+        NonTrainingPeriodId
+        StartDate
+        EndDate
+        Valid
+        __typename
       }
       ThirdPartyApplications {
-        application
-        applicationSync
-        applicationPartyId
-        applicationRequestOauthToken
-        applicationRequestOauthSecret
-        applicationUserOauthToken
-        applicationUserOauthSecret
-        applicationUserOauthRefreshToken
-        applicationUserOauthTokenExpiryDate
+        Application
+        ApplicationSync
+        ApplicationPartyId
+        ApplicationRequestOauthToken
+        ApplicationRequestOauthSecret
+        ApplicationUserOauthToken
+        ApplicationUserOauthSecret
+        ApplicationUserOauthRefreshToken
+        ApplicationUserOauthTokenExpiryDate
+        __typename
       }
       MetricsDateCapture
       MetricSick
       MetricInjury
       MetricSleep
       MetricWorkLifeBalance
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
-      CUSTOMER3RDPARTIES {
-        nextToken
-        startedAt
-      }
-      activities360dsls {
-        nextToken
-        startedAt
-      }
+      __typename
     }
   }
 `;
-export const createACTIVITIES360DSLCUSTOMER360DSL = /* GraphQL */ `
-  mutation CreateACTIVITIES360DSLCUSTOMER360DSL(
-    $input: CreateACTIVITIES360DSLCUSTOMER360DSLInput!
-    $condition: ModelACTIVITIES360DSLCUSTOMER360DSLConditionInput
+export const createWorkout = /* GraphQL */ `
+  mutation CreateWorkout(
+    $input: CreateWorkoutInput!
+    $condition: ModelWorkoutConditionInput
   ) {
-    createACTIVITIES360DSLCUSTOMER360DSL(input: $input, condition: $condition) {
+    createWorkout(input: $input, condition: $condition) {
       id
-      activities360dslID
-      customer360dslID
-      _version
-      _deleted
-      _lastChangedAt
+      idCustomer
+      WorkoutDescription
+      WorkoutType
+      WorkoutDateTime
+      WorkoutMovingTime
+      WorkoutDistance
+      WorkoutAverageHeartRate
+      WorkoutStressScore
+      WorkoutCalories
+      WorkoutElevationGain
+      WorkoutAverageSpeed
+      WorkoutAverageCadence
+      WorkoutAverageTemp
+      WorkoutLocation
+      WorkoutRPE
+      WorkoutPhysicalLevel
+      WorkoutWeatherLevel
+      WorkoutHydrationLevel
+      WorkoutCaloriesEatenPerHour
+      WorkoutAthleteFeedback
+      WorkoutStravaActivityId
+      WorkoutGarminActivityId
+      WorkoutTPWorkoutId
       createdAt
       updatedAt
-      activities360dsl {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      customer360dsl {
-        id
-        UserId360DSL
-        LastName
-        FirstName
-        EmailAddress
-        MobileNumber
-        Male
-        DateOfBirth
-        Country
-        MetricsDateCapture
-        MetricSick
-        MetricInjury
-        MetricSleep
-        MetricWorkLifeBalance
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
+      __typename
     }
   }
 `;
-export const updateACTIVITIES360DSLCUSTOMER360DSL = /* GraphQL */ `
-  mutation UpdateACTIVITIES360DSLCUSTOMER360DSL(
-    $input: UpdateACTIVITIES360DSLCUSTOMER360DSLInput!
-    $condition: ModelACTIVITIES360DSLCUSTOMER360DSLConditionInput
+export const updateWorkout = /* GraphQL */ `
+  mutation UpdateWorkout(
+    $input: UpdateWorkoutInput!
+    $condition: ModelWorkoutConditionInput
   ) {
-    updateACTIVITIES360DSLCUSTOMER360DSL(input: $input, condition: $condition) {
+    updateWorkout(input: $input, condition: $condition) {
       id
-      activities360dslID
-      customer360dslID
-      _version
-      _deleted
-      _lastChangedAt
+      idCustomer
+      WorkoutDescription
+      WorkoutType
+      WorkoutDateTime
+      WorkoutMovingTime
+      WorkoutDistance
+      WorkoutAverageHeartRate
+      WorkoutStressScore
+      WorkoutCalories
+      WorkoutElevationGain
+      WorkoutAverageSpeed
+      WorkoutAverageCadence
+      WorkoutAverageTemp
+      WorkoutLocation
+      WorkoutRPE
+      WorkoutPhysicalLevel
+      WorkoutWeatherLevel
+      WorkoutHydrationLevel
+      WorkoutCaloriesEatenPerHour
+      WorkoutAthleteFeedback
+      WorkoutStravaActivityId
+      WorkoutGarminActivityId
+      WorkoutTPWorkoutId
       createdAt
       updatedAt
-      activities360dsl {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      customer360dsl {
-        id
-        UserId360DSL
-        LastName
-        FirstName
-        EmailAddress
-        MobileNumber
-        Male
-        DateOfBirth
-        Country
-        MetricsDateCapture
-        MetricSick
-        MetricInjury
-        MetricSleep
-        MetricWorkLifeBalance
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
+      __typename
     }
   }
 `;
-export const deleteACTIVITIES360DSLCUSTOMER360DSL = /* GraphQL */ `
-  mutation DeleteACTIVITIES360DSLCUSTOMER360DSL(
-    $input: DeleteACTIVITIES360DSLCUSTOMER360DSLInput!
-    $condition: ModelACTIVITIES360DSLCUSTOMER360DSLConditionInput
+export const deleteWorkout = /* GraphQL */ `
+  mutation DeleteWorkout(
+    $input: DeleteWorkoutInput!
+    $condition: ModelWorkoutConditionInput
   ) {
-    deleteACTIVITIES360DSLCUSTOMER360DSL(input: $input, condition: $condition) {
+    deleteWorkout(input: $input, condition: $condition) {
       id
-      activities360dslID
-      customer360dslID
-      _version
-      _deleted
-      _lastChangedAt
+      idCustomer
+      WorkoutDescription
+      WorkoutType
+      WorkoutDateTime
+      WorkoutMovingTime
+      WorkoutDistance
+      WorkoutAverageHeartRate
+      WorkoutStressScore
+      WorkoutCalories
+      WorkoutElevationGain
+      WorkoutAverageSpeed
+      WorkoutAverageCadence
+      WorkoutAverageTemp
+      WorkoutLocation
+      WorkoutRPE
+      WorkoutPhysicalLevel
+      WorkoutWeatherLevel
+      WorkoutHydrationLevel
+      WorkoutCaloriesEatenPerHour
+      WorkoutAthleteFeedback
+      WorkoutStravaActivityId
+      WorkoutGarminActivityId
+      WorkoutTPWorkoutId
       createdAt
       updatedAt
-      activities360dsl {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      customer360dsl {
-        id
-        UserId360DSL
-        LastName
-        FirstName
-        EmailAddress
-        MobileNumber
-        Male
-        DateOfBirth
-        Country
-        MetricsDateCapture
-        MetricSick
-        MetricInjury
-        MetricSleep
-        MetricWorkLifeBalance
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
+      __typename
+    }
+  }
+`;
+export const createEvent = /* GraphQL */ `
+  mutation CreateEvent(
+    $input: CreateEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    createEvent(input: $input, condition: $condition) {
+      id
+      idCustomer
+      EventName
+      EventDate
+      EventType
+      EventSubType
+      EventDistance
+      EventPriority
+      EventDescription
+      EventGoalTime
+      EventGoalDistance
+      EventGoalPlace
+      EventGoalFinish
+      EventGoalPB
+      EventGoalOther
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateEvent = /* GraphQL */ `
+  mutation UpdateEvent(
+    $input: UpdateEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    updateEvent(input: $input, condition: $condition) {
+      id
+      idCustomer
+      EventName
+      EventDate
+      EventType
+      EventSubType
+      EventDistance
+      EventPriority
+      EventDescription
+      EventGoalTime
+      EventGoalDistance
+      EventGoalPlace
+      EventGoalFinish
+      EventGoalPB
+      EventGoalOther
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteEvent = /* GraphQL */ `
+  mutation DeleteEvent(
+    $input: DeleteEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    deleteEvent(input: $input, condition: $condition) {
+      id
+      idCustomer
+      EventName
+      EventDate
+      EventType
+      EventSubType
+      EventDistance
+      EventPriority
+      EventDescription
+      EventGoalTime
+      EventGoalDistance
+      EventGoalPlace
+      EventGoalFinish
+      EventGoalPB
+      EventGoalOther
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createStravaActivities = /* GraphQL */ `
+  mutation CreateStravaActivities(
+    $input: CreateStravaActivitiesInput!
+    $condition: ModelStravaActivitiesConditionInput
+  ) {
+    createStravaActivities(input: $input, condition: $condition) {
+      id
+      StravaActivityId
+      StravaActivityOwnerId
+      StravaActivityDescription
+      StravaActivityType
+      StravaActivityDateTime
+      StravaActivityMovingTime
+      StravaActivityDistance
+      StravaActivityAverageHeartRate
+      StravaActivitySufferScore
+      StravaActivityCalories
+      StravaActivityElevationGain
+      StravaActivityAverageSpeed
+      StravaActivityAverageCadence
+      StravaActivityAvergeTemp
+      StravaActivityLocation
+      StravaActivity
+      StravaActivityZones
+      StravaActivityAthleteFeedback
+      StravaActivityRPE
+      StravaActivityFatigue
+      StravaActivityAthleteEffort
+      StravaActivityAthleteBody
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateStravaActivities = /* GraphQL */ `
+  mutation UpdateStravaActivities(
+    $input: UpdateStravaActivitiesInput!
+    $condition: ModelStravaActivitiesConditionInput
+  ) {
+    updateStravaActivities(input: $input, condition: $condition) {
+      id
+      StravaActivityId
+      StravaActivityOwnerId
+      StravaActivityDescription
+      StravaActivityType
+      StravaActivityDateTime
+      StravaActivityMovingTime
+      StravaActivityDistance
+      StravaActivityAverageHeartRate
+      StravaActivitySufferScore
+      StravaActivityCalories
+      StravaActivityElevationGain
+      StravaActivityAverageSpeed
+      StravaActivityAverageCadence
+      StravaActivityAvergeTemp
+      StravaActivityLocation
+      StravaActivity
+      StravaActivityZones
+      StravaActivityAthleteFeedback
+      StravaActivityRPE
+      StravaActivityFatigue
+      StravaActivityAthleteEffort
+      StravaActivityAthleteBody
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteStravaActivities = /* GraphQL */ `
+  mutation DeleteStravaActivities(
+    $input: DeleteStravaActivitiesInput!
+    $condition: ModelStravaActivitiesConditionInput
+  ) {
+    deleteStravaActivities(input: $input, condition: $condition) {
+      id
+      StravaActivityId
+      StravaActivityOwnerId
+      StravaActivityDescription
+      StravaActivityType
+      StravaActivityDateTime
+      StravaActivityMovingTime
+      StravaActivityDistance
+      StravaActivityAverageHeartRate
+      StravaActivitySufferScore
+      StravaActivityCalories
+      StravaActivityElevationGain
+      StravaActivityAverageSpeed
+      StravaActivityAverageCadence
+      StravaActivityAvergeTemp
+      StravaActivityLocation
+      StravaActivity
+      StravaActivityZones
+      StravaActivityAthleteFeedback
+      StravaActivityRPE
+      StravaActivityFatigue
+      StravaActivityAthleteEffort
+      StravaActivityAthleteBody
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createGarminActivities = /* GraphQL */ `
+  mutation CreateGarminActivities(
+    $input: CreateGarminActivitiesInput!
+    $condition: ModelGarminActivitiesConditionInput
+  ) {
+    createGarminActivities(input: $input, condition: $condition) {
+      id
+      GarminAccountId
+      GarminActivityId
+      GarminActivityDescription
+      GarminActivityType
+      GarminActivityStartTime
+      GarminActivityDistance
+      GarminActivityDuration
+      GarminAveragePaceInMinutesPerKilometer
+      GarminActiveKilocalories
+      GarminAverageHeartRateInBeatsPerMinute
+      GarminActivity
+      GarminActivityRPE
+      GarminActivityFatigue
+      GarminActivityAthleteFeedback
+      GarminActivityAthleteEffort
+      GarminActivityAthleteBody
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateGarminActivities = /* GraphQL */ `
+  mutation UpdateGarminActivities(
+    $input: UpdateGarminActivitiesInput!
+    $condition: ModelGarminActivitiesConditionInput
+  ) {
+    updateGarminActivities(input: $input, condition: $condition) {
+      id
+      GarminAccountId
+      GarminActivityId
+      GarminActivityDescription
+      GarminActivityType
+      GarminActivityStartTime
+      GarminActivityDistance
+      GarminActivityDuration
+      GarminAveragePaceInMinutesPerKilometer
+      GarminActiveKilocalories
+      GarminAverageHeartRateInBeatsPerMinute
+      GarminActivity
+      GarminActivityRPE
+      GarminActivityFatigue
+      GarminActivityAthleteFeedback
+      GarminActivityAthleteEffort
+      GarminActivityAthleteBody
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteGarminActivities = /* GraphQL */ `
+  mutation DeleteGarminActivities(
+    $input: DeleteGarminActivitiesInput!
+    $condition: ModelGarminActivitiesConditionInput
+  ) {
+    deleteGarminActivities(input: $input, condition: $condition) {
+      id
+      GarminAccountId
+      GarminActivityId
+      GarminActivityDescription
+      GarminActivityType
+      GarminActivityStartTime
+      GarminActivityDistance
+      GarminActivityDuration
+      GarminAveragePaceInMinutesPerKilometer
+      GarminActiveKilocalories
+      GarminAverageHeartRateInBeatsPerMinute
+      GarminActivity
+      GarminActivityRPE
+      GarminActivityFatigue
+      GarminActivityAthleteFeedback
+      GarminActivityAthleteEffort
+      GarminActivityAthleteBody
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createGarminMetrics = /* GraphQL */ `
+  mutation CreateGarminMetrics(
+    $input: CreateGarminMetricsInput!
+    $condition: ModelGarminMetricsConditionInput
+  ) {
+    createGarminMetrics(input: $input, condition: $condition) {
+      id
+      idCustomer
+      GarminAccountId
+      GarminUserAccessToken
+      GarminSummaryId
+      GarminMetricType
+      GarminMetricData
+      GarminMetricDate
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateGarminMetrics = /* GraphQL */ `
+  mutation UpdateGarminMetrics(
+    $input: UpdateGarminMetricsInput!
+    $condition: ModelGarminMetricsConditionInput
+  ) {
+    updateGarminMetrics(input: $input, condition: $condition) {
+      id
+      idCustomer
+      GarminAccountId
+      GarminUserAccessToken
+      GarminSummaryId
+      GarminMetricType
+      GarminMetricData
+      GarminMetricDate
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteGarminMetrics = /* GraphQL */ `
+  mutation DeleteGarminMetrics(
+    $input: DeleteGarminMetricsInput!
+    $condition: ModelGarminMetricsConditionInput
+  ) {
+    deleteGarminMetrics(input: $input, condition: $condition) {
+      id
+      idCustomer
+      GarminAccountId
+      GarminUserAccessToken
+      GarminSummaryId
+      GarminMetricType
+      GarminMetricData
+      GarminMetricDate
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createNonTrainingDays = /* GraphQL */ `
+  mutation CreateNonTrainingDays(
+    $input: CreateNonTrainingDaysInput!
+    $condition: ModelNonTrainingDaysConditionInput
+  ) {
+    createNonTrainingDays(input: $input, condition: $condition) {
+      id
+      idCustomer
+      Valid
+      NonTrainingType
+      StartDate
+      EndDate
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateNonTrainingDays = /* GraphQL */ `
+  mutation UpdateNonTrainingDays(
+    $input: UpdateNonTrainingDaysInput!
+    $condition: ModelNonTrainingDaysConditionInput
+  ) {
+    updateNonTrainingDays(input: $input, condition: $condition) {
+      id
+      idCustomer
+      Valid
+      NonTrainingType
+      StartDate
+      EndDate
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteNonTrainingDays = /* GraphQL */ `
+  mutation DeleteNonTrainingDays(
+    $input: DeleteNonTrainingDaysInput!
+    $condition: ModelNonTrainingDaysConditionInput
+  ) {
+    deleteNonTrainingDays(input: $input, condition: $condition) {
+      id
+      idCustomer
+      Valid
+      NonTrainingType
+      StartDate
+      EndDate
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createMetric = /* GraphQL */ `
+  mutation CreateMetric(
+    $input: CreateMetricInput!
+    $condition: ModelMetricConditionInput
+  ) {
+    createMetric(input: $input, condition: $condition) {
+      id
+      idCustomer
+      MetricName
+      MetricDate
+      MetricType
+      MetricValue
+      MetricSource
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateMetric = /* GraphQL */ `
+  mutation UpdateMetric(
+    $input: UpdateMetricInput!
+    $condition: ModelMetricConditionInput
+  ) {
+    updateMetric(input: $input, condition: $condition) {
+      id
+      idCustomer
+      MetricName
+      MetricDate
+      MetricType
+      MetricValue
+      MetricSource
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteMetric = /* GraphQL */ `
+  mutation DeleteMetric(
+    $input: DeleteMetricInput!
+    $condition: ModelMetricConditionInput
+  ) {
+    deleteMetric(input: $input, condition: $condition) {
+      id
+      idCustomer
+      MetricName
+      MetricDate
+      MetricType
+      MetricValue
+      MetricSource
+      createdAt
+      updatedAt
+      __typename
     }
   }
 `;

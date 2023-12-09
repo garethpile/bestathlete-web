@@ -1,598 +1,16 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateACTIVITIESGARMIN = /* GraphQL */ `
-  subscription OnCreateACTIVITIESGARMIN {
-    onCreateACTIVITIESGARMIN {
+export const onCreateCustomer = /* GraphQL */ `
+  subscription OnCreateCustomer($filter: ModelSubscriptionCustomerFilterInput) {
+    onCreateCustomer(filter: $filter) {
       id
-      UserId360DSL
-      GarminAccountId
-      GarminActivityId
-      GarminActivityDescription
-      GarminActivityType
-      GarminActivityStartTime
-      GarminActivityDistance
-      GarminActivityDuration
-      GarminAveragePaceInMinutesPerKilometer
-      GarminActiveKilocalories
-      GarminAverageHeartRateInBeatsPerMinute
-      GarminActivity
-      GarminActivityRPE
-      GarminActivityFatigue
-      GarminActivityAthleteFeedback
-      GarminActivityAthleteEffort
-      GarminActivityAthleteBody
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateACTIVITIESGARMIN = /* GraphQL */ `
-  subscription OnUpdateACTIVITIESGARMIN {
-    onUpdateACTIVITIESGARMIN {
-      id
-      UserId360DSL
-      GarminAccountId
-      GarminActivityId
-      GarminActivityDescription
-      GarminActivityType
-      GarminActivityStartTime
-      GarminActivityDistance
-      GarminActivityDuration
-      GarminAveragePaceInMinutesPerKilometer
-      GarminActiveKilocalories
-      GarminAverageHeartRateInBeatsPerMinute
-      GarminActivity
-      GarminActivityRPE
-      GarminActivityFatigue
-      GarminActivityAthleteFeedback
-      GarminActivityAthleteEffort
-      GarminActivityAthleteBody
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteACTIVITIESGARMIN = /* GraphQL */ `
-  subscription OnDeleteACTIVITIESGARMIN {
-    onDeleteACTIVITIESGARMIN {
-      id
-      UserId360DSL
-      GarminAccountId
-      GarminActivityId
-      GarminActivityDescription
-      GarminActivityType
-      GarminActivityStartTime
-      GarminActivityDistance
-      GarminActivityDuration
-      GarminAveragePaceInMinutesPerKilometer
-      GarminActiveKilocalories
-      GarminAverageHeartRateInBeatsPerMinute
-      GarminActivity
-      GarminActivityRPE
-      GarminActivityFatigue
-      GarminActivityAthleteFeedback
-      GarminActivityAthleteEffort
-      GarminActivityAthleteBody
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateCUSTOMER3RDPARTY = /* GraphQL */ `
-  subscription OnCreateCUSTOMER3RDPARTY {
-    onCreateCUSTOMER3RDPARTY {
-      id
-      Application
-      ApplicationSync
-      ApplicationRefreshToken
-      ApplicationTokenExpiryDate
-      ApplicationAccessToken
-      customer360dslID
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateCUSTOMER3RDPARTY = /* GraphQL */ `
-  subscription OnUpdateCUSTOMER3RDPARTY {
-    onUpdateCUSTOMER3RDPARTY {
-      id
-      Application
-      ApplicationSync
-      ApplicationRefreshToken
-      ApplicationTokenExpiryDate
-      ApplicationAccessToken
-      customer360dslID
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteCUSTOMER3RDPARTY = /* GraphQL */ `
-  subscription OnDeleteCUSTOMER3RDPARTY {
-    onDeleteCUSTOMER3RDPARTY {
-      id
-      Application
-      ApplicationSync
-      ApplicationRefreshToken
-      ApplicationTokenExpiryDate
-      ApplicationAccessToken
-      customer360dslID
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateACTIVITIESTP = /* GraphQL */ `
-  subscription OnCreateACTIVITIESTP {
-    onCreateACTIVITIESTP {
-      id
-      UserId360DSL
-      TPActivityId
-      TPActivityOwnerId
-      TPActivityDescription
-      TPActivityType
-      TPActivityDate
-      TPActivityMovingTime
-      TPActivityDistance
-      TPActivityAverageHeartRate
-      TPActivityTSS
-      TPActivityCalories
-      TPActivityElevationGain
-      TPActivityAverageSpeed
-      TPActivityAverageCadence
-      TPActivityAverageTemp
-      TPActivityLocation
-      TPActivity
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ACTIVITIES360DSL {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const onUpdateACTIVITIESTP = /* GraphQL */ `
-  subscription OnUpdateACTIVITIESTP {
-    onUpdateACTIVITIESTP {
-      id
-      UserId360DSL
-      TPActivityId
-      TPActivityOwnerId
-      TPActivityDescription
-      TPActivityType
-      TPActivityDate
-      TPActivityMovingTime
-      TPActivityDistance
-      TPActivityAverageHeartRate
-      TPActivityTSS
-      TPActivityCalories
-      TPActivityElevationGain
-      TPActivityAverageSpeed
-      TPActivityAverageCadence
-      TPActivityAverageTemp
-      TPActivityLocation
-      TPActivity
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ACTIVITIES360DSL {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const onDeleteACTIVITIESTP = /* GraphQL */ `
-  subscription OnDeleteACTIVITIESTP {
-    onDeleteACTIVITIESTP {
-      id
-      UserId360DSL
-      TPActivityId
-      TPActivityOwnerId
-      TPActivityDescription
-      TPActivityType
-      TPActivityDate
-      TPActivityMovingTime
-      TPActivityDistance
-      TPActivityAverageHeartRate
-      TPActivityTSS
-      TPActivityCalories
-      TPActivityElevationGain
-      TPActivityAverageSpeed
-      TPActivityAverageCadence
-      TPActivityAverageTemp
-      TPActivityLocation
-      TPActivity
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ACTIVITIES360DSL {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const onCreateACTIVITIESSTRAVA = /* GraphQL */ `
-  subscription OnCreateACTIVITIESSTRAVA {
-    onCreateACTIVITIESSTRAVA {
-      id
-      UserId360DSL
-      StravaActivityId
-      StravaActivityOwnerId
-      StravaActivityDescription
-      StravaActivityType
-      StravaActivityDate
-      StravaActivityMovingTime
-      StravaActivityDistance
-      StravaActivityAverageHeartRate
-      StravaActivitySufferScore
-      StravaActivityCalories
-      StravaActivityElevationGain
-      StravaActivityAverageSpeed
-      StravaActivityAverageCadence
-      StravaActivityAvergeTemp
-      StravaActivityLocation
-      StravaActivity
-      StravaActivityZones
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateACTIVITIESSTRAVA = /* GraphQL */ `
-  subscription OnUpdateACTIVITIESSTRAVA {
-    onUpdateACTIVITIESSTRAVA {
-      id
-      UserId360DSL
-      StravaActivityId
-      StravaActivityOwnerId
-      StravaActivityDescription
-      StravaActivityType
-      StravaActivityDate
-      StravaActivityMovingTime
-      StravaActivityDistance
-      StravaActivityAverageHeartRate
-      StravaActivitySufferScore
-      StravaActivityCalories
-      StravaActivityElevationGain
-      StravaActivityAverageSpeed
-      StravaActivityAverageCadence
-      StravaActivityAvergeTemp
-      StravaActivityLocation
-      StravaActivity
-      StravaActivityZones
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteACTIVITIESSTRAVA = /* GraphQL */ `
-  subscription OnDeleteACTIVITIESSTRAVA {
-    onDeleteACTIVITIESSTRAVA {
-      id
-      UserId360DSL
-      StravaActivityId
-      StravaActivityOwnerId
-      StravaActivityDescription
-      StravaActivityType
-      StravaActivityDate
-      StravaActivityMovingTime
-      StravaActivityDistance
-      StravaActivityAverageHeartRate
-      StravaActivitySufferScore
-      StravaActivityCalories
-      StravaActivityElevationGain
-      StravaActivityAverageSpeed
-      StravaActivityAverageCadence
-      StravaActivityAvergeTemp
-      StravaActivityLocation
-      StravaActivity
-      StravaActivityZones
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateACTIVITIES360DSL = /* GraphQL */ `
-  subscription OnCreateACTIVITIES360DSL {
-    onCreateACTIVITIES360DSL {
-      id
-      UserId360DSL
-      ActivityDescription
-      ActivityType
-      ActivityDate
-      ActivityMovingTime
-      ActivityDistance
-      ActivityAverageHeartRate
-      ActivityStressScore
-      ActivityCalories
-      ActivityElevationGain
-      ActivityAverageSpeed
-      ActivityAverageCadence
-      ActivityAverageTemp
-      ActivityLocation
-      ActivityRPE
-      ActivityFatigueLevel
-      ActivityPhysicalLevel
-      ActivityStravaActivityId
-      ActivityStravaOwnerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ACTIVITIESSTRAVA {
-        id
-        UserId360DSL
-        StravaActivityId
-        StravaActivityOwnerId
-        StravaActivityDescription
-        StravaActivityType
-        StravaActivityDate
-        StravaActivityMovingTime
-        StravaActivityDistance
-        StravaActivityAverageHeartRate
-        StravaActivitySufferScore
-        StravaActivityCalories
-        StravaActivityElevationGain
-        StravaActivityAverageSpeed
-        StravaActivityAverageCadence
-        StravaActivityAvergeTemp
-        StravaActivityLocation
-        StravaActivity
-        StravaActivityZones
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      ACTIVITIES360DSLCUSTOMER360DSLS {
-        nextToken
-        startedAt
-      }
-    }
-  }
-`;
-export const onUpdateACTIVITIES360DSL = /* GraphQL */ `
-  subscription OnUpdateACTIVITIES360DSL {
-    onUpdateACTIVITIES360DSL {
-      id
-      UserId360DSL
-      ActivityDescription
-      ActivityType
-      ActivityDate
-      ActivityMovingTime
-      ActivityDistance
-      ActivityAverageHeartRate
-      ActivityStressScore
-      ActivityCalories
-      ActivityElevationGain
-      ActivityAverageSpeed
-      ActivityAverageCadence
-      ActivityAverageTemp
-      ActivityLocation
-      ActivityRPE
-      ActivityFatigueLevel
-      ActivityPhysicalLevel
-      ActivityStravaActivityId
-      ActivityStravaOwnerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ACTIVITIESSTRAVA {
-        id
-        UserId360DSL
-        StravaActivityId
-        StravaActivityOwnerId
-        StravaActivityDescription
-        StravaActivityType
-        StravaActivityDate
-        StravaActivityMovingTime
-        StravaActivityDistance
-        StravaActivityAverageHeartRate
-        StravaActivitySufferScore
-        StravaActivityCalories
-        StravaActivityElevationGain
-        StravaActivityAverageSpeed
-        StravaActivityAverageCadence
-        StravaActivityAvergeTemp
-        StravaActivityLocation
-        StravaActivity
-        StravaActivityZones
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      ACTIVITIES360DSLCUSTOMER360DSLS {
-        nextToken
-        startedAt
-      }
-    }
-  }
-`;
-export const onDeleteACTIVITIES360DSL = /* GraphQL */ `
-  subscription OnDeleteACTIVITIES360DSL {
-    onDeleteACTIVITIES360DSL {
-      id
-      UserId360DSL
-      ActivityDescription
-      ActivityType
-      ActivityDate
-      ActivityMovingTime
-      ActivityDistance
-      ActivityAverageHeartRate
-      ActivityStressScore
-      ActivityCalories
-      ActivityElevationGain
-      ActivityAverageSpeed
-      ActivityAverageCadence
-      ActivityAverageTemp
-      ActivityLocation
-      ActivityRPE
-      ActivityFatigueLevel
-      ActivityPhysicalLevel
-      ActivityStravaActivityId
-      ActivityStravaOwnerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ACTIVITIESSTRAVA {
-        id
-        UserId360DSL
-        StravaActivityId
-        StravaActivityOwnerId
-        StravaActivityDescription
-        StravaActivityType
-        StravaActivityDate
-        StravaActivityMovingTime
-        StravaActivityDistance
-        StravaActivityAverageHeartRate
-        StravaActivitySufferScore
-        StravaActivityCalories
-        StravaActivityElevationGain
-        StravaActivityAverageSpeed
-        StravaActivityAverageCadence
-        StravaActivityAvergeTemp
-        StravaActivityLocation
-        StravaActivity
-        StravaActivityZones
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      ACTIVITIES360DSLCUSTOMER360DSLS {
-        nextToken
-        startedAt
-      }
-    }
-  }
-`;
-export const onCreateCUSTOMER360DSL = /* GraphQL */ `
-  subscription OnCreateCUSTOMER360DSL {
-    onCreateCUSTOMER360DSL {
-      id
-      UserId360DSL
+      idCustomer
       LastName
       FirstName
       EmailAddress
       MobileNumber
-      Male
+      Gender
       DateOfBirth
       Country
       TrainingDays {
@@ -610,54 +28,48 @@ export const onCreateCUSTOMER360DSL = /* GraphQL */ `
         SaturdayTrainHours
         SundayTrain
         SundayTrainHours
+        __typename
       }
       NonTrainingPeriod {
-        valid
-        startDate
-        endDate
+        NonTrainingPeriodId
+        StartDate
+        EndDate
+        Valid
+        __typename
       }
       ThirdPartyApplications {
-        application
-        applicationSync
-        applicationPartyId
-        applicationRequestOauthToken
-        applicationRequestOauthSecret
-        applicationUserOauthToken
-        applicationUserOauthSecret
-        applicationUserOauthRefreshToken
-        applicationUserOauthTokenExpiryDate
+        Application
+        ApplicationSync
+        ApplicationPartyId
+        ApplicationRequestOauthToken
+        ApplicationRequestOauthSecret
+        ApplicationUserOauthToken
+        ApplicationUserOauthSecret
+        ApplicationUserOauthRefreshToken
+        ApplicationUserOauthTokenExpiryDate
+        __typename
       }
       MetricsDateCapture
       MetricSick
       MetricInjury
       MetricSleep
       MetricWorkLifeBalance
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
-      CUSTOMER3RDPARTIES {
-        nextToken
-        startedAt
-      }
-      activities360dsls {
-        nextToken
-        startedAt
-      }
+      __typename
     }
   }
 `;
-export const onUpdateCUSTOMER360DSL = /* GraphQL */ `
-  subscription OnUpdateCUSTOMER360DSL {
-    onUpdateCUSTOMER360DSL {
+export const onUpdateCustomer = /* GraphQL */ `
+  subscription OnUpdateCustomer($filter: ModelSubscriptionCustomerFilterInput) {
+    onUpdateCustomer(filter: $filter) {
       id
-      UserId360DSL
+      idCustomer
       LastName
       FirstName
       EmailAddress
       MobileNumber
-      Male
+      Gender
       DateOfBirth
       Country
       TrainingDays {
@@ -675,54 +87,48 @@ export const onUpdateCUSTOMER360DSL = /* GraphQL */ `
         SaturdayTrainHours
         SundayTrain
         SundayTrainHours
+        __typename
       }
       NonTrainingPeriod {
-        valid
-        startDate
-        endDate
+        NonTrainingPeriodId
+        StartDate
+        EndDate
+        Valid
+        __typename
       }
       ThirdPartyApplications {
-        application
-        applicationSync
-        applicationPartyId
-        applicationRequestOauthToken
-        applicationRequestOauthSecret
-        applicationUserOauthToken
-        applicationUserOauthSecret
-        applicationUserOauthRefreshToken
-        applicationUserOauthTokenExpiryDate
+        Application
+        ApplicationSync
+        ApplicationPartyId
+        ApplicationRequestOauthToken
+        ApplicationRequestOauthSecret
+        ApplicationUserOauthToken
+        ApplicationUserOauthSecret
+        ApplicationUserOauthRefreshToken
+        ApplicationUserOauthTokenExpiryDate
+        __typename
       }
       MetricsDateCapture
       MetricSick
       MetricInjury
       MetricSleep
       MetricWorkLifeBalance
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
-      CUSTOMER3RDPARTIES {
-        nextToken
-        startedAt
-      }
-      activities360dsls {
-        nextToken
-        startedAt
-      }
+      __typename
     }
   }
 `;
-export const onDeleteCUSTOMER360DSL = /* GraphQL */ `
-  subscription OnDeleteCUSTOMER360DSL {
-    onDeleteCUSTOMER360DSL {
+export const onDeleteCustomer = /* GraphQL */ `
+  subscription OnDeleteCustomer($filter: ModelSubscriptionCustomerFilterInput) {
+    onDeleteCustomer(filter: $filter) {
       id
-      UserId360DSL
+      idCustomer
       LastName
       FirstName
       EmailAddress
       MobileNumber
-      Male
+      Gender
       DateOfBirth
       Country
       TrainingDays {
@@ -740,227 +146,548 @@ export const onDeleteCUSTOMER360DSL = /* GraphQL */ `
         SaturdayTrainHours
         SundayTrain
         SundayTrainHours
+        __typename
       }
       NonTrainingPeriod {
-        valid
-        startDate
-        endDate
+        NonTrainingPeriodId
+        StartDate
+        EndDate
+        Valid
+        __typename
       }
       ThirdPartyApplications {
-        application
-        applicationSync
-        applicationPartyId
-        applicationRequestOauthToken
-        applicationRequestOauthSecret
-        applicationUserOauthToken
-        applicationUserOauthSecret
-        applicationUserOauthRefreshToken
-        applicationUserOauthTokenExpiryDate
+        Application
+        ApplicationSync
+        ApplicationPartyId
+        ApplicationRequestOauthToken
+        ApplicationRequestOauthSecret
+        ApplicationUserOauthToken
+        ApplicationUserOauthSecret
+        ApplicationUserOauthRefreshToken
+        ApplicationUserOauthTokenExpiryDate
+        __typename
       }
       MetricsDateCapture
       MetricSick
       MetricInjury
       MetricSleep
       MetricWorkLifeBalance
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
-      CUSTOMER3RDPARTIES {
-        nextToken
-        startedAt
-      }
-      activities360dsls {
-        nextToken
-        startedAt
-      }
+      __typename
     }
   }
 `;
-export const onCreateACTIVITIES360DSLCUSTOMER360DSL = /* GraphQL */ `
-  subscription OnCreateACTIVITIES360DSLCUSTOMER360DSL {
-    onCreateACTIVITIES360DSLCUSTOMER360DSL {
+export const onCreateWorkout = /* GraphQL */ `
+  subscription OnCreateWorkout($filter: ModelSubscriptionWorkoutFilterInput) {
+    onCreateWorkout(filter: $filter) {
       id
-      activities360dslID
-      customer360dslID
-      _version
-      _deleted
-      _lastChangedAt
+      idCustomer
+      WorkoutDescription
+      WorkoutType
+      WorkoutDateTime
+      WorkoutMovingTime
+      WorkoutDistance
+      WorkoutAverageHeartRate
+      WorkoutStressScore
+      WorkoutCalories
+      WorkoutElevationGain
+      WorkoutAverageSpeed
+      WorkoutAverageCadence
+      WorkoutAverageTemp
+      WorkoutLocation
+      WorkoutRPE
+      WorkoutPhysicalLevel
+      WorkoutWeatherLevel
+      WorkoutHydrationLevel
+      WorkoutCaloriesEatenPerHour
+      WorkoutAthleteFeedback
+      WorkoutStravaActivityId
+      WorkoutGarminActivityId
+      WorkoutTPWorkoutId
       createdAt
       updatedAt
-      activities360dsl {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      customer360dsl {
-        id
-        UserId360DSL
-        LastName
-        FirstName
-        EmailAddress
-        MobileNumber
-        Male
-        DateOfBirth
-        Country
-        MetricsDateCapture
-        MetricSick
-        MetricInjury
-        MetricSleep
-        MetricWorkLifeBalance
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
+      __typename
     }
   }
 `;
-export const onUpdateACTIVITIES360DSLCUSTOMER360DSL = /* GraphQL */ `
-  subscription OnUpdateACTIVITIES360DSLCUSTOMER360DSL {
-    onUpdateACTIVITIES360DSLCUSTOMER360DSL {
+export const onUpdateWorkout = /* GraphQL */ `
+  subscription OnUpdateWorkout($filter: ModelSubscriptionWorkoutFilterInput) {
+    onUpdateWorkout(filter: $filter) {
       id
-      activities360dslID
-      customer360dslID
-      _version
-      _deleted
-      _lastChangedAt
+      idCustomer
+      WorkoutDescription
+      WorkoutType
+      WorkoutDateTime
+      WorkoutMovingTime
+      WorkoutDistance
+      WorkoutAverageHeartRate
+      WorkoutStressScore
+      WorkoutCalories
+      WorkoutElevationGain
+      WorkoutAverageSpeed
+      WorkoutAverageCadence
+      WorkoutAverageTemp
+      WorkoutLocation
+      WorkoutRPE
+      WorkoutPhysicalLevel
+      WorkoutWeatherLevel
+      WorkoutHydrationLevel
+      WorkoutCaloriesEatenPerHour
+      WorkoutAthleteFeedback
+      WorkoutStravaActivityId
+      WorkoutGarminActivityId
+      WorkoutTPWorkoutId
       createdAt
       updatedAt
-      activities360dsl {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      customer360dsl {
-        id
-        UserId360DSL
-        LastName
-        FirstName
-        EmailAddress
-        MobileNumber
-        Male
-        DateOfBirth
-        Country
-        MetricsDateCapture
-        MetricSick
-        MetricInjury
-        MetricSleep
-        MetricWorkLifeBalance
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
+      __typename
     }
   }
 `;
-export const onDeleteACTIVITIES360DSLCUSTOMER360DSL = /* GraphQL */ `
-  subscription OnDeleteACTIVITIES360DSLCUSTOMER360DSL {
-    onDeleteACTIVITIES360DSLCUSTOMER360DSL {
+export const onDeleteWorkout = /* GraphQL */ `
+  subscription OnDeleteWorkout($filter: ModelSubscriptionWorkoutFilterInput) {
+    onDeleteWorkout(filter: $filter) {
       id
-      activities360dslID
-      customer360dslID
-      _version
-      _deleted
-      _lastChangedAt
+      idCustomer
+      WorkoutDescription
+      WorkoutType
+      WorkoutDateTime
+      WorkoutMovingTime
+      WorkoutDistance
+      WorkoutAverageHeartRate
+      WorkoutStressScore
+      WorkoutCalories
+      WorkoutElevationGain
+      WorkoutAverageSpeed
+      WorkoutAverageCadence
+      WorkoutAverageTemp
+      WorkoutLocation
+      WorkoutRPE
+      WorkoutPhysicalLevel
+      WorkoutWeatherLevel
+      WorkoutHydrationLevel
+      WorkoutCaloriesEatenPerHour
+      WorkoutAthleteFeedback
+      WorkoutStravaActivityId
+      WorkoutGarminActivityId
+      WorkoutTPWorkoutId
       createdAt
       updatedAt
-      activities360dsl {
-        id
-        UserId360DSL
-        ActivityDescription
-        ActivityType
-        ActivityDate
-        ActivityMovingTime
-        ActivityDistance
-        ActivityAverageHeartRate
-        ActivityStressScore
-        ActivityCalories
-        ActivityElevationGain
-        ActivityAverageSpeed
-        ActivityAverageCadence
-        ActivityAverageTemp
-        ActivityLocation
-        ActivityRPE
-        ActivityFatigueLevel
-        ActivityPhysicalLevel
-        ActivityStravaActivityId
-        ActivityStravaOwnerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      customer360dsl {
-        id
-        UserId360DSL
-        LastName
-        FirstName
-        EmailAddress
-        MobileNumber
-        Male
-        DateOfBirth
-        Country
-        MetricsDateCapture
-        MetricSick
-        MetricInjury
-        MetricSleep
-        MetricWorkLifeBalance
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
+      __typename
+    }
+  }
+`;
+export const onCreateEvent = /* GraphQL */ `
+  subscription OnCreateEvent($filter: ModelSubscriptionEventFilterInput) {
+    onCreateEvent(filter: $filter) {
+      id
+      idCustomer
+      EventName
+      EventDate
+      EventType
+      EventSubType
+      EventDistance
+      EventPriority
+      EventDescription
+      EventGoalTime
+      EventGoalDistance
+      EventGoalPlace
+      EventGoalFinish
+      EventGoalPB
+      EventGoalOther
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateEvent = /* GraphQL */ `
+  subscription OnUpdateEvent($filter: ModelSubscriptionEventFilterInput) {
+    onUpdateEvent(filter: $filter) {
+      id
+      idCustomer
+      EventName
+      EventDate
+      EventType
+      EventSubType
+      EventDistance
+      EventPriority
+      EventDescription
+      EventGoalTime
+      EventGoalDistance
+      EventGoalPlace
+      EventGoalFinish
+      EventGoalPB
+      EventGoalOther
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteEvent = /* GraphQL */ `
+  subscription OnDeleteEvent($filter: ModelSubscriptionEventFilterInput) {
+    onDeleteEvent(filter: $filter) {
+      id
+      idCustomer
+      EventName
+      EventDate
+      EventType
+      EventSubType
+      EventDistance
+      EventPriority
+      EventDescription
+      EventGoalTime
+      EventGoalDistance
+      EventGoalPlace
+      EventGoalFinish
+      EventGoalPB
+      EventGoalOther
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateStravaActivities = /* GraphQL */ `
+  subscription OnCreateStravaActivities(
+    $filter: ModelSubscriptionStravaActivitiesFilterInput
+  ) {
+    onCreateStravaActivities(filter: $filter) {
+      id
+      StravaActivityId
+      StravaActivityOwnerId
+      StravaActivityDescription
+      StravaActivityType
+      StravaActivityDateTime
+      StravaActivityMovingTime
+      StravaActivityDistance
+      StravaActivityAverageHeartRate
+      StravaActivitySufferScore
+      StravaActivityCalories
+      StravaActivityElevationGain
+      StravaActivityAverageSpeed
+      StravaActivityAverageCadence
+      StravaActivityAvergeTemp
+      StravaActivityLocation
+      StravaActivity
+      StravaActivityZones
+      StravaActivityAthleteFeedback
+      StravaActivityRPE
+      StravaActivityFatigue
+      StravaActivityAthleteEffort
+      StravaActivityAthleteBody
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateStravaActivities = /* GraphQL */ `
+  subscription OnUpdateStravaActivities(
+    $filter: ModelSubscriptionStravaActivitiesFilterInput
+  ) {
+    onUpdateStravaActivities(filter: $filter) {
+      id
+      StravaActivityId
+      StravaActivityOwnerId
+      StravaActivityDescription
+      StravaActivityType
+      StravaActivityDateTime
+      StravaActivityMovingTime
+      StravaActivityDistance
+      StravaActivityAverageHeartRate
+      StravaActivitySufferScore
+      StravaActivityCalories
+      StravaActivityElevationGain
+      StravaActivityAverageSpeed
+      StravaActivityAverageCadence
+      StravaActivityAvergeTemp
+      StravaActivityLocation
+      StravaActivity
+      StravaActivityZones
+      StravaActivityAthleteFeedback
+      StravaActivityRPE
+      StravaActivityFatigue
+      StravaActivityAthleteEffort
+      StravaActivityAthleteBody
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteStravaActivities = /* GraphQL */ `
+  subscription OnDeleteStravaActivities(
+    $filter: ModelSubscriptionStravaActivitiesFilterInput
+  ) {
+    onDeleteStravaActivities(filter: $filter) {
+      id
+      StravaActivityId
+      StravaActivityOwnerId
+      StravaActivityDescription
+      StravaActivityType
+      StravaActivityDateTime
+      StravaActivityMovingTime
+      StravaActivityDistance
+      StravaActivityAverageHeartRate
+      StravaActivitySufferScore
+      StravaActivityCalories
+      StravaActivityElevationGain
+      StravaActivityAverageSpeed
+      StravaActivityAverageCadence
+      StravaActivityAvergeTemp
+      StravaActivityLocation
+      StravaActivity
+      StravaActivityZones
+      StravaActivityAthleteFeedback
+      StravaActivityRPE
+      StravaActivityFatigue
+      StravaActivityAthleteEffort
+      StravaActivityAthleteBody
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateGarminActivities = /* GraphQL */ `
+  subscription OnCreateGarminActivities(
+    $filter: ModelSubscriptionGarminActivitiesFilterInput
+  ) {
+    onCreateGarminActivities(filter: $filter) {
+      id
+      GarminAccountId
+      GarminActivityId
+      GarminActivityDescription
+      GarminActivityType
+      GarminActivityStartTime
+      GarminActivityDistance
+      GarminActivityDuration
+      GarminAveragePaceInMinutesPerKilometer
+      GarminActiveKilocalories
+      GarminAverageHeartRateInBeatsPerMinute
+      GarminActivity
+      GarminActivityRPE
+      GarminActivityFatigue
+      GarminActivityAthleteFeedback
+      GarminActivityAthleteEffort
+      GarminActivityAthleteBody
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateGarminActivities = /* GraphQL */ `
+  subscription OnUpdateGarminActivities(
+    $filter: ModelSubscriptionGarminActivitiesFilterInput
+  ) {
+    onUpdateGarminActivities(filter: $filter) {
+      id
+      GarminAccountId
+      GarminActivityId
+      GarminActivityDescription
+      GarminActivityType
+      GarminActivityStartTime
+      GarminActivityDistance
+      GarminActivityDuration
+      GarminAveragePaceInMinutesPerKilometer
+      GarminActiveKilocalories
+      GarminAverageHeartRateInBeatsPerMinute
+      GarminActivity
+      GarminActivityRPE
+      GarminActivityFatigue
+      GarminActivityAthleteFeedback
+      GarminActivityAthleteEffort
+      GarminActivityAthleteBody
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteGarminActivities = /* GraphQL */ `
+  subscription OnDeleteGarminActivities(
+    $filter: ModelSubscriptionGarminActivitiesFilterInput
+  ) {
+    onDeleteGarminActivities(filter: $filter) {
+      id
+      GarminAccountId
+      GarminActivityId
+      GarminActivityDescription
+      GarminActivityType
+      GarminActivityStartTime
+      GarminActivityDistance
+      GarminActivityDuration
+      GarminAveragePaceInMinutesPerKilometer
+      GarminActiveKilocalories
+      GarminAverageHeartRateInBeatsPerMinute
+      GarminActivity
+      GarminActivityRPE
+      GarminActivityFatigue
+      GarminActivityAthleteFeedback
+      GarminActivityAthleteEffort
+      GarminActivityAthleteBody
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateGarminMetrics = /* GraphQL */ `
+  subscription OnCreateGarminMetrics(
+    $filter: ModelSubscriptionGarminMetricsFilterInput
+  ) {
+    onCreateGarminMetrics(filter: $filter) {
+      id
+      idCustomer
+      GarminAccountId
+      GarminUserAccessToken
+      GarminSummaryId
+      GarminMetricType
+      GarminMetricData
+      GarminMetricDate
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateGarminMetrics = /* GraphQL */ `
+  subscription OnUpdateGarminMetrics(
+    $filter: ModelSubscriptionGarminMetricsFilterInput
+  ) {
+    onUpdateGarminMetrics(filter: $filter) {
+      id
+      idCustomer
+      GarminAccountId
+      GarminUserAccessToken
+      GarminSummaryId
+      GarminMetricType
+      GarminMetricData
+      GarminMetricDate
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteGarminMetrics = /* GraphQL */ `
+  subscription OnDeleteGarminMetrics(
+    $filter: ModelSubscriptionGarminMetricsFilterInput
+  ) {
+    onDeleteGarminMetrics(filter: $filter) {
+      id
+      idCustomer
+      GarminAccountId
+      GarminUserAccessToken
+      GarminSummaryId
+      GarminMetricType
+      GarminMetricData
+      GarminMetricDate
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateNonTrainingDays = /* GraphQL */ `
+  subscription OnCreateNonTrainingDays(
+    $filter: ModelSubscriptionNonTrainingDaysFilterInput
+  ) {
+    onCreateNonTrainingDays(filter: $filter) {
+      id
+      idCustomer
+      Valid
+      NonTrainingType
+      StartDate
+      EndDate
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateNonTrainingDays = /* GraphQL */ `
+  subscription OnUpdateNonTrainingDays(
+    $filter: ModelSubscriptionNonTrainingDaysFilterInput
+  ) {
+    onUpdateNonTrainingDays(filter: $filter) {
+      id
+      idCustomer
+      Valid
+      NonTrainingType
+      StartDate
+      EndDate
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteNonTrainingDays = /* GraphQL */ `
+  subscription OnDeleteNonTrainingDays(
+    $filter: ModelSubscriptionNonTrainingDaysFilterInput
+  ) {
+    onDeleteNonTrainingDays(filter: $filter) {
+      id
+      idCustomer
+      Valid
+      NonTrainingType
+      StartDate
+      EndDate
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateMetric = /* GraphQL */ `
+  subscription OnCreateMetric($filter: ModelSubscriptionMetricFilterInput) {
+    onCreateMetric(filter: $filter) {
+      id
+      idCustomer
+      MetricName
+      MetricDate
+      MetricType
+      MetricValue
+      MetricSource
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateMetric = /* GraphQL */ `
+  subscription OnUpdateMetric($filter: ModelSubscriptionMetricFilterInput) {
+    onUpdateMetric(filter: $filter) {
+      id
+      idCustomer
+      MetricName
+      MetricDate
+      MetricType
+      MetricValue
+      MetricSource
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteMetric = /* GraphQL */ `
+  subscription OnDeleteMetric($filter: ModelSubscriptionMetricFilterInput) {
+    onDeleteMetric(filter: $filter) {
+      id
+      idCustomer
+      MetricName
+      MetricDate
+      MetricType
+      MetricValue
+      MetricSource
+      createdAt
+      updatedAt
+      __typename
     }
   }
 `;
