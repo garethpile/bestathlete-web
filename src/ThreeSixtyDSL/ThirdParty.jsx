@@ -7,7 +7,7 @@ import { useLocation } from "react-router-dom";
 
 
 
-function ThirdParty(props) {
+function ThirdParty({props}) {
 
   let location = useLocation();
   //let locationStateCustomerEntity;

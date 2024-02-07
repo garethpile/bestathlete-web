@@ -12,14 +12,15 @@ import Modal from "./Modal/Modal"
 
 const { Option } = Select;
 
-export default function AthleteFeedback(props) {
-  const [dropdownSleep, setDropdownSleep] = React.useState(props.customerEntity.metricSleep);
-  const [dropdownWorkLifeStress, setDropdownWorkLifeStress] =
-    React.useState("");
+export default function AthleteFeedback({customer}) {
+
+  const [dropdownSleep, setDropdownSleep] = React.useState("");
+  const [dropdownWorkLifeStress, setDropdownWorkLifeStress] = React.useState("");
   const [dropdownInjury, setDropdownInjury] = React.useState("");
   const [dropdownSick, setDropdownSick] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [form, setForm] = React.useState({startDate : "" , endDate: ""});
+
   const dateHandler = (e) => {
     setForm({...form , [e.target.name] : e.target.value})
   }
@@ -30,20 +31,20 @@ export default function AthleteFeedback(props) {
     }
     let currentCustomerEntityVersion = "";
     try {
-      currentCustomerEntityVersion = props.customerEntity._version;
+      currentCustomerEntityVersion = customer._version;
       console.log(
-        "Function updateAthleteMetrics executing with parameter id: " + props.customerEntity.id
+        "Function updateAthleteMetrics executing with parameter id: " + customer.id
       );
       
       console.log("AthleteFeedback Component - customerVersion: " + currentCustomerEntityVersion);
 
       const updateAthleteMetricsResponse = await API.graphql(
         graphqlOperation(updateNonTrainingDays, {
-          id: props.customerEntity.id,
+          id: customer.id,
           startDate: form.startDate,
           endDate: form.endDate,
           valid: true,
-          EmailAddress: props.customerEntity.EmailAddress,
+          EmailAddress: customer.EmailAddress,
           _version: currentCustomerEntityVersion
         })
       );
@@ -167,9 +168,9 @@ export default function AthleteFeedback(props) {
             <Select
               value={dropdownSleep}
               onChange={(e) => setDropdownSleep(e)}
-              placeholder={props.customerEntity.MetricSleep }
+              placeholder={customer.MetricSleep }
               style={{ width: 200 }}
-              defaulValue={props.customerEntity.MetricSleep }
+         
             >
               <Option value="HardlyAny">Hardly any</Option>
               <Option value="6Less">Less Than 6</Option>
@@ -194,7 +195,7 @@ export default function AthleteFeedback(props) {
           </Box>
      
 <p></p>
-          <Button onClick={() => updateAthleteMetrics(props.customerEntity.id,props.customerEntity._version)}>Save</Button>
+          <Button onClick={() => updateAthleteMetrics(customer.id,customer._version)}>Save</Button>
         </Col>
       </Row>
     </Card>

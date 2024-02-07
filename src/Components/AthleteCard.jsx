@@ -4,7 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import { Avatar } from "antd";
 import Divider from "@mui/material/Divider";
 
-export default function AthleteCard (props) {
+export default function AthleteCard ({customer}) {
   
     return (
       <Card className="maincardDiv">
@@ -16,7 +16,7 @@ export default function AthleteCard (props) {
           />
         </IconButton>
         <div>
-          <p className="nameDiv">{props.customerEntity?.FirstName } {props.customerEntity?.LastName}</p>
+          <p className="nameDiv">{customer?.FirstName } {customer?.LastName}</p>
         </div>
         <div className="calculationDiv">
           <span className="spanDiv">

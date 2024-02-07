@@ -11,9 +11,9 @@ import AthleteCard from "../Components/AthleteCard";
 import ActivityCardStrava from "../Components/ActivityCardStrava";
 import Events from "../Components/Events";
 
-function ThreeSixtyDSL(props) {
+function ThreeSixtyDSL({customer}, {stravaData}) {
 
-  console.log( props.stravaData);
+  console.log( stravaData);
   const [activities, setActivities] = React.useState([]);
 
   const sortDesByDate = (a, b) => {
@@ -25,33 +25,8 @@ function ThreeSixtyDSL(props) {
     }
     return 0;
   };
-  async function fetchActivities(stravaPartyId) {
-    try {
-      const stravaActivities = await API.graphql(graphqlOperation(StravaActivityQuery,{StravaActivityOwnerId: stravaPartyId }));
-      // console.log( "Strava activity items returned:" + stravaActivities.data.activitiesStravaByStravaActivityOwnerId.items);
-      let sorted =
-      stravaActivities.data.activitiesStravaByStravaActivityOwnerId.items.sort(
-          sortDesByDate
-        );
-      sorted = sorted.filter(
-        (exr) =>
-          !exr.StravaActivityAthleteFeedback ||
-          exr.StravaActivityAthleteFeedback !== 1
-      );
-      setActivities(sorted.slice(0, 10));
-    } catch (err) {
-      console.log("Error fetching activities");
-    }
-  }
-  useEffect(() => {
-    if (props.stravaData.PartyId){
-      // console.log("props.stravaData.PartyId: ", props.stravaData.PartyId);
-      fetchActivities(props.stravaData.PartyId);
-    }
-    else {
-      console.log("props.stravaData.PartyId does not exist...")
-    }
-  }, [props]);
+
+
   return (
     <div>
       {/* <Header user={userId} /> */}
@@ -68,9 +43,9 @@ function ThreeSixtyDSL(props) {
             >
               Activity Feedback Corner
             </h1>
-            <AthleteCard customerEntity={props.customerEntity} />
-            <Events customerId={props.customerId}/>
-            <NonTrainingDays customerId={props.customerId}/>
+            <AthleteCard customer={customer} />
+            <Events customer={customer}/>
+            <NonTrainingDays customer={customer}/>
             
           </Col>
           <Col className="secondCol" span={8} xs={24} sm={24} lg={8} xl={8}>
@@ -112,7 +87,7 @@ function ThreeSixtyDSL(props) {
             )}
           </Col>
           <Col className="thirdCol" span={8} xs={24} sm={24}>
-            <AthleteFeedback customerEntity={props.customerEntity} />
+        {/*    <AthleteFeedback customerEntity={customer} /> */}
             <TermsConditions />
             <div
               style={{

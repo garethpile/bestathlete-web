@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Auth, API, graphqlOperation } from "aws-amplify";
-
-import { customersByIdCustomer } from "../graphql/queries";
-import { createCustomer } from "../graphql/mutations";
+import { Auth, Hub } from "aws-amplify";
+import { customerGetByIdCustomer } from "../services/customerServices";
+import { workoutGetIDDateTime, workoutGetIDDateTimeFilterAthleteFeedback } from "../services/workoutServices";
+import { eventGetIDDateTime } from "../services/eventServices";
+import { metricsGet3DaysWeight, metricsGet3DaysSleep } from "../services/metricServices";
 
 import axios from "axios";
-
 import Header from "../Components/Header";
 import {
   BrowserRouter as Router,
@@ -20,231 +20,149 @@ import Profile from "../ProfilePage/Profile";
 
 const LandingPage = () => {
   const [cognitoEntity, setCognitoEntity] = useState("");
-  const [customerEntity, setCustomerEntity] = useState({
-    id: "",
-    FirstName: "",
-    LastName: "",
-    EmailAddress: "",
-    Male: false,
-    MobileNumber: "",
-    Country: "",
-    DateOfBirth: "",
-    SaturdayTrain: true,
-    SundayTrain: true,
-    MondayTrain: true,
-    TuesdayTrain: true,
-    WednesdayTrain: true,
-    ThursdayTrain: true,
-    FridayTrain: true,
-    SaturdayTrainHours: 3,
-    SundayTrainHours: 2,
-    MondayTrainHours: 1,
-    TuesdayTrainHours: 1,
-    WednesdayTrainHours: 1,
-    ThursdayTrainHours: 1,
-    FridayTrainHours: 1,
-  });
+  const [customerEntity, setCustomerEntity] = useState({});
 
   const [customerId, setCustomerId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+
+  const [userExists, setUserExists] = useState(false);
+  const [customer, setCustomer] = useState({});
+
+  const [workouts, setWorkouts] = useState([]);
+  const [selectedWorkout, setSelectedWorkout] = useState(null);
+
+  const [workoutsNoFeedback, setWorkoutsNoFeedback] = useState([]);
+
+  const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const [globalUserId, setGlobalUserId] = useState(null);
+
+  const [metrics3DaysWeight, setMetrics3DaysWeight] = useState([]);
+  const [metrics3DaysSleep, setMetrics3DaysSleep] = useState([]);
 
   const [redirect, setRedirect] = useState(false);
   const [stravaInfo, setStravaInfo] = useState("");
   let customerDataVersion = 0;
 
-  let stravaPartyId = "";
-
-  const getCustomer = async (authenticatedUser) => {
-    try {
-      // console.log("cognitoEntity inside getCustomer: ", cognitoEntity);
-      const userEmail = authenticatedUser.attributes.email;
-      const userName = authenticatedUser.username;
-      // Attempt to get 360DSL Customer .....
-      const customerData = await API.graphql(
-        graphqlOperation(customersByIdCustomer, { idCustomer: userName })
-      );
-      // If the 360 Customer does not exist ....
-      if (!customerData.data.customersByIdCustomer) {
-        console.log("Customer does not exist .... Lets' create new customer ....");
-
-        const newCustomer = await API.graphql(
-          graphqlOperation(createCustomer, {
-            idCustomer: userName,
-            EmailAddress: userEmail,
-            MobileNumber: "+27821234567",
-            Gender: "_",
-            FirstName: "-",
-            LastName: "-",
-            Country: "South Africa",
-            DateOfBirth: "1901-01-01",
-            TrainingDays: {
-              SaturdayTrain: true,
-              SaturdayTrainHours: 1,
-              SundayTrain: true,
-              SundayTrainHours: 1,
-              MondayTrain: true,
-              MondayTrainHours: 1,
-              TuesdayTrain: true,
-              TuesdayTrainHours: 1,
-              WednesdayTrain: true,
-              WednesdayTrainHours: 1,
-              ThursdayTrain: true,
-              ThursdayTrainHours: 1,
-              FridayTrain: true,
-              FridayTrainHours: 1
-            }
-          })
-        );
-
-        setCustomerEntity({
-          ...customerEntity,
-          idCustomer: userName,
-          EmailAddress: userEmail,
-          MobileNumber: "+27821234567",
-          Male: "-",
-          FirstName: "-",
-          LastName: "-",
-          Country: "South Africa",
-          DateOfBirth: "1901-01-01",
-          TrainingDays: {
-            SaturdayTrain: true,
-            SaturdayTrainHours: 1,
-            SundayTrain: true,
-            SundayTrainHours: 1,
-            MondayTrain: true,
-            MondayTrainHours: 1,
-            TuesdayTrain: true,
-            TuesdayTrainHours: 1,
-            WednesdayTrain: true,
-            WednesdayTrainHours: 1,
-            ThursdayTrain: true,
-            ThursdayTrainHours: 1,
-            FridayTrain: true,
-            FridayTrainHours: 1,
-            _version: 1
-          }
-        });
-        // console.log( "Newly created customer copied into customerEntity: ",customerEntity);
-        setRedirect(true);
-        setIsLoading(false);
-      } else {
-        // Else Customer exists ....
-        console.log("<LandingPage>: Customer exsists ....");
-        console.log("<LandingPage>: Customer Data returned: ", customerData.data.customersByIdCustomer.items[0]);
-        const customerDataEntity = customerData.data.customersByIdCustomer.items[0];
-        setCustomerEntity({
-          ...customerEntity,
-          idCustomer: userName,
-          EmailAddress: customerDataEntity.hasOwnProperty('EmailAddress') ? customerDataEntity.EmailAddress : '',
-          MobileNumber: customerDataEntity.hasOwnProperty('MobileNumber') ? customerDataEntity.MobileNumber : '',
-          Gender: customerDataEntity.hasOwnProperty('Gender') ? customerDataEntity.Gender : '',
-          FirstName: customerDataEntity.hasOwnProperty('FirstName') ? customerDataEntity.FirstName : '',
-          LastName: customerDataEntity.hasOwnProperty('LastName') ? customerDataEntity.LastName : '',
-          Country: customerDataEntity.hasOwnProperty('Country') ? customerDataEntity.Country : 'South Africa',
-          DateOfBirth: customerDataEntity.hasOwnProperty('DateOfBirth') ? customerDataEntity.DateOfBirth : '1901-01-01',
-          TrainingDays: {
-
-            SaturdayTrain:
-              customerDataEntity.hasOwnProperty('TrainingDays.SaturdayTrain') ? customerDataEntity.TrainingDays.SaturdayTrain : true,
-
-            SaturdayTrainHours:
-              customerDataEntity.hasOwnProperty('TrainingDays.SaturdayTrainHours') ? customerDataEntity.TrainingDays.SaturdayTrainHours : 1,
-            SundayTrain:
-              customerDataEntity.hasOwnProperty('TrainingDays.SundayTrain') ? customerDataEntity.TrainingDays.SundayTrain : true,
-            SundayTrainHours:
-              customerDataEntity.hasOwnProperty('TrainingDays.SundayTrainHours') ? customerDataEntity.TrainingDays.SundayTrainHours : 1,
-            MondayTrain:
-              customerDataEntity.hasOwnProperty('TrainingDays.MondayTrain') ? customerDataEntity.TrainingDays.MondayTrain : true,
-            MondayTrainHours:
-              customerDataEntity.hasOwnProperty('TrainingDays.MondayTrainHours') ? customerDataEntity.TrainingDays.MondayTrainHours : 1,
-            TuesdayTrain:
-              customerDataEntity.hasOwnProperty('TrainingDays.TuesdayTrain') ? customerDataEntity.TrainingDays.TuesdayTrain : true,
-            TuesdayTrainHours:
-              customerDataEntity.hasOwnProperty('TrainingDays.TuesdayTrainHours') ? customerDataEntity.TrainingDays.TuesdayTrainHours : 1,
-            WednesdayTrain:
-              customerDataEntity.hasOwnProperty('TrainingDays.WednesdayTrain') ? customerDataEntity.TrainingDays.WednesdayTrain : true,
-            WednesdayTrainHours:
-              customerDataEntity.hasOwnProperty('TrainingDays.WednesdayTrainHours') ? customerDataEntity.TrainingDays.WednesdayTrainHours : 1,
-            ThursdayTrain:
-              customerDataEntity.hasOwnProperty('TrainingDays.ThursdayTrain') ? customerDataEntity.TrainingDays.ThursdayTrain : true,
-            ThursdayTrainHours:
-              customerDataEntity.hasOwnProperty('TrainingDays.ThursdayTrainHours') ? customerDataEntity.TrainingDays.ThursdayTrainHours : 1,
-            FridayTrain:
-              customerDataEntity.hasOwnProperty('TrainingDays.FridayTrain') ? customerDataEntity.TrainingDays.FridayTrain : true,
-            FridayTrainHours:
-              customerDataEntity.hasOwnProperty('TrainingDays.FridayTrainHours') ? customerDataEntity.TrainingDays.FridayTrainHours : 1,
-            _version: customerDataEntity._version
-          }
-        });
-
-        customerDataVersion = customerDataEntity?._version;
-        console.log("Customer version (Landing Page): ", customerDataVersion);
-        setIsLoading(false);
-      }
-    } catch (error) {
-      console.log("Error retrieving customer entity: ", error);
-      alert(
-        `Apologies! There was a technical error. Please email info@360dsl.co.za`
-      );
-      setRedirect(true);
-    }
-  };
-
-  const getStravaPartyId = async (customer360dslId) => {
-    try {
-      let stravaInformation = await axios.get(
-        `https://p7v775qaqh.execute-api.eu-west-1.amazonaws.com/prod/strava?customer360dslId=${customer360dslId}`
-      );
-      //console.log("Strava Party Information retrieved: ", stravaInformation);
-      //console.log("Strava Party Information body retrieved: ", stravaInformation.data.body);
-      //console.log("Strava Party Information Item[0] retrieved: ", stravaInformation.data.body.Items[0]);
-
-      if (
-        stravaInformation.data.body.Items[0]?.PartyId === undefined ||
-        stravaInformation.data.body.Items[0]?.PartyId === null
-      ) {
-        console.log("Strava Party Id could not be retrieved ...");
-      } else {
-        stravaPartyId = stravaInformation.data.body.Items[0].PartyId;
-        console.log(
-          "Strava Party Id retrieved: ",
-          stravaInformation.data.body.Items[0].PartyId
-        );
-        setStravaInfo(stravaInformation.data.body.Items[0]);
-        // console.log("stravaInfo: ", stravaInfo);
-      }
-    } catch (error) {
-      console.log("Error retrieving Strava Party info ....", error);
-    }
-  };
+  useEffect(() => {
+    console.log("<App><useEffect()-[workouts]>: Executing ...");
+    console.log("<App><useEffect()-[workouts]>: 'workouts' state variable updated to: ", workouts);
+  }, [workouts]);
 
   useEffect(() => {
-    Auth.currentAuthenticatedUser({
-      bypassCache: true, // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-    })
+    console.log("<App><useEffect()-[workoutsNoFeedback]>: Executing ...");
+    console.log("<App><useEffect()-[workoutsNoFeedback]>: 'workoutsNoFeedback' state variable updated to: ", workoutsNoFeedback);
+  }, [workoutsNoFeedback]);
+
+  useEffect(() => {
+    console.log("<App><useEffect()-[events]>: Executing ...");
+    console.log("<App><useEffect()-[events]>: 'events' state variable updated to: ", events);
+  }, [events]);
+
+  useEffect(() => {
+    console.log("<App><useEffect()-[customer]>: Executing ...");
+    console.log("<App><useEffect()-[customer]>: 'customer' state variable updated to: ", customer);
+  }, [customer]);
+  useEffect(() => {
+    console.log("<App><useEffect()-[metrics3DaysWeight]>: Executing ...");
+    console.log("<App><useEffect()-[metrics3DaysWeight]>: 'metrics3DaysWeight' state variable updated to: ", metrics3DaysWeight);
+    //console.log("metrics3DaysWeight.length: ", metrics3DaysWeight.length);
+  }, [metrics3DaysWeight]);
+
+  useEffect(() => {
+    console.log("<App><useEffect()-[metrics3DaysSleep]>: Executing ...");
+    console.log("<App><useEffect()-[metrics3DaysSleep]>: 'metrics3DaysSleep' state variable updated to: ", metrics3DaysSleep);
+    //console.log("metrics3DaysWeight.length: ", metrics3DaysWeight.length);
+  }, [metrics3DaysSleep]);
+ 
+  useEffect(() => {
+    console.log("<LandingPage><useEffect()>: Executing ...");
+    Auth.currentAuthenticatedUser({ bypassCache: true, })
       .then((authenticatedUser) => {
-        setCustomerId(authenticatedUser.username);
-        setCognitoEntity(authenticatedUser);
+        if (authenticatedUser.username) {
+          setGlobalUserId(authenticatedUser.username);
+          console.log("<LandingPage><useEffect()><handleAuthStateChange>: globalUserId retrieved: ", authenticatedUser.username);
+          console.log("<LandingPage><useEffect()><handleAuthStateChange>: Retrieve customer using customerGet() ...");
+          customerGetByIdCustomer(authenticatedUser.username)
+            .then(returnedCustomer => {
+              if (returnedCustomer == false) {
+                //console.log("<LandingPage><useEffect()><handleAuthStateChange>: Customer does not exist. Take user to Profile page for creation");
+                setUserExists(false);
+              }
+              else {
+                setCustomer(returnedCustomer);
+                setUserExists(true);
+                const today = new Date();
+                const threeDaysAgo = new Date(today);
+                threeDaysAgo.setDate(threeDaysAgo.getDate() - 7);
+                const startDate = threeDaysAgo.toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
+                const endDate = today.toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
+                console.log("<LandingPage><useEffect()><handleAuthStateChange>: Retrieve ALL workouts for past week ...");
+                workoutGetIDDateTime(authenticatedUser.username, startDate, endDate)
+                  .then(returnedWorkouts => {
+                    setWorkouts(returnedWorkouts);
+                  }
+                  )
+                console.log("<LandingPage><useEffect()><handleAuthStateChange>: Retrieve NO FEEDBACK workouts for past week ...");
+                workoutGetIDDateTimeFilterAthleteFeedback(authenticatedUser.username, startDate, endDate, 0)
+                  .then(returnedWorkoutsNoFeedback => {
+                    setWorkoutsNoFeedback(returnedWorkoutsNoFeedback);
+                  }
+                  )
+                console.log("<LandingPage><useEffect()><handleAuthStateChange>: Retrieve events ...");
+                eventGetIDDateTime(authenticatedUser.username)
+                  .then(returnedEvents => {
+                    setEvents(returnedEvents);
+                  }
+                  )
+                console.log("<LandingPage><useEffect()><handleAuthStateChange>: Retrieve metrics3DaysWeight using metricsGet3DaysWeight() ...");
+                metricsGet3DaysWeight(authenticatedUser.username)
+                  .then(returnedMetrics => {
 
-        // console.log("Cognito user: ", authenticatedUser);
-        // console.log("Cognito email: ", authenticatedUser.attributes.email);
-        // console.log("Cognito username: ", authenticatedUser.username);
+                    if (returnedMetrics.statusCode == 200) {
+                      // console.log("<LandingPage><useEffect()><handleAuthStateChange>: Weight Metrics returned: ", returnedMetrics);
 
-        // console.log("cognitoEntity set to: ", { cognitoEntity });
-
-        // console.log("Get customer data of current logged in user: ",authenticatedUser.username);
-        getCustomer(authenticatedUser);
-        // console.log("Retrieve Strava Party Id ...");
-        getStravaPartyId(authenticatedUser.username);
+                      setMetrics3DaysWeight(returnedMetrics.body);
+                    }
+                    else {
+                      console.log("<LandingPage><useEffect()><handleAuthStateChange>: NO Weight Metrics returned.");
+                      setMetrics3DaysWeight({});
+                    }
+                  }
+                  )
+                console.log("<LandingPage><useEffect()><handleAuthStateChange>: Retrieve metrics3DaysSleep using metricsGet3DaysSleep() ...");
+                metricsGet3DaysSleep(authenticatedUser.username)
+                  .then(returnedMetrics => {
+                    if (returnedMetrics.statusCode == 200) {
+                      // console.log("<LandingPage><useEffect()><handleAuthStateChange>: Sleep Metrics returned: ", returnedMetrics);
+                      setMetrics3DaysSleep(returnedMetrics.body);
+                    }
+                    else {
+                      console.log("<LandingPage><useEffect()><handleAuthStateChange>: NO Sleep Metrics returned.");
+                      setMetrics3DaysSleep({});
+                    }
+                  }
+                  )
+                  setIsLoading(false);
+              }
+            })
+            .catch(error => {
+              // If customer does not exist or there's an error fetching
+              console.error("<LandingPage><useEffect()><handleAuthStateChange><Error><003>: Error fetching customer:", error);
+              setUserExists(false);
+            }
+            )
+        }
       })
-      .catch((err) => console.log(err));
   }, []);
+
   return (
     <BrowserRouter>
 
       <Header
-        customerId={customerId}
-        customerEntity={customerEntity}
+        customerId={globalUserId}
+        customer={customer}
         cognitoEntity={cognitoEntity}
       ></Header>
 
@@ -254,10 +172,10 @@ const LandingPage = () => {
       ) : (
         // Render the Routes only when not loading
         <Routes>
-          <Route path="/Profile" element={<Profile setRedirect={setRedirect} customerEntity={customerEntity} />} />
+          <Route path="/Profile" element={<Profile setRedirect={setRedirect} customer={customer} />} />
           <Route
             path="/ThirdParty"
-            element={<ThirdParty customerEntity={customerEntity} />}
+            element={<ThirdParty customer={customer} />}
           />
           <Route
             exact
@@ -265,7 +183,7 @@ const LandingPage = () => {
             element={
               <ThreeSixtyDSL
                 customerId={customerId}
-                customerEntity={customerEntity}
+                customer={customer}
                 stravaData={stravaInfo}
               />
             }
@@ -275,6 +193,6 @@ const LandingPage = () => {
       )}
     </BrowserRouter>
   );
-};
 
+}
 export default LandingPage;
