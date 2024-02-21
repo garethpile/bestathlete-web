@@ -18,7 +18,7 @@ import { Box } from "@mui/system";
 import { Auth, API, graphqlOperation } from "aws-amplify";
 import { updateCustomer } from "../graphql/mutations";
 
-const Profile = ({ setRedirect, customerEntity }) => {
+const Profile = ({ userExists, customerEntity = {} }) => {
 
  
  
@@ -99,7 +99,7 @@ const Profile = ({ setRedirect, customerEntity }) => {
             alert(`Please fill all the fields`);
           } else {
             //setRedirect(true);
-            setRedirect(false);
+            //setRedirect(false);
             window.location.reload();
           }
           

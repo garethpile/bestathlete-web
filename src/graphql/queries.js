@@ -506,11 +506,6 @@ export const customersByIdCustomer = /* GraphQL */ `
         Gender
         DateOfBirth
         Country
-        MetricsDateCapture
-        MetricSick
-        MetricInjury
-        MetricSleep
-        MetricWorkLifeBalance
         createdAt
         updatedAt
         __typename

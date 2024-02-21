@@ -172,7 +172,7 @@ const LandingPage = () => {
       ) : (
         // Render the Routes only when not loading
         <Routes>
-          <Route path="/Profile" element={<Profile setRedirect={setRedirect} customer={customer} />} />
+          <Route path="/Profile" element={<Profile userExists={userExists} customer={customer} />} />
           <Route
             path="/ThirdParty"
             element={<ThirdParty customer={customer} />}
