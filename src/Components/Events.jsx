@@ -23,20 +23,10 @@ import Modal from "./Modal/Modal";
 
 import moment from "moment";
 
-export default function Events(props) {
-  const [events, setEvents] = useState([
-    {
-      id: "",
-      UserId360DSL: props.customerId,
-      EventName: "",
-      EventDate: "",
-      EventType: "",
-      EventDistance: 0.0,
-      EventPriority: "A",
-      Description: "",
-      _version: 1,
-    },
-  ]);
+export default function Events({events}) {
+
+  console.log("Events component loading ....")
+
   const [open, setOpen] = React.useState(false);
   const [form, setForm] = React.useState({});
   const dateHandler = (e) => {
@@ -69,7 +59,7 @@ export default function Events(props) {
 
       API.graphql(
         graphqlOperation(createEventsEntry, {
-          UserId360DSL: props.customerId,
+         
           EventName: form.eventName,
           EventDate: form.eventDate,
           EventType: form.eventType,
@@ -81,7 +71,7 @@ export default function Events(props) {
         .then((createEventsResponse) => {
           alert("Event Added Succesfully");
           // Retrieve updated list ....
-          getEvents(props.customerId);
+          //getEvents(props.customerId);
           setOpen(false);
         })
         .catch((error) => {
@@ -106,7 +96,7 @@ export default function Events(props) {
       })
     );
     // Retrieve updated list ....
-    getEvents(props.customerId);
+    //getEvents(props.customerId);
   };
 
   const getEvents = async (authenticatedUser) => {
@@ -125,7 +115,7 @@ export default function Events(props) {
         const newEventItems = eventItems.filter(
           (item) => item._deleted !== true
         );
-        setEvents(newEventItems);
+        //setEvents(newEventItems);
 
       //  console.log("events after update: ", events);
 
@@ -142,20 +132,9 @@ export default function Events(props) {
     deleteEvents(id, _version);
     const newEvents = events.filter((item) => item.id !== id);
   // console.log("newEvents after filter: ", newEvents);
-    setEvents(newEvents);
+    //setEvents(newEvents);
   }
 
-  useEffect(() => {
-    console.log("useEffect running ....");
-    if (props.customerId) {
-      // customerId Exists ....
-      console.log("props.customerId exists: ", props.customerId);
-      getEvents(props.customerId);
-    } else {
-      // customerId Does not exist yet ....
-      console.log("props.customerId Does NOT Exist");
-    }
-  }, [props.customerId]);
 
   return (
     <Card className="maincardDiv">
@@ -278,7 +257,7 @@ export default function Events(props) {
                   {event.EventPriority} | {event.EventDate} | {event.EventName} | 
                   <button
                     type="button"
-                    onClick={() => handleRemove(event.id, event._version)}
+                    onClick={() => handleRemove(event.id)}
                   >
                     Remove
                   </button>

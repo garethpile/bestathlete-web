@@ -48,11 +48,11 @@ export const metricsGet3DaysWeight = async (idCustomer) => {
       }
       return responseMessage;
     } else {
-      const errorMessage = '<metricServices><metricsGet3DaysWeight><Error><002> No weight metrics returned';
-      console.log(errorMessage);
+      const returnMessage = '<metricServices><metricsGet3DaysWeight><Error><002> No weight metrics returned';
+      console.log(returnMessage);
       const responseMessage = {
-        statusCode: 400,
-        body: errorMessage
+        statusCode: 204,
+        body: returnMessage
       }
       return responseMessage;
     }
@@ -115,11 +115,11 @@ export const metricsGet3DaysSleep = async (idCustomer) => {
       }
       return responseMessage;
     } else {
-      const errorMessage = '<metricServices><metricsGet3DaysSleep><Error><002> No sleep metrics returned';
-      console.log(errorMessage);
+      const returnMessage = '<metricServices><metricsGet3DaysSleep><Error><002> No sleep metrics returned';
+      console.log(returnMessage);
       const responseMessage = {
-        statusCode: 400,
-        body: errorMessage
+        statusCode: 204,
+        body: returnMessage
       }
       return responseMessage;
     }

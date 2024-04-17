@@ -2,9 +2,9 @@ import { API, graphqlOperation } from "aws-amplify";
 import { createWorkout, updateWorkout, deleteWorkout } from "../graphql/mutations";
 import { workoutsByIdCustomerAndWorkoutDateTime } from "../graphql/queries";
 
-export const workoutGetIDDateTime = async (idCustomer, startDate, endDate) => {
-  console.log("<workoutServices><workoutGetIDDateTime>: executing ...");
-  console.log("<workoutServices><workoutGetIDDateTime>: idCustomer passed in: ", idCustomer);
+export const workoutsGetIDDateTime = async (idCustomer, startDate, endDate) => {
+  console.log("<workoutServices><workoutsGetIDDateTime>: executing ...");
+  console.log("<workoutServices><workoutsGetIDDateTime>: idCustomer passed in: ", idCustomer);
   try {
     const input = {
       idCustomer: idCustomer,
@@ -14,26 +14,42 @@ export const workoutGetIDDateTime = async (idCustomer, startDate, endDate) => {
       sortDirection: 'ASC'
     }
     const result = await API.graphql(graphqlOperation(workoutsByIdCustomerAndWorkoutDateTime, input));
-    console.log("<workoutServices><workoutGetIDDateTime>: result: ", result);
+  
     if (
       result.data.workoutsByIdCustomerAndWorkoutDateTime.items &&
       result.data.workoutsByIdCustomerAndWorkoutDateTime.items.length > 0) {
-      const response = result.data.workoutsByIdCustomerAndWorkoutDateTime.items;
-      //console.log("<workoutServices><workoutGetIDDateTime>: Workout returned: ", response);
+      const apiresult = result.data.workoutsByIdCustomerAndWorkoutDateTime.items;
+      console.log("<workoutServices><workoutsGetIDDateTime>: Workout returned: ", apiresult);
+      const response = {
+        statusCode: 200,
+        body: apiresult
+      }
       return response;
+
     } else {
-      console.log('<workoutServices><workoutGetIDDateTime><Error><002> No workouts returned');
-      const response = [];
+      const body = "<workoutServices><workoutsGetIDDateTime><Info><002>: No workouts returned";
+      console.log(body);
+
+      const response = {
+        statusCode: 204,
+        body: body
+      }
       return response;
+
     }
   } catch (error) {
-    console.error("<workoutServices><workoutGetIDDateTime><Error><001>: Error retrieving NEW workouts:", error);
-    return false;
+    const errorMessage = "<workoutServices><workoutsGetIDDateTime><Error><001>: Error retrieving NEW workouts:" + error;
+    console.error(errorMessage);
+    const responseMessage = {
+      statusCode: 500,
+      body: errorMessage
+    }
+    return responseMessage;
   }
 };
 
-export const workoutGetIDDateTimeFilterAthleteFeedback = async (idCustomer, startDate, endDate, athleteFeedbackValue) => {
-  console.log("<workoutServices><workoutGetIDDateTimeFilterAthleteFeedback>: executing ...");
+export const workoutsGetIDDateTimeFilterAthleteFeedback = async (idCustomer, startDate, endDate, athleteFeedbackValue) => {
+  console.log("<workoutServices><workoutsGetIDDateTimeFilterAthleteFeedback>: executing ...");
   try {
 
     const input = {
@@ -41,28 +57,43 @@ export const workoutGetIDDateTimeFilterAthleteFeedback = async (idCustomer, star
       WorkoutDateTime: {
         between: [startDate, endDate]
       },
-      filter: {WorkoutAthleteFeedback : {eq:athleteFeedbackValue}},
+      filter: { WorkoutAthleteFeedback: { eq: athleteFeedbackValue } },
       sortDirection: 'ASC'
     };
 
-    //console.log("<workoutServices><workoutGetIDDateTimeFilterAthleteFeedback>: input ...", input);
+    //console.log("<workoutServices><workoutsGetIDDateTimeFilterAthleteFeedback>: input ...", input);
 
     const result = await API.graphql(graphqlOperation(workoutsByIdCustomerAndWorkoutDateTime, input));
-    //console.log("<workoutServices><workoutGetIDDateTimeFilterAthleteFeedback>: result: ", result);
+    //console.log("<workoutServices><workoutsGetIDDateTimeFilterAthleteFeedback>: result: ", result);
     if (
       result.data.workoutsByIdCustomerAndWorkoutDateTime.items &&
       result.data.workoutsByIdCustomerAndWorkoutDateTime.items.length > 0) {
-      const response = result.data.workoutsByIdCustomerAndWorkoutDateTime.items;
-      console.log("<workoutServices><workoutGetIDDateTimeFilterAthleteFeedback>: Workout returned: ", response);
+      const apiresult = result.data.workoutsByIdCustomerAndWorkoutDateTime.items;
+      console.log("<workoutServices><workoutsGetIDDateTimeFilterAthleteFeedback>: Workouts returned: ", apiresult);
+      const response = {
+        statusCode: 200,
+        body: apiresult
+      }
       return response;
+
     } else {
-      console.log('<workoutServices><workoutGetIDDateTimeFilterAthleteFeedback><Error><002> No workouts returned');
-      const response = [];
+      const returnMessage = "<workoutServices><workoutsGetIDDateTimeFilterAthleteFeedback><Info><002>: No workouts returned";
+      console.log(returnMessage);
+
+      const response = {
+        statusCode: 200,
+        body: returnMessage
+      }
       return response;
     }
   } catch (error) {
-    console.error("<workoutServices><workoutGetIDDateTimeFilterAthleteFeedback><Error><001>: Error retrieving NEW workouts:", error);
-    return false;
+    const errorMessage = "<workoutServices><workoutsGetIDDateTimeFilterAthleteFeedback><Error><001>: Error retrieving NEW workouts:" + error;
+    console.error(errorMessage);
+    const responseMessage = {
+      statusCode: 500,
+      body: errorMessage
+    }
+    return responseMessage;
   }
 };
 
@@ -72,7 +103,7 @@ export const workoutUpdate = async (updatedFields) => {
     console.log("<workoutServices><workoutUpdate>: updatedFields: ", updatedFields);
 
     const result = await API.graphql(graphqlOperation(updateWorkout, { input: updatedFields }));
-    //console.log("<workoutServices><workoutUpdate>: Result: ", result);
+    console.log("<workoutServices><workoutUpdate>: Result: ", result);
     return true;
 
   } catch (error) {
@@ -87,7 +118,7 @@ export const workoutDelete = async (idWorkout) => {
 
     const result = await API.graphql(graphqlOperation(deleteWorkout, { input: { id: idWorkout } }));
 
-    //console.log("<workoutServices><workoutDelete>: Result: ", result);
+    console.log("<workoutServices><workoutDelete>: Result: ", result);
     return true;
 
   } catch (error) {

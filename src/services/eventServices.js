@@ -11,13 +11,24 @@ export const eventGetIDDateTime= async (idCustomer, dateTime) => {
     if (
       result.data.eventsByIdCustomerAndEventDate.items &&
       result.data.eventsByIdCustomerAndEventDate.items.length > 0) {
-      const response = result.data.eventsByIdCustomerAndEventDate.items;
-      //console.log("<eventServices><eventGetIDDateTime>: Workout returned: ", response);
-      return response;
+      const apiresult = result.data.eventsByIdCustomerAndEventDate.items;
+      console.log("<eventServices><eventGetIDDateTime>: Events returned: ", apiresult);
+      const responseMessage = {
+        statusCode: 200,
+        body: apiresult
+      }
+      return responseMessage;
+
     } else {
-      console.log('<eventServices><eventGetIDDateTime><Error><002> No events returned');
-      const response = [];
-      return response;
+
+      const returnMessage = "<eventServices><eventGetIDDateTime><Error><002>: No events returned";
+      console.log(returnMessage);
+
+      const responseMessage = {
+        statusCode: 204,
+        body: returnMessage
+      }
+      return responseMessage;
     }
   } catch (error) {
     console.error("<eventServices><eventGetIDDateTime><Error><001>: Error retrieving NEW events:", error);
