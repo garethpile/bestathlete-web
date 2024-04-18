@@ -27,6 +27,7 @@ const iconDictionary = {
   Ride: <DirectionsBikeIcon fontSize="large" />,
   VirtualRide: <PedalBikeIcon fontSize="large" />,
 };
+
 function secondsToHms(d) {
   d = Number(d);
   var h = Math.floor(d / 3600);
@@ -40,45 +41,18 @@ function secondsToHms(d) {
 }
 
 function MetresPerSecondToMinsPerKm(MetresPerSecond, StravaActivityType) {
-  if (MetresPerSecond === 0) {
-    return "-";
-  } else if (StravaActivityType === "WeightTraining") {
+  if (MetresPerSecond === 0 || StravaActivityType === "WeightTraining") {
     return "-";
   } else {
     var MetresPerMinute = MetresPerSecond * 60;
     var MinutesPerKm = 1000 / MetresPerMinute;
 
-    var MinutesPerKmFormatted = MinPerKmFraction(MinutesPerKm.toFixed(2),"Run");
+    var MinutesPerKmFormatted = MinPerKmFraction(
+      MinutesPerKm.toFixed(2),
+      StravaActivityType
+    );
     return MinutesPerKmFormatted;
   }
-  /*
-            switch (StravaActivityType) {
-              case "Swim":
-                MinPerKm = Number(MinPerKm);
-                var SecPerHundred = (MinPerKm / 10) * 60;
-                var Mins = Math.floor(SecPerHundred / 60);
-                var Secs = Math.floor(SecPerHundred - Mins * 60);
-                return Mins + ":" + Secs;
-              case "WeightTraining":
-                return "-";
-              case "Run": {
-                MinPerKm = Number(MinPerKm);
-                var mins = Math.floor(MinPerKm / 1);
-                var fraction = Math.floor((MinPerKm - mins) * 60);
-                return mins + ":" + fraction;
-              }
-              case "Ride":
-                MinPerKm = Number(MinPerKm);
-                var KmPerHr = (1 / MinPerKm) * 60;
-                return KmPerHr.toFixed(2);
-              case "VirtualRide":
-                MinPerKm = Number(MinPerKm);
-                var KmPerHr = (1 / MinPerKm) * 60;
-                return KmPerHr.toFixed(2);
-              default:
-                return "-";
-            }
-          */
 }
 
 function MinPerKmFraction(MinPerKm, StravaActivityType) {
@@ -88,41 +62,27 @@ function MinPerKmFraction(MinPerKm, StravaActivityType) {
       var SecPerHundred = (MinPerKm / 10) * 60;
       var Mins = Math.floor(SecPerHundred / 60);
       var Secs = Math.floor(SecPerHundred - Mins * 60);
-      if (Secs < 10){
-        Secs = "0"+ Secs;
+      if (Secs < 10) {
+        Secs = "0" + Secs;
       }
       return Mins + ":" + Secs;
-    case "WeightTraining":
-      return "-";
-    case "Run": {
+    case "Run":
       MinPerKm = Number(MinPerKm);
       var mins = Math.floor(MinPerKm / 1);
       var fraction = Math.floor((MinPerKm - mins) * 60);
-      if (fraction < 10){
-        console.log("Fraction leass than 10")
-        fraction = "0"+ fraction;
+      if (fraction < 10) {
+        fraction = "0" + fraction;
       }
       return mins + ":" + fraction;
-    }
-    case "Ride":
-      MinPerKm = Number(MinPerKm);
-      var KmPerHr = (1 / MinPerKm) * 60;
-      return KmPerHr.toFixed(2);
-    case "VirtualRide":
-      MinPerKm = Number(MinPerKm);
-      var KmPerHr = (1 / MinPerKm) * 60;
-      return KmPerHr.toFixed(2);
     default:
       return "-";
   }
 }
 
-export default function WorkoutNoFeedbackCard(props) {
+export default function WorkoutNoFeedbackCard({ workout }) {
+  console.log("WorkoutNoFeedbackCard Component loading .... workout: ", workout);
 
- console.log("WorkoutNoFeedbackCard Component loading ....");
-
-  const [dropdownActivityEffort, setDropdownActivityEffort] =
-    React.useState("");
+  const [dropdownActivityEffort, setDropdownActivityEffort] = React.useState("");
   const [dropdownActivityBody, setDropdownActivityBody] = React.useState("");
 
   async function updateActivity(id) {
@@ -130,21 +90,19 @@ export default function WorkoutNoFeedbackCard(props) {
       if (!dropdownActivityBody || !dropdownActivityEffort) {
         alert("Please Select Required Fields");
       }
-      console.log("Strava ActivityAthleteBody: " + dropdownActivityBody);
+      console.log("Strava ActivityAthleteBody: ", dropdownActivityBody);
 
       const updateActivity = await API.graphql(
         graphqlOperation(updateStravaActivity, {
-          // variables: {
           id: id,
           StravaActivityAthleteBody: dropdownActivityBody,
           StravaActivityAthleteEffort: dropdownActivityEffort,
           StravaActivityAthleteFeedback: true,
-          _version: props.version,
-          // }
+          _version: workout.version,
         })
       );
-      console.log("updateActivity response: " + updateActivity);
-      props.fetcchActivity(props.StravaActivityOwnerId);
+      console.log("updateActivity response: ", updateActivity);
+      workout.fetcchActivity(workout.StravaActivityOwnerId);
     } catch (err) {
       console.log("Error updating activity", err);
     }
@@ -156,19 +114,15 @@ export default function WorkoutNoFeedbackCard(props) {
         <span className="activitySpan">
           <IconButton className="activityAvator">
             <Avatar shape="circle" size={60}>
-              {iconDictionary[props.WorkoutType] ||
-                props.WorkoutType}
+              {iconDictionary[workout.WorkoutType] || workout.WorkoutType}
             </Avatar>
           </IconButton>
-          {}
         </span>
 
         <span className="activityHead">
-          <p>{props.WorkoutDescription}</p>
+          <p>{workout.WorkoutDescription}</p>
           <p className="metricValue">
-            {moment(new Date(props.WorkoutDateTime)).format(
-              "DD/MM/YYYY HH:MM"
-            )}
+            {moment(new Date(workout.WorkoutDateTime)).format("DD/MM/YYYY HH:MM")}
           </p>
         </span>
       </div>
@@ -177,28 +131,30 @@ export default function WorkoutNoFeedbackCard(props) {
         <span className="metricSpan">
           <p className="metricHead">Distance(km)</p>
           <p className="metricValue">
-            {(props.WorkoutDistance / 1000).toFixed(2)}
+            {workout.WorkoutDistance != null
+              ? (workout.WorkoutDistance / 1000).toFixed(2)
+              : "-"}
           </p>
         </span>
         <span className="metricSpan">
           <p className="metricHead">Time</p>
-          <p className="metricValue">
-            {secondsToHms(props.WorkoutMovingTime)}
-          </p>
+          <p className="metricValue">{secondsToHms(workout.WorkoutMovingTime)}</p>
         </span>
         <span className="metricSpan">
           <p className="metricHead">Pace</p>
           <p className="metricValue">
             {MetresPerSecondToMinsPerKm(
-              props.WorkoutAverageSpeed,
-              props.WorkoutType
+              workout.WorkoutAverageSpeed,
+              workout.WorkoutType
             )}
           </p>
         </span>
         <span className="metricSpan">
           <p className="metricHead">Avg HR</p>
           <p className="metricValue">
-            {Math.round(props.WorkoutAverageHeartRate)}
+            {workout.WorkoutAverageHeartRate != null
+              ? Math.round(workout.WorkoutAverageHeartRate)
+              : "-"}
           </p>
         </span>
       </div>
@@ -242,7 +198,7 @@ export default function WorkoutNoFeedbackCard(props) {
       </Box>
       <Divider light />
       <Box mt={1}>
-        <Button onClick={() => updateActivity(props.id)}>Save</Button>
+        <Button onClick={() => updateActivity(workout.id)}>Save</Button>
       </Box>
     </Card>
   );

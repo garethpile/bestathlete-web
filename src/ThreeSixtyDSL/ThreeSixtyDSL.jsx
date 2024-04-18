@@ -7,10 +7,9 @@ import WorkoutNoFeedbackCard from "../Components/WorkoutNoFeedbackCard";
 import Events from "../Components/Events";
 
 function ThreeSixtyDSL({ customer, workoutsNoFeedback, events }) {
-  if (!events || !workoutsNoFeedback) {
-    console.log("events or workoutsNoFeedback is undefined");
-    return <div>Loading events...</div>;
-  }
+
+  console.log("ThreeSixtyDSL component loading ...");
+  console.log("workoutsNoFeedback: ", workoutsNoFeedback);
 
   return (
     <div>
@@ -32,13 +31,14 @@ function ThreeSixtyDSL({ customer, workoutsNoFeedback, events }) {
             <NonTrainingDays customer={customer} />
           </Col>
           <Col className="secondCol" span={8} xs={24} sm={24} lg={8} xl={8}>
-            {workoutsNoFeedback.map(({ workout }) => (
-              workout && (
-                <div className="cardSpacingDiv" key={workout.id}>
-                  <WorkoutNoFeedbackCard workout={workout} />
-                </div>
-              )
-            ))}
+            {workoutsNoFeedback &&
+              workoutsNoFeedback.map((workout) => (
+                workout && (
+                  <div className="cardSpacingDiv" key={workout.id}>
+                    <WorkoutNoFeedbackCard workout={workout} />
+                  </div>
+                )
+              ))}
           </Col>
           <Col className="thirdCol" span={8} xs={24} sm={24}>
             <TermsConditions />
