@@ -129,9 +129,11 @@ export default function Events({events}) {
   };
 
   function handleRemove(id, _version) {
+    console.log("Removing event with id:", id);
+    console.log("Version of the event:", _version);
     deleteEvents(id, _version);
     const newEvents = events.filter((item) => item.id !== id);
-  // console.log("newEvents after filter: ", newEvents);
+    console.log("New events after filter:", newEvents);
     //setEvents(newEvents);
   }
 

@@ -3,6 +3,7 @@ import { Row, Col } from "antd";
 import TermsConditions from "../Components/TermsConditions";
 import NonTrainingDays from "../Components/NonTrainingDays";
 import AthleteCard from "../Components/AthleteCard";
+import AthleteFeedback from "../Components/AthleteFeedback";
 import WorkoutNoFeedbackCard from "../Components/WorkoutNoFeedbackCard";
 import Events from "../Components/Events";
 
@@ -15,7 +16,15 @@ function ThreeSixtyDSL({ customer, workoutsNoFeedback, events }) {
     <div>
       <div className="bodyDiv">
         <Row>
-          <Col className="firstCol" span={8} xs={24} sm={24} lg={8} xl={8}>
+        <Col
+          className="firstCol"
+          span={8}
+          xs={24}
+          sm={24}
+          lg={8}
+          xl={8}
+          style={{ overflowY: "auto", maxHeight: "100%" }}
+        >
             <h1
               style={{
                 justifyContent: "center",
@@ -28,7 +37,7 @@ function ThreeSixtyDSL({ customer, workoutsNoFeedback, events }) {
             </h1>
             <AthleteCard customer={customer} />
             <Events events={events} />
-            <NonTrainingDays customer={customer} />
+            
           </Col>
           <Col className="secondCol" span={8} xs={24} sm={24} lg={8} xl={8}>
             {workoutsNoFeedback &&
@@ -40,7 +49,15 @@ function ThreeSixtyDSL({ customer, workoutsNoFeedback, events }) {
                 )
               ))}
           </Col>
-          <Col className="thirdCol" span={8} xs={24} sm={24}>
+          <Col
+          className="thirdCol"
+          span={8}
+          xs={24}
+          sm={24}
+          style={{ overflowY: "auto", maxHeight: "100%" }}
+        >
+          <AthleteFeedback customer={customer} />
+          <NonTrainingDays customer={customer} />
             <TermsConditions />
             <div
               style={{

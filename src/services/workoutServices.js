@@ -69,7 +69,7 @@ export const workoutsGetIDDateTimeFilterAthleteFeedback = async (idCustomer, sta
       result.data.workoutsByIdCustomerAndWorkoutDateTime.items &&
       result.data.workoutsByIdCustomerAndWorkoutDateTime.items.length > 0) {
       const apiresult = result.data.workoutsByIdCustomerAndWorkoutDateTime.items;
-      console.log("<workoutServices><workoutsGetIDDateTimeFilterAthleteFeedback>: Workouts returned: ", apiresult);
+      //console.log("<workoutServices><workoutsGetIDDateTimeFilterAthleteFeedback>: Workouts returned: ", apiresult);
       const response = {
         statusCode: 200,
         body: apiresult
