@@ -1,0 +1,22 @@
+/* Header.css */
+.headerDiv {
+    position: fixed; /* Keeps the header fixed at the top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1100; /* Ensure it is above most other content but below the modal */
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Additional styling if needed */
+  .menuItems {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Align menu items to the right */
+  }
+  
+  .rightDiv {
+    display: flex;
+    align-items: center;
+  }
