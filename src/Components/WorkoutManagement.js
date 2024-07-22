@@ -5,6 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "./WorkoutManagement.css";
+import { workoutUpdate } from "../services/workoutServices";
 
 const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutManagement }) => {
   const [description, setDescription] = useState("");
@@ -18,7 +19,9 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
   const [workoutWeatherLevel, setWorkoutWeatherLevel] = useState(0);
   const [workoutHydrationLevel, setWorkoutHydrationLevel] = useState(0);
   const [workoutCaloriesEatenPerHour, setWorkoutCaloriesEatenPerHour] = useState(0);
-  const [workoutAthleteFeedback, setWorkoutAthleteFeedback] = useState("");
+  const [workoutAthleteFeedback, setWorkoutAthleteFeedback] = useState(0);
+
+  const [changedFields, setChangedFields] = useState({});
 
   useEffect(() => {
     if (selectedWorkout) {
@@ -33,9 +36,64 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
       setWorkoutWeatherLevel(selectedWorkout.WorkoutWeatherLevel || 0);
       setWorkoutHydrationLevel(selectedWorkout.WorkoutHydrationLevel || 0);
       setWorkoutCaloriesEatenPerHour(selectedWorkout.WorkoutCaloriesEatenPerHour || 0);
-      setWorkoutAthleteFeedback(selectedWorkout.WorkoutAthleteFeedback);
+      setWorkoutAthleteFeedback(selectedWorkout.WorkoutAthleteFeedback || 0);
+      setChangedFields({});
     }
   }, [selectedWorkout]);
+
+  const handleChange = (field, value) => {
+    switch (field) {
+      case 'WorkoutDescription':
+        setDescription(value);
+        break;
+      case 'WorkoutDateTime':
+        setDate(value);
+        break;
+      case 'WorkoutType':
+        setType(value);
+        break;
+      case 'WorkoutRPE':
+        setWorkoutRPE(value);
+        break;
+      case 'WorkoutPhysicalLevel':
+        setWorkoutPhysicalLevel(value);
+        break;
+      case 'WorkoutWeatherLevel':
+        setWorkoutWeatherLevel(value);
+        break;
+      case 'WorkoutHydrationLevel':
+        setWorkoutHydrationLevel(value);
+        break;
+      case 'WorkoutCaloriesEatenPerHour':
+        setWorkoutCaloriesEatenPerHour(value);
+        break;
+      case 'WorkoutAthleteFeedback':
+        setWorkoutAthleteFeedback(value);
+        break;
+      default:
+        break;
+    }
+    setChangedFields({
+      ...changedFields,
+      [field]: value,
+    });
+  };
+
+  const handleSave = async () => {
+    if (Object.keys(changedFields).length === 0) {
+      return;
+    }
+
+    const updatedFields = {
+      id: selectedWorkout.id,
+      ...changedFields,
+    };
+
+    const success = await workoutUpdate(updatedFields);
+    if (success) {
+      setSelectedWorkout(null);
+    }
+  };
 
   const getRPEDescription = (value) => {
     switch (value) {
@@ -118,14 +176,6 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
     }
   };
 
-  const handleSave = () => {
-    // handle save logic here
-  };
-
-  const handleDelete = () => {
-    // handle delete logic here
-  };
-
   return (
     <Card
       title="Workout Management"
@@ -135,17 +185,17 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
       <Row gutter={16}>
         <Col span={12}>
           <label>Type:</label>
-          <Input value={type} onChange={e => setType(e.target.value)} />
+          <Input value={type} onChange={e => handleChange('WorkoutType', e.target.value)} />
         </Col>
         <Col span={12}>
           <label>Workout:</label>
-          <Input value={description} onChange={e => setDescription(e.target.value)} />
+          <Input value={description} onChange={e => handleChange('WorkoutDescription', e.target.value)} />
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={12}>
           <label>Date:</label>
-          <ReactDatePicker selected={date} onChange={setDate} />
+          <ReactDatePicker selected={date} onChange={date => handleChange('WorkoutDateTime', date)} />
         </Col>
         <Col span={12}>
           <label>Avg Heart Rate:</label>
@@ -169,7 +219,7 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
             min={0}
             max={10}
             value={workoutRPE}
-            onChange={value => setWorkoutRPE(value)}
+            onChange={value => handleChange('WorkoutRPE', value)}
           />
           <div>{getRPEDescription(workoutRPE)}</div>
         </Col>
@@ -179,7 +229,7 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
             min={0}
             max={5}
             value={workoutPhysicalLevel}
-            onChange={value => setWorkoutPhysicalLevel(value)}
+            onChange={value => handleChange('WorkoutPhysicalLevel', value)}
           />
           <div>{getBodyDescription(workoutPhysicalLevel)}</div>
         </Col>
@@ -191,7 +241,7 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
             min={0}
             max={5}
             value={workoutWeatherLevel}
-            onChange={value => setWorkoutWeatherLevel(value)}
+            onChange={value => handleChange('WorkoutWeatherLevel', value)}
           />
           <div>{getWeatherDescription(workoutWeatherLevel)}</div>
         </Col>
@@ -201,7 +251,7 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
             min={0}
             max={5}
             value={workoutHydrationLevel}
-            onChange={value => setWorkoutHydrationLevel(value)}
+            onChange={value => handleChange('WorkoutHydrationLevel', value)}
           />
           <div>{getHydrationDescription(workoutHydrationLevel)}</div>
         </Col>
@@ -209,7 +259,11 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
       <Row gutter={16}>
         <Col span={12}>
           <label>Calories eaten per hour:</label>
-          <Input value={workoutCaloriesEatenPerHour} onChange={e => setWorkoutCaloriesEatenPerHour(e.target.value)} />
+          <Input value={workoutCaloriesEatenPerHour} onChange={e => handleChange('WorkoutCaloriesEatenPerHour', e.target.value)} />
+        </Col>
+        <Col span={12}>
+          <label>Athlete Feedback:</label>
+          <Input value={workoutAthleteFeedback} onChange={e => handleChange('WorkoutAthleteFeedback', parseInt(e.target.value) || 0)} />
         </Col>
       </Row>
       <Row gutter={16} style={{ marginTop: 16 }}>
