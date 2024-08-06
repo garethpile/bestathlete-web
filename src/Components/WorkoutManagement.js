@@ -178,18 +178,16 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
 
   return (
     <Card
-      title="Workout Management"
-      extra={<Button onClick={cancelWorkoutManagement}>Close</Button>}
       className="workout-management-card"
     >
       <Row gutter={16}>
         <Col span={12}>
           <label>Type:</label>
-          <Input value={type} onChange={e => handleChange('WorkoutType', e.target.value)} />
+          <Input value={type} disabled />
         </Col>
         <Col span={12}>
           <label>Workout:</label>
-          <Input value={description} onChange={e => handleChange('WorkoutDescription', e.target.value)} />
+          <Input value={description} disabled />
         </Col>
       </Row>
       <Row gutter={16}>
