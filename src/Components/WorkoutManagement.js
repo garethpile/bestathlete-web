@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Input, Button, Row, Col, Card } from "antd";
-import ReactDatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "./WorkoutManagement.css";
 import { workoutUpdate } from "../services/workoutServices";
 
-const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutManagement }) => {
+const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout }) => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date());
   const [averageSpeed, setAverageSpeed] = useState(0);
@@ -19,7 +17,6 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
   const [workoutWeatherLevel, setWorkoutWeatherLevel] = useState(0);
   const [workoutHydrationLevel, setWorkoutHydrationLevel] = useState(0);
   const [workoutCaloriesEatenPerHour, setWorkoutCaloriesEatenPerHour] = useState(0);
-  const [workoutAthleteFeedback, setWorkoutAthleteFeedback] = useState(0);
 
   const [changedFields, setChangedFields] = useState({});
 
@@ -36,7 +33,6 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
       setWorkoutWeatherLevel(selectedWorkout.WorkoutWeatherLevel || 0);
       setWorkoutHydrationLevel(selectedWorkout.WorkoutHydrationLevel || 0);
       setWorkoutCaloriesEatenPerHour(selectedWorkout.WorkoutCaloriesEatenPerHour || 0);
-      setWorkoutAthleteFeedback(selectedWorkout.WorkoutAthleteFeedback || 0);
       setChangedFields({});
     }
   }, [selectedWorkout]);
@@ -45,9 +41,6 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
     switch (field) {
       case 'WorkoutDescription':
         setDescription(value);
-        break;
-      case 'WorkoutDateTime':
-        setDate(value);
         break;
       case 'WorkoutType':
         setType(value);
@@ -66,9 +59,6 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
         break;
       case 'WorkoutCaloriesEatenPerHour':
         setWorkoutCaloriesEatenPerHour(value);
-        break;
-      case 'WorkoutAthleteFeedback':
-        setWorkoutAthleteFeedback(value);
         break;
       default:
         break;
@@ -177,9 +167,7 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
   };
 
   return (
-    <Card
-      className="workout-management-card"
-    >
+    <Card className="workout-management-card">
       <Row gutter={16}>
         <Col span={12}>
           <label>Type:</label>
@@ -193,7 +181,7 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
       <Row gutter={16}>
         <Col span={12}>
           <label>Date:</label>
-          <ReactDatePicker selected={date} onChange={date => handleChange('WorkoutDateTime', date)} />
+          <Input value={date.toLocaleDateString()} disabled />
         </Col>
         <Col span={12}>
           <label>Avg Heart Rate:</label>
@@ -258,10 +246,6 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout, cancelWorkoutM
         <Col span={12}>
           <label>Calories eaten per hour:</label>
           <Input value={workoutCaloriesEatenPerHour} onChange={e => handleChange('WorkoutCaloriesEatenPerHour', e.target.value)} />
-        </Col>
-        <Col span={12}>
-          <label>Athlete Feedback:</label>
-          <Input value={workoutAthleteFeedback} onChange={e => handleChange('WorkoutAthleteFeedback', parseInt(e.target.value) || 0)} />
         </Col>
       </Row>
       <Row gutter={16} style={{ marginTop: 16 }}>

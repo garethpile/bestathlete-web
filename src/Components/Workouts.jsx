@@ -7,10 +7,15 @@ export default function Workouts({ workoutsNoFeedback }) {
     start: new Date(new Date().setDate(new Date().getDate() - 2)),
     end: new Date()
   });
+  const [selectedWorkout, setSelectedWorkout] = useState(null); // Define this state to manage the currently selected workout
 
   useEffect(() => {
-    // This could be improved to fetch data based on the new date range if needed
-  }, [dateRange]);
+    // Update the selected workout based on the date range
+    const workout = workoutsNoFeedback.find(
+      workout => workout.WorkoutDateTime.slice(0, 10) === dateRange.end.toISOString().slice(0, 10)
+    );
+    setSelectedWorkout(workout || null);
+  }, [dateRange, workoutsNoFeedback]);
 
   const formatDate = (date) => date.toISOString().slice(0, 10);
 
@@ -30,13 +35,6 @@ export default function Workouts({ workoutsNoFeedback }) {
 
   const displayDateRange = `${dateRange.start.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })} - ${dateRange.end.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}`;
 
-  const getWorkoutsForDay = (day) => {
-    const dateStr = formatDate(day);
-    return workoutsNoFeedback.filter(
-      (workout) => workout.WorkoutDateTime.slice(0, 10) === dateStr
-    );
-  };
-
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -47,13 +45,20 @@ export default function Workouts({ workoutsNoFeedback }) {
       <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
         {Array.from({ length: 3 }).map((_, index) => {
           const day = new Date(dateRange.start.getTime() + (index * 86400000));
-          const workouts = getWorkoutsForDay(day);
+          const dateStr = formatDate(day);
+          const workouts = workoutsNoFeedback.filter(
+            (workout) => workout.WorkoutDateTime.slice(0, 10) === dateStr
+          );
           return (
             <div key={index} style={{ flex: 1 }}>
               <h4>{day.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}</h4>
               {workouts.length > 0 ? (
                 workouts.map((workout) => (
-                  <WorkoutManagement key={workout.id} selectedWorkout={workout} />
+                  <WorkoutManagement
+                    key={workout.id}
+                    selectedWorkout={workout}
+                    setSelectedWorkout={setSelectedWorkout} // Correctly pass setSelectedWorkout
+                  />
                 ))
               ) : (
                 <p>No Workout</p>
