@@ -1,31 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Auth } from "aws-amplify";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Header from "../Components/Header";
 import Profile from "../ProfilePage/Profile";
 import ThirdParty from "../ThreeSixtyDSL/ThirdParty";
-import ThreeSixtyDSL from "../ThreeSixtyDSL/ThreeSixtyDSL";
+import MainComponent from "../Components/MainComponent";
 import {
   customerGetByIdCustomer,
-
 } from "../services/customerServices";
 import {
- 
   workoutsGetIDDateTime,
   workoutsGetIDDateTimeFilterAthleteFeedback
-} from "../services//workoutServices";
+} from "../services/workoutServices";
 import {
- 
-
   eventGetIDDateTime
 } from "../services/eventServices";
 import {
- 
-
   metricsGet3DaysWeight,
   metricsGet3DaysSleep
 } from "../services/metricServices";
-
 
 const LandingPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -40,15 +32,14 @@ const LandingPage = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    let authenticatedUser; // Define authenticatedUser variable
-  
+    let authenticatedUser;
+
     Auth.currentAuthenticatedUser({ bypassCache: true })
       .then((user) => {
-        authenticatedUser = user; // Assign the user to authenticatedUser
+        authenticatedUser = user;
         setGlobalUserId(authenticatedUser.username);
         return customerGetByIdCustomer(authenticatedUser.username);
       })
-  
       .then((returnedCustomer) => {
         if (!returnedCustomer) {
           setUserExists(false);
@@ -89,14 +80,13 @@ const LandingPage = () => {
 
   return (
     <Router>
-      <Header customerId={globalUserId} customer={customer} />
       {isLoading ? (
         <div>Loading...</div>
       ) : (
         <Routes>
           <Route path="/Profile" element={<Profile userExists={userExists} customer={customer} />} />
           <Route path="/ThirdParty" element={<ThirdParty customer={customer} />} />
-          <Route path="/" element={<ThreeSixtyDSL customer={customer} workoutsNoFeedback={workoutsNoFeedback} events={events} />} />
+          <Route path="/" element={<MainComponent customer={customer} workoutsNoFeedback={workoutsNoFeedback} events={events} />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       )}

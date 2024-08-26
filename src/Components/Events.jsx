@@ -36,52 +36,58 @@ export default function Events({events}) {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+
   const createEvents = async () => {
     var eventDateObject;
     var eventDateObjectFormatted;
-
+  
     var currentDate = new Date();
     var currentDateFormatted = moment(currentDate).format("YYYY-MM-DD");
-
+  
     if (!form.eventDate) {
       return alert("Please enter event date");
     } else {
       eventDateObject = new Date(form.eventDate);
       eventDateObjectFormatted = moment(eventDateObject).format("YYYY-MM-DD");
-      //console.log("eventDateObjectFormatted: ", eventDateObjectFormatted);
     }
     if (eventDateObjectFormatted < currentDateFormatted) {
       return alert("Event date cannot be in the past!");
     }
-
+  
     try {
-     // console.log("Create Parameters: ", form);
-
-      API.graphql(
-        graphqlOperation(createEventsEntry, {
-         
-          EventName: form.eventName,
-          EventDate: form.eventDate,
-          EventType: form.eventType,
-          EventDistance: form.eventDistance,
-          EventPriority: form.eventPriority,
-          Description: form.eventDescription,
-        })
-      )
-        .then((createEventsResponse) => {
-          alert("Event Added Succesfully");
-          // Retrieve updated list ....
-          //getEvents(props.customerId);
-          setOpen(false);
-        })
-        .catch((error) => {
-          console.log("Error: ", error);
-          alert(
-            "An issue occurred adding an event. Please contact info@360dsl.co.za"
-          );
-        });
-    } catch (err) {
-      console.log("Error creating an event: ", err);
+      const response = await fetch(
+        "https://4sglhoenlj.execute-api.eu-west-1.amazonaws.com/Prod/event",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            EventName: form.eventName,
+            EventDate: form.eventDate,
+            EventType: form.eventType,
+            EventDistance: form.eventDistance,
+            EventPriority: form.eventPriority,
+            Description: form.eventDescription,
+          }),
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const createEventsResponse = await response.json();
+      alert("Event Added Successfully");
+  
+      // Retrieve updated list ...
+      // getEvents(props.customerId);
+      setOpen(false);
+    } catch (error) {
+      console.log("Error:", error);
+      alert(
+        "An issue occurred adding an event. Please contact info@360dsl.co.za"
+      );
     }
   };
 

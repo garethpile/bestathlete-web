@@ -18,7 +18,7 @@ import { Box } from "@mui/system";
 import { Auth, API, graphqlOperation } from "aws-amplify";
 import { updateCustomer } from "../graphql/mutations";
 
-const Profile = ({ userExists, customerEntity = {} }) => {
+const Profile = ({ userExists, customer = {} }) => {
 
  
  
@@ -61,41 +61,41 @@ const Profile = ({ userExists, customerEntity = {} }) => {
     if (Object.keys(user).every((key) => user[key] !== "")) {
       const updateCustomer = await API.graphql(
         updateCustomer(updateCustomer, {
-          id: customerEntity.id,
-          EmailAddress: customerEntity.EmailAddress,
-          MobileNumber: customerEntity.MobileNumber,
-          Gender: customerEntity.Gender,
-          FirstName: customerEntity.FirstName,
-          LastName: customerEntity.LastName,
-          Country: customerEntity.Country,
-          DateOfBirth: new Date(customerEntity.DateOfBirth)
+          id: customer.id,
+          EmailAddress: customer.EmailAddress,
+          MobileNumber: customer.MobileNumber,
+          Gender: customer.Gender,
+          FirstName: customer.FirstName,
+          LastName: customer.LastName,
+          Country: customer.Country,
+          DateOfBirth: new Date(customer.DateOfBirth)
             .toISOString()
             .substring(0, 10),
           TrainingDays : {
-          SaturdayTrain: customerEntity.SaturdayTrain,
-          SaturdayTrainHours: Number(customerEntity.SundayTrainHours),
-          SundayTrain: customerEntity.SundayTrain,
-          SundayTrainHours: Number(customerEntity.SundayTrainHours),
-          MondayTrain: customerEntity.MondayTrain,
-          MondayTrainHours: Number(customerEntity.MondayTrainHours),
-          TuesdayTrain: customerEntity.TuesdayTrain,
-          TuesdayTrainHours: Number(customerEntity.TuesdayTrainHours),
-          WednesdayTrain: customerEntity.WednesdayTrain,
-          WednesdayTrainHours: Number(customerEntity.WednesdayTrainHours),
-          ThursdayTrain: customerEntity.ThursdayTrain,
-          ThursdayTrainHours: Number(customerEntity.ThursdayTrainHours),
-          FridayTrain: customerEntity.FridayTrain,
-          FridayTrainHours: Number(customerEntity.FridayTrainHours),
+          SaturdayTrain: customer.SaturdayTrain,
+          SaturdayTrainHours: Number(customer.SundayTrainHours),
+          SundayTrain: customer.SundayTrain,
+          SundayTrainHours: Number(customer.SundayTrainHours),
+          MondayTrain: customer.MondayTrain,
+          MondayTrainHours: Number(customer.MondayTrainHours),
+          TuesdayTrain: customer.TuesdayTrain,
+          TuesdayTrainHours: Number(customer.TuesdayTrainHours),
+          WednesdayTrain: customer.WednesdayTrain,
+          WednesdayTrainHours: Number(customer.WednesdayTrainHours),
+          ThursdayTrain: customer.ThursdayTrain,
+          ThursdayTrainHours: Number(customer.ThursdayTrainHours),
+          FridayTrain: customer.FridayTrain,
+          FridayTrainHours: Number(customer.FridayTrainHours),
           },
-          _version: customerEntity._version,
+          _version: customer._version,
         })
       );
 
 
-      setUser({ ...user, _version: customerEntity._version + 1 });
+      setUser({ ...user, _version: customer._version + 1 });
 
       
-          if (customerEntity.FirstName === "-" || customerEntity.LastName === "-") {
+          if (customer.FirstName === "-" || customer.LastName === "-") {
             alert(`Please fill all the fields`);
           } else {
             //setRedirect(true);
@@ -121,7 +121,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
           <Grid item xs={12} lg={3} md={3} sm={6}>
             <TextField
               name="FirstName"
-              value={customerEntity.FirstName}
+              value={customer.FirstName}
               label="First Name"
               onChange={handleChange}
               fullWidth
@@ -130,7 +130,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
           <Grid item xs={12} lg={3} md={3} sm={6}>
             <TextField
               name="LastName"
-              value={customerEntity.LastName}
+              value={customer.LastName}
               label="Last Name"
               onChange={handleChange}
               fullWidth
@@ -139,7 +139,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
           <Grid item xs={12} lg={3} md={3} sm={6}>
             <TextField
               name="EmailAddress"
-              value={customerEntity.EmailAddress}
+              value={customer.EmailAddress}
               label="Email Address"
               onChange={handleChange}
               fullWidth
@@ -152,7 +152,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
                 labelId="genderLabel"
                 id="gender"
                 name="gender"
-                value={customerEntity.Gender}
+                value={customer.Gender}
                 label="Gender"
                 fullWidth
                 onChange={handleChange}
@@ -165,7 +165,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
           <Grid item xs={12} lg={3} md={3} sm={6}>
             <TextField
               type="text"
-              value={customerEntity.MobileNumber}
+              value={customer.MobileNumber}
               name="MobileNumber"
               label="Mobile Number"
               onChange={handleChange}
@@ -176,7 +176,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
             <TextField
               name="DateOfBirth"
               InputLabelProps={{ shrink: true }}
-              value={customerEntity.DateOfBirth}
+              value={customer.DateOfBirth}
               type="date"
               label="Date Of Birth"
               onChange={handleChange}
@@ -187,11 +187,11 @@ const Profile = ({ userExists, customerEntity = {} }) => {
             <Autocomplete
               id="country"
               name="Country"
-              value={customerEntity.Country}
-              inputValue={customerEntity.Country}
+              value={customer.Country}
+              inputValue={customer.Country}
               options={CountryList?.map((option) => option.name)}
               fullWidth
-              onInputChange={(a, b) => setUser({ ...customerEntity, Country: b })}
+              onInputChange={(a, b) => setUser({ ...customer, Country: b })}
               renderInput={(params) => (
                 <TextField {...params} label="Select Country" />
               )}
@@ -212,7 +212,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
               control={
                 <Checkbox
                   name="FridayTrain"
-                  checked={customerEntity.FridayTrain}
+                  checked={customer.FridayTrain}
                   onChange={handleCheckBox}
                 />
               }
@@ -221,7 +221,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
             <br />
             <TextField
               type="number"
-              value={customerEntity.FridayTrainHours}
+              value={customer.FridayTrainHours}
               name="FridayTrainHours"
               label="Friday Train Hours"
               onChange={handleChange}
@@ -233,7 +233,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
               control={
                 <Checkbox
                   name="SaturdayTrain"
-                  checked={customerEntity.SaturdayTrain}
+                  checked={customer.SaturdayTrain}
                   onChange={handleCheckBox}
                 />
               }
@@ -242,7 +242,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
             <br />
             <TextField
               type="number"
-              value={customerEntity.SaturdayTrainHours}
+              value={customer.SaturdayTrainHours}
               name="SaturdayTrainHours"
               label="Saturday Train Hours"
               onChange={handleChange}
@@ -254,7 +254,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
               control={
                 <Checkbox
                   name="SundayTrain"
-                  checked={customerEntity.SundayTrain}
+                  checked={customer.SundayTrain}
                   onChange={handleCheckBox}
                 />
               }
@@ -263,7 +263,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
             <br />
             <TextField
               type="number"
-              value={customerEntity.SundayTrainHours}
+              value={customer.SundayTrainHours}
               name="SundayTrainHours"
               label="Sunday Train Hours"
               onChange={handleChange}
@@ -275,7 +275,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
               control={
                 <Checkbox
                   name="MondayTrain"
-                  checked={customerEntity.MondayTrain}
+                  checked={customer.MondayTrain}
                   onChange={handleCheckBox}
                 />
               }
@@ -284,7 +284,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
             <br />
             <TextField
               type="number"
-              value={customerEntity.MondayTrainHours}
+              value={customer.MondayTrainHours}
               name="MondayTrainHours"
               label="Monday Train Hours"
               onChange={handleChange}
@@ -296,7 +296,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
               control={
                 <Checkbox
                   onChange={handleCheckBox}
-                  checked={customerEntity.TuesdayTrain}
+                  checked={customer.TuesdayTrain}
                   name="TuesdayTrain"
                 />
               }
@@ -305,7 +305,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
             <br />
             <TextField
               type="number"
-              value={customerEntity.TuesdayTrainHours}
+              value={customer.TuesdayTrainHours}
               name="TuesdayTrainHours"
               label="Tuesday Train Hours"
               onChange={handleChange}
@@ -317,7 +317,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
               control={
                 <Checkbox
                   name="WednesdayTrain"
-                  checked={customerEntity.WednesdayTrain}
+                  checked={customer.WednesdayTrain}
                   onChange={handleCheckBox}
                 />
               }
@@ -326,7 +326,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
             <br />
             <TextField
               type="number"
-              value={customerEntity.WednesdayTrainHours}
+              value={customer.WednesdayTrainHours}
               name="WednesdayTrainHours"
               label="Wednesday Train Hours"
               onChange={handleChange}
@@ -338,7 +338,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
               control={
                 <Checkbox
                   name="ThursdayTrain"
-                  checked={customerEntity.ThursdayTrain}
+                  checked={customer.ThursdayTrain}
                   onChange={handleCheckBox}
                 />
               }
@@ -347,7 +347,7 @@ const Profile = ({ userExists, customerEntity = {} }) => {
             <br />
             <TextField
               type="number"
-              value={customerEntity.ThursdayTrainHours}
+              value={customer.ThursdayTrainHours}
               name="ThursdayTrainHours"
               label="Thursday Train Hours"
               onChange={handleChange}
