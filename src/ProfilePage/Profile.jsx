@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Select,
@@ -13,20 +13,53 @@ import {
   Checkbox,
   Divider,
 } from "@mui/material";
-import CountryList from "./CountryList"; // Ensure the import is correct
+import CountryList from "./CountryList";
 import { Box } from "@mui/system";
 import { API, graphqlOperation } from "aws-amplify";
 import { updateCustomer } from "../graphql/mutations";
 
 const Profile = ({ customer }) => {
   const [user, setUser] = useState({
-    ...customer,
-    Country: customer.Country || '', // Initialize country if undefined
+    id: "",
+    FirstName: "",
+    LastName: "",
+    EmailAddress: "",
+    gender: "",
+    MobileNumber: "",
+    Country: "",
+    DateOfBirth: "",
+    // Initializing the checkbox states based on customer data or defaulting to false
+    MondayTrain: false,
+    MondayTrainHours: 0,
+    TuesdayTrain: false,
+    TuesdayTrainHours: 0,
+    WednesdayTrain: false,
+    WednesdayTrainHours: 0,
+    ThursdayTrain: false,
+    ThursdayTrainHours: 0,
+    FridayTrain: false,
+    FridayTrainHours: 0,
+    SaturdayTrain: false,
+    SaturdayTrainHours: 0,
+    SundayTrain: false,
+    SundayTrainHours: 0,
+    _version: customer._version || 1
   });
+
+  useEffect(() => {
+    // Setting initial values from customer data
+    if (customer) {
+      setUser({
+        ...customer,
+        ...customer.TrainingDays, // Ensures training days are correctly initialized
+        Country: customer.Country || '' // Handling undefined country
+      });
+    }
+  }, [customer]);
 
   const handleInputChange = (event, newValue, field) => {
     if (field === 'Country') {
-      setUser((prev) => ({ ...prev, Country: newValue ? newValue.name : '' }));
+      setUser(prev => ({ ...prev, Country: newValue ? newValue.name : '' }));
     } else {
       const { name, value, type, checked } = event.target;
       setUser(prev => ({
@@ -37,8 +70,17 @@ const Profile = ({ customer }) => {
   };
 
   const saveCustomerData = async () => {
+    const input = {
+      ...user,
+      TrainingDays: {
+        MondayTrain: user.MondayTrain,
+        MondayTrainHours: user.MondayTrainHours,
+        // Repeat for other days
+      }
+    };
+
     try {
-      const response = await API.graphql(graphqlOperation(updateCustomer, { input: user }));
+      const response = await API.graphql(graphqlOperation(updateCustomer, { input }));
       alert("Customer data updated successfully");
       console.log("Update response:", response);
     } catch (error) {
@@ -50,7 +92,6 @@ const Profile = ({ customer }) => {
   return (
     <Card sx={{ padding: "20px", margin: "20px" }}>
       <Grid container spacing={2}>
-        {/* Personal Details */}
         <Grid item xs={12}>
           <Box textAlign="center"><h1>Personal Details</h1></Box>
         </Grid>
@@ -72,7 +113,7 @@ const Profile = ({ customer }) => {
             <Select
               labelId="genderLabel"
               name="gender"
-              value={user.gender || ''}
+              value={user.Gender || ''}
               onChange={handleInputChange}
             >
               <MenuItem value={"Male"}>Male</MenuItem>
@@ -91,7 +132,6 @@ const Profile = ({ customer }) => {
             onChange={handleInputChange}
           />
         </Grid>
-        {/* Country Autocomplete */}
         <Grid item xs={12} sm={6}>
           <Autocomplete
             options={CountryList}
@@ -101,11 +141,9 @@ const Profile = ({ customer }) => {
             renderInput={(params) => <TextField {...params} label="Country" />}
           />
         </Grid>
-        {/* Separator */}
         <Grid item xs={12}>
           <Divider variant="middle" style={{ margin: '20px 0' }} />
         </Grid>
-        {/* Training Days */}
         {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
           <Grid item xs={6} sm={4} key={day}>
             <FormControlLabel
@@ -130,11 +168,10 @@ const Profile = ({ customer }) => {
               name={`${day}TrainHours`}
               value={user[`${day}TrainHours`] || 0}
               onChange={handleInputChange}
-              inputProps={{ min: 0 }} // Set minimum to 0 to avoid negative values
+              inputProps={{ min: 0 }} // Prevent negative numbers
             />
           </Grid>
         ))}
-        {/* Save Button */}
         <Grid item xs={12}>
           <Button variant="contained" color="primary" onClick={saveCustomerData}>
             Save

@@ -114,11 +114,6 @@ export const updateCustomer = /* GraphQL */ `
         ApplicationUserOauthTokenExpiryDate
         __typename
       }
-      MetricsDateCapture
-      MetricSick
-      MetricInjury
-      MetricSleep
-      MetricWorkLifeBalance
       createdAt
       updatedAt
       __typename

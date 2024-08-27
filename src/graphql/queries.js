@@ -506,6 +506,22 @@ export const customersByIdCustomer = /* GraphQL */ `
         Gender
         DateOfBirth
         Country
+         TrainingDays {
+          FridayTrain
+          FridayTrainHours
+          MondayTrain
+          MondayTrainHours
+          SaturdayTrain
+          SaturdayTrainHours
+          SundayTrain
+          WednesdayTrainHours
+          WednesdayTrain
+          TuesdayTrainHours
+          TuesdayTrain
+          ThursdayTrainHours
+          ThursdayTrain
+          SundayTrainHours
+          }
         createdAt
         updatedAt
         __typename
