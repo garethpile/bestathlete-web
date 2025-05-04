@@ -6,196 +6,103 @@ import "./WorkoutManagement.css";
 import { workoutUpdate } from "../services/workoutServices";
 
 const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout }) => {
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [averageSpeed, setAverageSpeed] = useState(0);
-  const [avgHeartRate, setAvgHeartRate] = useState(0);
-  const [distance, setDistance] = useState(0);
-  const [type, setType] = useState("");
-  const [workoutRPE, setWorkoutRPE] = useState(0);
-  const [workoutPhysicalLevel, setWorkoutPhysicalLevel] = useState(0);
-  const [workoutWeatherLevel, setWorkoutWeatherLevel] = useState(0);
-  const [workoutHydrationLevel, setWorkoutHydrationLevel] = useState(0);
-  const [workoutCaloriesEatenPerHour, setWorkoutCaloriesEatenPerHour] = useState(0);
-
-  const [changedFields, setChangedFields] = useState({});
+  const [workoutData, setWorkoutData] = useState({
+    description: "",
+    date: new Date(),
+    averageSpeed: 0,
+    avgHeartRate: 0,
+    distance: 0,
+    type: "",
+    workoutRPE: 0,
+    workoutPhysicalLevel: 0,
+    workoutWeatherLevel: 0,
+    workoutHydrationLevel: 0,
+    workoutCaloriesEatenPerHour: 0,
+  });
 
   useEffect(() => {
     if (selectedWorkout) {
-      setDescription(selectedWorkout.WorkoutDescription);
-      setDate(new Date(selectedWorkout.WorkoutDateTime));
-      setAverageSpeed(selectedWorkout.WorkoutAverageSpeed);
-      setAvgHeartRate(selectedWorkout.WorkoutAverageHeartRate);
-      setDistance(selectedWorkout.WorkoutDistance);
-      setType(selectedWorkout.WorkoutType);
-      setWorkoutRPE(selectedWorkout.WorkoutRPE || 0);
-      setWorkoutPhysicalLevel(selectedWorkout.WorkoutPhysicalLevel || 0);
-      setWorkoutWeatherLevel(selectedWorkout.WorkoutWeatherLevel || 0);
-      setWorkoutHydrationLevel(selectedWorkout.WorkoutHydrationLevel || 0);
-      setWorkoutCaloriesEatenPerHour(selectedWorkout.WorkoutCaloriesEatenPerHour || 0);
-      setChangedFields({});
+      setWorkoutData({
+        description: selectedWorkout.WorkoutDescription,
+        date: new Date(selectedWorkout.WorkoutDateTime),
+        averageSpeed: selectedWorkout.WorkoutAverageSpeed,
+        avgHeartRate: selectedWorkout.WorkoutAverageHeartRate,
+        distance: selectedWorkout.WorkoutDistance,
+        type: selectedWorkout.WorkoutType,
+        workoutRPE: selectedWorkout.WorkoutRPE || 0,
+        workoutPhysicalLevel: selectedWorkout.WorkoutPhysicalLevel || 0,
+        workoutWeatherLevel: selectedWorkout.WorkoutWeatherLevel || 0,
+        workoutHydrationLevel: selectedWorkout.WorkoutHydrationLevel || 0,
+        workoutCaloriesEatenPerHour: selectedWorkout.WorkoutCaloriesEatenPerHour || 0,
+      });
     }
   }, [selectedWorkout]);
 
   const handleChange = (field, value) => {
-    switch (field) {
-      case 'WorkoutDescription':
-        setDescription(value);
-        break;
-      case 'WorkoutType':
-        setType(value);
-        break;
-      case 'WorkoutRPE':
-        setWorkoutRPE(value);
-        break;
-      case 'WorkoutPhysicalLevel':
-        setWorkoutPhysicalLevel(value);
-        break;
-      case 'WorkoutWeatherLevel':
-        setWorkoutWeatherLevel(value);
-        break;
-      case 'WorkoutHydrationLevel':
-        setWorkoutHydrationLevel(value);
-        break;
-      case 'WorkoutCaloriesEatenPerHour':
-        setWorkoutCaloriesEatenPerHour(value);
-        break;
-      default:
-        break;
-    }
-    setChangedFields({
-      ...changedFields,
+    setWorkoutData((prevData) => ({
+      ...prevData,
       [field]: value,
-    });
+    }));
   };
 
   const handleSave = async () => {
-    if (Object.keys(changedFields).length === 0) {
-      return;
-    }
-
-    const updatedFields = {
+    const success = await workoutUpdate({
       id: selectedWorkout.id,
-      ...changedFields,
-    };
+      WorkoutDescription: workoutData.description,
+      WorkoutDateTime: workoutData.date,
+      WorkoutAverageSpeed: workoutData.averageSpeed,
+      WorkoutAverageHeartRate: workoutData.avgHeartRate,
+      WorkoutDistance: workoutData.distance,
+      WorkoutType: workoutData.type,
+      WorkoutRPE: workoutData.workoutRPE,
+      WorkoutPhysicalLevel: workoutData.workoutPhysicalLevel,
+      WorkoutWeatherLevel: workoutData.workoutWeatherLevel,
+      WorkoutHydrationLevel: workoutData.workoutHydrationLevel,
+      WorkoutCaloriesEatenPerHour: workoutData.workoutCaloriesEatenPerHour,
+    });
 
-    const success = await workoutUpdate(updatedFields);
     if (success) {
       setSelectedWorkout(null);
     }
   };
 
-  const getRPEDescription = (value) => {
-    switch (value) {
-      case 0:
-        return "Rest";
-      case 1:
-      case 2:
-        return "Very Easy";
-      case 3:
-      case 4:
-        return "Easy";
-      case 5:
-      case 6:
-        return "Moderate";
-      case 7:
-      case 8:
-        return "Hard";
-      case 9:
-      case 10:
-        return "Very Hard";
-      default:
-        return "";
-    }
-  };
+  const getDescription = (value, descriptions) => descriptions[value] || "";
 
-  const getBodyDescription = (value) => {
-    switch (value) {
-      case 0:
-        return "Perfect";
-      case 1:
-        return "Good";
-      case 2:
-        return "Average";
-      case 3:
-        return "Tired";
-      case 4:
-        return "Very Tired";
-      case 5:
-        return "Exhausted";
-      default:
-        return "";
-    }
-  };
-
-  const getWeatherDescription = (value) => {
-    switch (value) {
-      case 0:
-        return "Perfect";
-      case 1:
-        return "Good";
-      case 2:
-        return "Average";
-      case 3:
-        return "Poor";
-      case 4:
-        return "Very Poor";
-      case 5:
-        return "Extreme";
-      default:
-        return "";
-    }
-  };
-
-  const getHydrationDescription = (value) => {
-    switch (value) {
-      case 0:
-        return "Perfect";
-      case 1:
-        return "Good";
-      case 2:
-        return "Average";
-      case 3:
-        return "Poor";
-      case 4:
-        return "Very Poor";
-      case 5:
-        return "Dehydrated";
-      default:
-        return "";
-    }
-  };
+  const rpeDescriptions = ["Rest", "Very Easy", "Easy", "Moderate", "Hard", "Very Hard"];
+  const bodyDescriptions = ["Perfect", "Good", "Average", "Tender", "Sore", "Destroyed!"];
+  const weatherDescriptions = ["Perfect", "Good", "Average", "Poor", "Very Poor", "Extreme"];
+  const hydrationDescriptions = ["Perfect", "Good", "Average", "Poor", "Very Poor", "Dehydrated"];
 
   return (
     <Card className="workout-management-card">
       <Row gutter={16}>
         <Col span={12}>
           <label>Type:</label>
-          <Input value={type} disabled />
+          <Input value={workoutData.type} disabled />
         </Col>
         <Col span={12}>
           <label>Workout:</label>
-          <Input value={description} disabled />
+          <Input value={workoutData.description} disabled />
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={12}>
           <label>Date:</label>
-          <Input value={date.toLocaleDateString()} disabled />
+          <Input value={workoutData.date.toLocaleDateString()} disabled />
         </Col>
         <Col span={12}>
           <label>Avg Heart Rate:</label>
-          <Input value={avgHeartRate} disabled />
+          <Input value={workoutData.avgHeartRate} disabled />
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={12}>
           <label>Average Speed:</label>
-          <Input value={averageSpeed} disabled />
+          <Input value={workoutData.averageSpeed} disabled />
         </Col>
         <Col span={12}>
           <label>Distance:</label>
-          <Input value={distance} disabled />
+          <Input value={workoutData.distance} disabled />
         </Col>
       </Row>
       <Row gutter={16}>
@@ -204,20 +111,24 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout }) => {
           <Slider
             min={0}
             max={10}
-            value={workoutRPE}
-            onChange={value => handleChange('WorkoutRPE', value)}
+            value={workoutData.workoutRPE}
+            onChange={(value) => handleChange("workoutRPE", value)}
+            trackStyle={{ backgroundColor: "#1890ff" }}
+            handleStyle={{ borderColor: "#1890ff" }}
           />
-          <div>{getRPEDescription(workoutRPE)}</div>
+          <div>{getDescription(workoutData.workoutRPE, rpeDescriptions)}</div>
         </Col>
         <Col span={12}>
           <label>Body:</label>
           <Slider
             min={0}
             max={5}
-            value={workoutPhysicalLevel}
-            onChange={value => handleChange('WorkoutPhysicalLevel', value)}
+            value={workoutData.workoutPhysicalLevel}
+            onChange={(value) => handleChange("workoutPhysicalLevel", value)}
+            trackStyle={{ backgroundColor: "#1890ff" }}
+            handleStyle={{ borderColor: "#1890ff" }}
           />
-          <div>{getBodyDescription(workoutPhysicalLevel)}</div>
+          <div>{getDescription(workoutData.workoutPhysicalLevel, bodyDescriptions)}</div>
         </Col>
       </Row>
       <Row gutter={16}>
@@ -226,31 +137,40 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout }) => {
           <Slider
             min={0}
             max={5}
-            value={workoutWeatherLevel}
-            onChange={value => handleChange('WorkoutWeatherLevel', value)}
+            value={workoutData.workoutWeatherLevel}
+            onChange={(value) => handleChange("workoutWeatherLevel", value)}
+            trackStyle={{ backgroundColor: "#52c41a" }}
+            handleStyle={{ borderColor: "#52c41a" }}
           />
-          <div>{getWeatherDescription(workoutWeatherLevel)}</div>
+          <div>{getDescription(workoutData.workoutWeatherLevel, weatherDescriptions)}</div>
         </Col>
         <Col span={12}>
           <label>Hydration:</label>
           <Slider
             min={0}
             max={5}
-            value={workoutHydrationLevel}
-            onChange={value => handleChange('WorkoutHydrationLevel', value)}
+            value={workoutData.workoutHydrationLevel}
+            onChange={(value) => handleChange("workoutHydrationLevel", value)}
+            trackStyle={{ backgroundColor: "#52c41a" }}
+            handleStyle={{ borderColor: "#52c41a" }}
           />
-          <div>{getHydrationDescription(workoutHydrationLevel)}</div>
+          <div>{getDescription(workoutData.workoutHydrationLevel, hydrationDescriptions)}</div>
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col span={12}>
+        <Col span={24}>
           <label>Calories eaten per hour:</label>
-          <Input value={workoutCaloriesEatenPerHour} onChange={e => handleChange('WorkoutCaloriesEatenPerHour', e.target.value)} />
+          <Input
+            value={workoutData.workoutCaloriesEatenPerHour}
+            onChange={(e) => handleChange("workoutCaloriesEatenPerHour", e.target.value)}
+          />
         </Col>
       </Row>
       <Row gutter={16} style={{ marginTop: 16 }}>
         <Col span={24}>
-          <Button type="primary" onClick={handleSave} style={{ marginRight: 8 }}>Save</Button>
+          <Button type="primary" onClick={handleSave} className="workout-save-button">
+            Save
+          </Button>
         </Col>
       </Row>
     </Card>

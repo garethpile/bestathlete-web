@@ -7,7 +7,7 @@ export default function Workouts({ workoutsNoFeedback }) {
     start: new Date(new Date().setDate(new Date().getDate() - 2)),
     end: new Date()
   });
-  const [selectedWorkout, setSelectedWorkout] = useState(null); // Define this state to manage the currently selected workout
+  const [selectedWorkout, setSelectedWorkout] = useState(null);
 
   useEffect(() => {
     // Update the selected workout based on the date range
@@ -30,6 +30,14 @@ export default function Workouts({ workoutsNoFeedback }) {
     setDateRange((prevRange) => ({
       start: new Date(prevRange.end.setDate(prevRange.end.getDate() + 1)),
       end: new Date(prevRange.start.setDate(prevRange.start.getDate() + 2))
+    }));
+  };
+
+  const handleSaveWorkout = async (updatedWorkoutData) => {
+    // This function is called after saving the workout in the WorkoutManagement component
+    setSelectedWorkout((prevWorkout) => ({
+      ...prevWorkout,
+      ...updatedWorkoutData,
     }));
   };
 
@@ -56,8 +64,9 @@ export default function Workouts({ workoutsNoFeedback }) {
                 workouts.map((workout) => (
                   <WorkoutManagement
                     key={workout.id}
-                    selectedWorkout={workout}
-                    setSelectedWorkout={setSelectedWorkout} // Correctly pass setSelectedWorkout
+                    selectedWorkout={selectedWorkout?.id === workout.id ? selectedWorkout : workout}
+                    setSelectedWorkout={setSelectedWorkout}
+                    onSave={handleSaveWorkout} // Pass handleSaveWorkout to update the state
                   />
                 ))
               ) : (

@@ -28,57 +28,114 @@ const Profile = ({ customer }) => {
     MobileNumber: "",
     Country: "",
     DateOfBirth: "",
-    // Initializing the checkbox states based on customer data or defaulting to false
-    MondayTrain: false,
-    MondayTrainHours: 0,
-    TuesdayTrain: false,
-    TuesdayTrainHours: 0,
-    WednesdayTrain: false,
-    WednesdayTrainHours: 0,
-    ThursdayTrain: false,
-    ThursdayTrainHours: 0,
-    FridayTrain: false,
-    FridayTrainHours: 0,
-    SaturdayTrain: false,
-    SaturdayTrainHours: 0,
-    SundayTrain: false,
-    SundayTrainHours: 0,
-    _version: customer._version || 1
+    TrainingDays: {
+      MondayTrain: false,
+      MondayTrainHours: 0,
+      TuesdayTrain: false,
+      TuesdayTrainHours: 0,
+      WednesdayTrain: false,
+      WednesdayTrainHours: 0,
+      ThursdayTrain: false,
+      ThursdayTrainHours: 0,
+      FridayTrain: false,
+      FridayTrainHours: 0,
+      SaturdayTrain: false,
+      SaturdayTrainHours: 0,
+      SundayTrain: false,
+      SundayTrainHours: 0,
+    },
+    _version: customer._version || 1,
   });
 
   useEffect(() => {
-    // Setting initial values from customer data
     if (customer) {
       setUser({
         ...customer,
-        ...customer.TrainingDays, // Ensures training days are correctly initialized
-        Country: customer.Country || '' // Handling undefined country
+        TrainingDays: {
+          MondayTrain: customer.TrainingDays?.MondayTrain || false,
+          MondayTrainHours: customer.TrainingDays?.MondayTrainHours || 0,
+          TuesdayTrain: customer.TrainingDays?.TuesdayTrain || false,
+          TuesdayTrainHours: customer.TrainingDays?.TuesdayTrainHours || 0,
+          WednesdayTrain: customer.TrainingDays?.WednesdayTrain || false,
+          WednesdayTrainHours: customer.TrainingDays?.WednesdayTrainHours || 0,
+          ThursdayTrain: customer.TrainingDays?.ThursdayTrain || false,
+          ThursdayTrainHours: customer.TrainingDays?.ThursdayTrainHours || 0,
+          FridayTrain: customer.TrainingDays?.FridayTrain || false,
+          FridayTrainHours: customer.TrainingDays?.FridayTrainHours || 0,
+          SaturdayTrain: customer.TrainingDays?.SaturdayTrain || false,
+          SaturdayTrainHours: customer.TrainingDays?.SaturdayTrainHours || 0,
+          SundayTrain: customer.TrainingDays?.SundayTrain || false,
+          SundayTrainHours: customer.TrainingDays?.SundayTrainHours || 0,
+        },
+        Country: customer.Country || ''
       });
     }
   }, [customer]);
 
-  const handleInputChange = (event, newValue, field) => {
-    if (field === 'Country') {
-      setUser(prev => ({ ...prev, Country: newValue ? newValue.name : '' }));
-    } else {
-      const { name, value, type, checked } = event.target;
-      setUser(prev => ({
+  const handleInputChange = (event) => {
+    const { name, value, type, checked } = event.target;
+    if (name.includes("TrainHours")) {
+      setUser((prev) => ({
         ...prev,
-        [name]: type === 'checkbox' ? checked : value
+        TrainingDays: {
+          ...prev.TrainingDays,
+          [name]: type === "number" ? Number(value) : value,
+        },
+      }));
+    } else if (name.includes("Train")) {
+      setUser((prev) => ({
+        ...prev,
+        TrainingDays: {
+          ...prev.TrainingDays,
+          [name]: type === "checkbox" ? checked : value,
+        },
+      }));
+    } else {
+      setUser((prev) => ({
+        ...prev,
+        [name]: value,
       }));
     }
   };
 
+  const handleCountryChange = (event, newValue) => {
+    setUser(prev => ({
+      ...prev,
+      Country: newValue ? newValue.name : ''
+    }));
+  };
+
   const saveCustomerData = async () => {
     const input = {
-      ...user,
+      id: user.id,
+      idCustomer: user.idCustomer,
+      LastName: user.LastName,
+      FirstName: user.FirstName,
+      EmailAddress: user.EmailAddress,
+      MobileNumber: user.MobileNumber,
+      Gender: user.Gender,
+      DateOfBirth: user.DateOfBirth,
+      Country: user.Country,
       TrainingDays: {
-        MondayTrain: user.MondayTrain,
-        MondayTrainHours: user.MondayTrainHours,
-        // Repeat for other days
-      }
+        MondayTrain: user.TrainingDays.MondayTrain,
+        MondayTrainHours: parseInt(user.TrainingDays.MondayTrainHours, 10),
+        TuesdayTrain: user.TrainingDays.TuesdayTrain,
+        TuesdayTrainHours: parseInt(user.TrainingDays.TuesdayTrainHours, 10),
+        WednesdayTrain: user.TrainingDays.WednesdayTrain,
+        WednesdayTrainHours: parseInt(user.TrainingDays.WednesdayTrainHours, 10),
+        ThursdayTrain: user.TrainingDays.ThursdayTrain,
+        ThursdayTrainHours: parseInt(user.TrainingDays.ThursdayTrainHours, 10),
+        FridayTrain: user.TrainingDays.FridayTrain,
+        FridayTrainHours: parseInt(user.TrainingDays.FridayTrainHours, 10),
+        SaturdayTrain: user.TrainingDays.SaturdayTrain,
+        SaturdayTrainHours: parseInt(user.TrainingDays.SaturdayTrainHours, 10),
+        SundayTrain: user.TrainingDays.SundayTrain,
+        SundayTrainHours: parseInt(user.TrainingDays.SundayTrainHours, 10),
+      },
+      NonTrainingPeriod: user.NonTrainingPeriod || [], // Adjust this if needed
+      ThirdPartyApplications: user.ThirdPartyApplications || [], // Adjust this if needed
     };
-
+  
     try {
       const response = await API.graphql(graphqlOperation(updateCustomer, { input }));
       alert("Customer data updated successfully");
@@ -112,7 +169,7 @@ const Profile = ({ customer }) => {
             <InputLabel id="genderLabel">Select Gender</InputLabel>
             <Select
               labelId="genderLabel"
-              name="gender"
+              name="Gender"
               value={user.Gender || ''}
               onChange={handleInputChange}
             >
@@ -137,7 +194,7 @@ const Profile = ({ customer }) => {
             options={CountryList}
             getOptionLabel={(option) => option.name}
             value={CountryList.find(c => c.name === user.Country) || null}
-            onChange={(event, newValue) => handleInputChange(event, newValue, 'Country')}
+            onChange={handleCountryChange}
             renderInput={(params) => <TextField {...params} label="Country" />}
           />
         </Grid>
@@ -149,14 +206,9 @@ const Profile = ({ customer }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={user[`${day}Train`] || false}
-                  onChange={(e) => handleInputChange({
-                    target: {
-                      name: `${day}Train`,
-                      type: 'checkbox',
-                      checked: e.target.checked,
-                    }
-                  })}
+                  name={`${day}Train`}
+                  checked={user.TrainingDays[`${day}Train`] || false}
+                  onChange={handleInputChange}
                 />
               }
               label={`${day} Train`}
@@ -166,7 +218,7 @@ const Profile = ({ customer }) => {
               fullWidth
               label={`${day} Train Hours`}
               name={`${day}TrainHours`}
-              value={user[`${day}TrainHours`] || 0}
+              value={user.TrainingDays[`${day}TrainHours`] || 0}
               onChange={handleInputChange}
               inputProps={{ min: 0 }} // Prevent negative numbers
             />

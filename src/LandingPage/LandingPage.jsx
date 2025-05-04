@@ -48,10 +48,13 @@ const LandingPage = () => {
           setCustomer(returnedCustomer);
           setUserExists(true);
           const today = new Date();
-          const sevenDaysAgo = new Date(today);
-          sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-          const startDate = sevenDaysAgo.toISOString().split('T')[0];
-          const endDate = today.toISOString().split('T')[0];
+          const tomorrow = new Date();
+          const eightDaysAgo = new Date(today);
+
+          tomorrow.setDate(today.getDate() + 1);
+          eightDaysAgo.setDate(tomorrow.getDate() - 8);
+          const startDate = eightDaysAgo.toISOString().split('T')[0];
+          const endDate = tomorrow.toISOString().split('T')[0];
 
           Promise.all([
             workoutsGetIDDateTime(authenticatedUser.username, startDate, endDate),
