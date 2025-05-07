@@ -3,6 +3,7 @@ import { Tabs } from "antd";
 import Dashboard from "./Dashboard";
 import Workouts from "./Workouts";
 import ThirdPartyCard from "./ThirdPartyCard";
+import Header from "./Header";
 import Profile from "../ProfilePage/Profile";
 import Modal from "./Modal/Modal";
 import { Grid } from "@mui/material";
@@ -26,6 +27,9 @@ export default function MainComponent({ customer, events, workoutsNoFeedback, us
         </TabPane>
         <TabPane tab="Profile" key="4">
           <Profile userExists={userExists} customer={customer} />
+        </TabPane>
+        <TabPane tab="User" key="5">
+          <Header customer={customer} />
         </TabPane>
       </Tabs>
 
