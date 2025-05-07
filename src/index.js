@@ -18,10 +18,10 @@ Amplify.configure(config);
 const client = new ApolloClient({
   credentials : "include",
   headers : {
-      "API-ID": "i3r7qpfutrc5jhickziybbcmgm",
-      "API KEY": "da2-furlftqpy5anpb475cwlsqaakq"
+      "API-ID": "lfdjpwzwbjhr3psfq5w7wyakui",
+      "API KEY": "dda2-bila5xsilzegjgtqsfncolxeve"
   },
-  uri: 'https://dhy5zxj44zbzfdh6pc72ou7gty.appsync-api.eu-west-1.amazonaws.com/graphql',
+  uri: 'https://6ytdelytwbdfbbyojwmxqit6ou.appsync-api.us-east-1.amazonaws.com/graphql',
   cache: new InMemoryCache()
 });
 
