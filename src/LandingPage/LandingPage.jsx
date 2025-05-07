@@ -65,7 +65,7 @@ const LandingPage = () => {
           ]).then(([workoutsRes, workoutsNoFeedbackRes, eventsRes, weightMetricsRes, sleepMetricsRes]) => {
             setWorkouts(workoutsRes.body || []);
             setWorkoutsNoFeedback(workoutsNoFeedbackRes.body || []);
-            setEvents(eventsRes.body || []);
+            setEvents(Array.isArray(eventsRes.body) ? eventsRes.body : []);
             setMetrics3DaysWeight(weightMetricsRes.body || []);
             setMetrics3DaysSleep(sleepMetricsRes.body || []);
             setIsLoading(false);
