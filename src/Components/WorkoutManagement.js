@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Input, Button, Row, Col, Card } from "antd";
+import { Input, Button, Row, Col, Card, Typography, Divider, Space } from "antd";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "./WorkoutManagement.css";
 import { workoutUpdate } from "../services/workoutServices";
+
+const { Title, Text } = Typography;
 
 const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout }) => {
   const [workoutData, setWorkoutData] = useState({
@@ -74,105 +76,105 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout }) => {
   const hydrationDescriptions = ["Perfect", "Good", "Average", "Poor", "Very Poor", "Dehydrated"];
 
   return (
-    <Card className="workout-management-card">
-      <Row gutter={16}>
-        <Col span={12}>
-          <label>Type:</label>
-          <Input value={workoutData.type} disabled />
-        </Col>
-        <Col span={12}>
-          <label>Workout:</label>
-          <Input value={workoutData.description} disabled />
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={12}>
-          <label>Date:</label>
-          <Input value={workoutData.date.toLocaleDateString()} disabled />
-        </Col>
-        <Col span={12}>
-          <label>Avg Heart Rate:</label>
-          <Input value={workoutData.avgHeartRate} disabled />
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={12}>
-          <label>Average Speed:</label>
-          <Input value={workoutData.averageSpeed} disabled />
-        </Col>
-        <Col span={12}>
-          <label>Distance:</label>
-          <Input value={workoutData.distance} disabled />
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={12}>
-          <label>RPE:</label>
-          <Slider
-            min={0}
-            max={10}
-            value={workoutData.workoutRPE}
-            onChange={(value) => handleChange("workoutRPE", value)}
-            trackStyle={{ backgroundColor: "#1890ff" }}
-            handleStyle={{ borderColor: "#1890ff" }}
-          />
-          <div>{getDescription(workoutData.workoutRPE, rpeDescriptions)}</div>
-        </Col>
-        <Col span={12}>
-          <label>Body:</label>
-          <Slider
-            min={0}
-            max={5}
-            value={workoutData.workoutPhysicalLevel}
-            onChange={(value) => handleChange("workoutPhysicalLevel", value)}
-            trackStyle={{ backgroundColor: "#1890ff" }}
-            handleStyle={{ borderColor: "#1890ff" }}
-          />
-          <div>{getDescription(workoutData.workoutPhysicalLevel, bodyDescriptions)}</div>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={12}>
-          <label>Weather:</label>
-          <Slider
-            min={0}
-            max={5}
-            value={workoutData.workoutWeatherLevel}
-            onChange={(value) => handleChange("workoutWeatherLevel", value)}
-            trackStyle={{ backgroundColor: "#52c41a" }}
-            handleStyle={{ borderColor: "#52c41a" }}
-          />
-          <div>{getDescription(workoutData.workoutWeatherLevel, weatherDescriptions)}</div>
-        </Col>
-        <Col span={12}>
-          <label>Hydration:</label>
-          <Slider
-            min={0}
-            max={5}
-            value={workoutData.workoutHydrationLevel}
-            onChange={(value) => handleChange("workoutHydrationLevel", value)}
-            trackStyle={{ backgroundColor: "#52c41a" }}
-            handleStyle={{ borderColor: "#52c41a" }}
-          />
-          <div>{getDescription(workoutData.workoutHydrationLevel, hydrationDescriptions)}</div>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={24}>
-          <label>Calories eaten per hour:</label>
-          <Input
-            value={workoutData.workoutCaloriesEatenPerHour}
-            onChange={(e) => handleChange("workoutCaloriesEatenPerHour", e.target.value)}
-          />
-        </Col>
-      </Row>
-      <Row gutter={16} style={{ marginTop: 16 }}>
-        <Col span={24}>
-          <Button type="primary" onClick={handleSave} className="workout-save-button">
+    <Card style={{ margin: 12, borderRadius: 12, boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+      <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Text strong>Type:</Text>
+            <Input value={workoutData.type} disabled />
+          </Col>
+          <Col span={12}>
+            <Text strong>Workout:</Text>
+            <Input value={workoutData.description} disabled />
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col span={12}>
+            <Text strong>Date:</Text>
+            <Input value={workoutData.date.toLocaleDateString()} disabled />
+          </Col>
+          <Col span={12}>
+            <Text strong>Avg Heart Rate:</Text>
+            <Input value={workoutData.avgHeartRate} disabled />
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col span={12}>
+            <Text strong>Average Speed:</Text>
+            <Input value={workoutData.averageSpeed} disabled />
+          </Col>
+          <Col span={12}>
+            <Text strong>Distance:</Text>
+            <Input value={workoutData.distance} disabled />
+          </Col>
+        </Row>
+
+        <Divider />
+
+        <Row gutter={16}>
+          <Col span={12}>
+            <Text strong>RPE:</Text>
+            <Slider
+              min={0}
+              max={5}
+              value={workoutData.workoutRPE}
+              onChange={(value) => handleChange("workoutRPE", value)}
+            />
+            <Text type="secondary">{getDescription(workoutData.workoutRPE, rpeDescriptions)}</Text>
+          </Col>
+          <Col span={12}>
+            <Text strong>Body:</Text>
+            <Slider
+              min={0}
+              max={5}
+              value={workoutData.workoutPhysicalLevel}
+              onChange={(value) => handleChange("workoutPhysicalLevel", value)}
+            />
+            <Text type="secondary">{getDescription(workoutData.workoutPhysicalLevel, bodyDescriptions)}</Text>
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col span={12}>
+            <Text strong>Weather:</Text>
+            <Slider
+              min={0}
+              max={5}
+              value={workoutData.workoutWeatherLevel}
+              onChange={(value) => handleChange("workoutWeatherLevel", value)}
+            />
+            <Text type="secondary">{getDescription(workoutData.workoutWeatherLevel, weatherDescriptions)}</Text>
+          </Col>
+          <Col span={12}>
+            <Text strong>Hydration:</Text>
+            <Slider
+              min={0}
+              max={5}
+              value={workoutData.workoutHydrationLevel}
+              onChange={(value) => handleChange("workoutHydrationLevel", value)}
+            />
+            <Text type="secondary">{getDescription(workoutData.workoutHydrationLevel, hydrationDescriptions)}</Text>
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col span={24}>
+            <Text strong>Calories eaten per hour:</Text>
+            <Input
+              value={workoutData.workoutCaloriesEatenPerHour}
+              onChange={(e) => handleChange("workoutCaloriesEatenPerHour", e.target.value)}
+            />
+          </Col>
+        </Row>
+
+        <Row justify="end">
+          <Button type="primary" onClick={handleSave}>
             Save
           </Button>
-        </Col>
-      </Row>
+        </Row>
+      </Space>
     </Card>
   );
 };
