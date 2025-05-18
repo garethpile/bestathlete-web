@@ -1,8 +1,19 @@
 import React, { useState } from "react";
 import { Card } from "antd";
-import { Grid, TextField, Button, Select, InputLabel, MenuItem, FormControl, Box, Slider } from "@mui/material";
-import Modal from "./Modal/Modal"; 
-import { eventDelete } from "../services/eventServices"; // Import the eventDelete function
+import {
+  Grid,
+  TextField,
+  Button,
+  Select,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Box,
+  Slider,
+  Chip,
+} from "@mui/material";
+import Modal from "./Modal/Modal";
+import { eventDelete } from "../services/eventServices";
 
 export default function EventManagement({ event, removeEvent }) {
   const [open, setOpen] = useState(false);
@@ -13,53 +24,70 @@ export default function EventManagement({ event, removeEvent }) {
     eventDistance: event.EventDistance || "",
     eventPriority: event.EventPriority || "",
     eventDescription: event.EventDescription || "",
-    sliderValue: [0, 33, 66] // Default values for three sliders
+    sliderValue: [0, 33, 66],
   });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSliderChange = (event, newValue) => {
+  const handleSliderChange = (_, newValue) => {
     setForm({ ...form, sliderValue: newValue });
   };
 
-  const handleOpenModal = () => {
-    setOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpen(false);
-  };
-
-  const handleSave = () => {
-    handleCloseModal();
-  };
+  const handleOpenModal = () => setOpen(true);
+  const handleCloseModal = () => setOpen(false);
+  const handleSave = () => handleCloseModal();
 
   const handleDeleteEvent = async () => {
     const success = await eventDelete(event.id);
     if (success) {
-      removeEvent(event.id); // Optionally remove the event from the UI if deletion is successful
+      removeEvent(event.id);
     }
   };
 
   const sliderMarks = [
-    { value: 0, label: 'Section 1' },
-    { value: 33, label: 'Section 2' },
-    { value: 66, label: 'Section 3' },
-    { value: 100, label: 'Section 4' }
+    { value: 0, label: "Section 1" },
+    { value: 33, label: "Section 2" },
+    { value: 66, label: "Section 3" },
+    { value: 100, label: "Section 4" },
   ];
 
   return (
-    <Card style={{ marginBottom: '20px', padding: '20px' }}>
-      <h3>{event.EventName || "No Name"} - {event.EventDate || "No Date"}</h3>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Button variant="contained" color="primary" onClick={handleOpenModal}>
-          View
-        </Button>
-        <Button variant="contained" color="secondary" onClick={handleDeleteEvent}>
-          Delete
-        </Button>
+    <Card style={{ marginBottom: "20px", padding: "20px" }}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        flexWrap="wrap"
+      >
+        <Box display="flex" alignItems="center" gap={2}>
+          {event.EventPriority && (
+            <Chip
+              label={`Priority: ${event.EventPriority}`}
+              size="small"
+              color={
+                event.EventPriority === "A"
+                  ? "error"
+                  : event.EventPriority === "B"
+                  ? "warning"
+                  : "default"
+              }
+            />
+          )}
+          <div style={{ fontSize: 16, fontWeight: 500 }}>
+            {event.EventName || "No Name"} - {event.EventDate || "No Date"}
+          </div>
+        </Box>
+
+        <Box display="flex" gap={1} mt={{ xs: 1, sm: 0 }}>
+          <Button variant="contained" color="primary" onClick={handleOpenModal}>
+            View
+          </Button>
+          <Button variant="contained" color="secondary" onClick={handleDeleteEvent}>
+            Delete
+          </Button>
+        </Box>
       </Box>
 
       <Modal
@@ -84,8 +112,8 @@ export default function EventManagement({ event, removeEvent }) {
             <Grid item xs={6}>
               <TextField
                 label="Event Date"
-                InputLabelProps={{ shrink: true }}
                 type="date"
+                InputLabelProps={{ shrink: true }}
                 value={form.eventDate}
                 name="eventDate"
                 margin="normal"
@@ -98,10 +126,8 @@ export default function EventManagement({ event, removeEvent }) {
           <Grid item xs={12} container spacing={2}>
             <Grid item xs={6}>
               <FormControl fullWidth margin="normal">
-                <InputLabel id="event-type-select-label">Event Type</InputLabel>
+                <InputLabel>Event Type</InputLabel>
                 <Select
-                  labelId="event-type-select-label"
-                  id="event-type-select"
                   name="eventType"
                   value={form.eventType}
                   onChange={handleChange}
@@ -132,10 +158,8 @@ export default function EventManagement({ event, removeEvent }) {
           <Grid item xs={12} container spacing={2}>
             <Grid item xs={6}>
               <FormControl fullWidth margin="normal">
-                <InputLabel id="event-priority-select-label">Event Priority</InputLabel>
+                <InputLabel>Event Priority</InputLabel>
                 <Select
-                  labelId="event-priority-select-label"
-                  id="event-priority-select"
                   name="eventPriority"
                   value={form.eventPriority}
                   onChange={handleChange}
@@ -168,11 +192,11 @@ export default function EventManagement({ event, removeEvent }) {
                 aria-labelledby="range-slider"
                 min={0}
                 max={100}
-                step={1} 
+                step={1}
               />
               <Box display="flex" justifyContent="space-between">
                 {sliderMarks.map((mark) => (
-                  <Box key={mark.value} sx={{ textAlign: 'center', width: '25%' }}>
+                  <Box key={mark.value} sx={{ textAlign: "center", width: "25%" }}>
                     {mark.label}
                   </Box>
                 ))}
