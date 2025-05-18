@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Auth } from "aws-amplify";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Profile from "../ProfilePage/Profile";
-import ThirdParty from "../ThreeSixtyDSL/ThirdParty";
-import MainComponent from "../Components/MainComponent";
+import RouterConfig from "../routes/RouterConfig";
 import {
   customerGetByIdCustomer,
 } from "../services/customerServices";
 import {
   workoutsGetIDDateTime,
-  workoutsGetIDDateTimeFilterAthleteFeedback
+  workoutsGetIDDateTimeFilterAthleteFeedback,
 } from "../services/workoutServices";
-import {
-  eventGetIDDateTime
-} from "../services/eventServices";
+import { eventGetIDDateTime } from "../services/eventServices";
 import {
   metricsGet3DaysWeight,
-  metricsGet3DaysSleep
+  metricsGet3DaysSleep,
 } from "../services/metricServices";
 
 const LandingPage = () => {
@@ -26,74 +21,74 @@ const LandingPage = () => {
   const [workouts, setWorkouts] = useState([]);
   const [workoutsNoFeedback, setWorkoutsNoFeedback] = useState([]);
   const [events, setEvents] = useState([]);
-  const [globalUserId, setGlobalUserId] = useState(null);
   const [metrics3DaysWeight, setMetrics3DaysWeight] = useState([]);
   const [metrics3DaysSleep, setMetrics3DaysSleep] = useState([]);
 
   useEffect(() => {
-    setIsLoading(true);
-    let authenticatedUser;
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const authenticatedUser = await Auth.currentAuthenticatedUser({ bypassCache: true });
+        const customerData = await customerGetByIdCustomer(authenticatedUser.username);
 
-    Auth.currentAuthenticatedUser({ bypassCache: true })
-      .then((user) => {
-        authenticatedUser = user;
-        setGlobalUserId(authenticatedUser.username);
-        return customerGetByIdCustomer(authenticatedUser.username);
-      })
-      .then((returnedCustomer) => {
-        if (!returnedCustomer) {
+        if (!customerData) {
           setUserExists(false);
-          setIsLoading(false);
-        } else {
-          setCustomer(returnedCustomer);
-          setUserExists(true);
-          const today = new Date();
-          const tomorrow = new Date();
-          const eightDaysAgo = new Date(today);
-
-          tomorrow.setDate(today.getDate() + 1);
-          eightDaysAgo.setDate(tomorrow.getDate() - 8);
-          const startDate = eightDaysAgo.toISOString().split('T')[0];
-          const endDate = tomorrow.toISOString().split('T')[0];
-
-          Promise.all([
-            workoutsGetIDDateTime(authenticatedUser.username, startDate, endDate),
-            workoutsGetIDDateTimeFilterAthleteFeedback(authenticatedUser.username, startDate, endDate, 0),
-            eventGetIDDateTime(authenticatedUser.username),
-            metricsGet3DaysWeight(authenticatedUser.username),
-            metricsGet3DaysSleep(authenticatedUser.username)
-          ]).then(([workoutsRes, workoutsNoFeedbackRes, eventsRes, weightMetricsRes, sleepMetricsRes]) => {
-            setWorkouts(workoutsRes.body || []);
-            setWorkoutsNoFeedback(workoutsNoFeedbackRes.body || []);
-            setEvents(Array.isArray(eventsRes.body) ? eventsRes.body : []);
-            setMetrics3DaysWeight(weightMetricsRes.body || []);
-            setMetrics3DaysSleep(sleepMetricsRes.body || []);
-            setIsLoading(false);
-          }).catch(error => {
-            console.error("Error fetching data:", error);
-            setIsLoading(false);
-          });
+          return;
         }
-      })
-      .catch((error) => {
-        console.error("Error retrieving user:", error);
+
+        setCustomer(customerData);
+        setUserExists(true);
+
+        const today = new Date();
+        const tomorrow = new Date();
+        const eightDaysAgo = new Date(today);
+
+        tomorrow.setDate(today.getDate() + 1);
+        eightDaysAgo.setDate(tomorrow.getDate() - 8);
+        const startDate = eightDaysAgo.toISOString().split("T")[0];
+        const endDate = tomorrow.toISOString().split("T")[0];
+
+        const [
+          workoutsRes,
+          workoutsNoFeedbackRes,
+          eventsRes,
+          weightMetricsRes,
+          sleepMetricsRes,
+        ] = await Promise.all([
+          workoutsGetIDDateTime(authenticatedUser.username, startDate, endDate),
+          workoutsGetIDDateTimeFilterAthleteFeedback(authenticatedUser.username, startDate, endDate, 0),
+          eventGetIDDateTime(authenticatedUser.username),
+          metricsGet3DaysWeight(authenticatedUser.username),
+          metricsGet3DaysSleep(authenticatedUser.username),
+        ]);
+
+        setWorkouts(workoutsRes.body || []);
+        setWorkoutsNoFeedback(workoutsNoFeedbackRes.body || []);
+        setEvents(Array.isArray(eventsRes.body) ? eventsRes.body : []);
+        setMetrics3DaysWeight(weightMetricsRes.body || []);
+        setMetrics3DaysSleep(sleepMetricsRes.body || []);
+      } catch (error) {
+        console.error("Error loading user data:", error);
+      } finally {
         setIsLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
-  return (
-    <Router>
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <Routes>
-          <Route path="/Profile" element={<Profile userExists={userExists} customer={customer} />} />
-          <Route path="/ThirdParty" element={<ThirdParty customer={customer} />} />
-          <Route path="/" element={<MainComponent customer={customer} workoutsNoFeedback={workoutsNoFeedback} events={events} />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      )}
-    </Router>
+  return isLoading ? (
+    <div>Loading...</div>
+  ) : (
+    <RouterConfig
+      customer={customer}
+      events={events}
+      workouts={workouts}
+      workoutsNoFeedback={workoutsNoFeedback}
+      metrics3DaysWeight={metrics3DaysWeight}
+      metrics3DaysSleep={metrics3DaysSleep}
+      userExists={userExists}
+    />
   );
 };
 

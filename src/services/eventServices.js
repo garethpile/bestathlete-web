@@ -7,7 +7,7 @@ export const eventGetIDDateTime= async (idCustomer, dateTime) => {
   //console.log("<eventServices><eventGetIDDateTime>: Incoming idCustomer: ", idCustomer);
   try {
     const result = await API.graphql(graphqlOperation(eventsByIdCustomerAndEventDate, { idCustomer: idCustomer }));
-    //console.log("<eventServices><eventGetIDDateTime>: result: ", result);
+    console.log("<eventServices><eventGetIDDateTime>: result: ", result);
     if (
       result.data.eventsByIdCustomerAndEventDate.items &&
       result.data.eventsByIdCustomerAndEventDate.items.length > 0) {
@@ -66,10 +66,10 @@ export const eventDelete = async (id) => {
 
 export const eventCreate = async (newEvent) => {
   console.log('<eventServices><eventCreate>: Executing ...');
-  //console.log('<eventServices><eventCreate>: newEvent: ', newEvent);
+  console.log('<eventServices><eventCreate>: newEvent: ', newEvent);
   try {
     const result = await API.graphql(graphqlOperation(createEvent, { input: newEvent }));
-    //console.log("<eventServices><eventCreate>: result: ", result);
+    console.log("<eventServices><eventCreate>: result: ", result);
     return result;
   } catch (error) {
     console.error('<eventServices><eventCreate><Error><001>: Error creating event:', error);
