@@ -110,6 +110,7 @@ export const getWorkout = /* GraphQL */ `
       WorkoutStravaActivityId
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
+      WorkoutPairId
       createdAt
       updatedAt
       __typename
@@ -150,6 +151,7 @@ export const listWorkouts = /* GraphQL */ `
         WorkoutStravaActivityId
         WorkoutGarminActivityId
         WorkoutTPWorkoutId
+        WorkoutPairId
         createdAt
         updatedAt
         __typename
@@ -607,6 +609,7 @@ export const workoutsByIdCustomerAndWorkoutDateTime = /* GraphQL */ `
         WorkoutStravaActivityId
         WorkoutGarminActivityId
         WorkoutTPWorkoutId
+        WorkoutPairId
         createdAt
         updatedAt
         __typename

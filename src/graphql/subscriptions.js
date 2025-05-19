@@ -192,6 +192,7 @@ export const onCreateWorkout = /* GraphQL */ `
       WorkoutStravaActivityId
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
+      WorkoutPairId
       createdAt
       updatedAt
       __typename
@@ -227,6 +228,7 @@ export const onUpdateWorkout = /* GraphQL */ `
       WorkoutStravaActivityId
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
+      WorkoutPairId
       createdAt
       updatedAt
       __typename
@@ -262,6 +264,7 @@ export const onDeleteWorkout = /* GraphQL */ `
       WorkoutStravaActivityId
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
+      WorkoutPairId
       createdAt
       updatedAt
       __typename

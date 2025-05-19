@@ -1,3 +1,4 @@
+import { Auth } from 'aws-amplify';
 import React from 'react';
 import { Layout, Menu, Tooltip, Grid } from 'antd';
 import {
@@ -72,8 +73,18 @@ const MainLayout = () => {
               <Link to="/thirdparty">ThirdParty</Link>
             </Menu.Item>
 
-                      <Menu.Item key="profile" icon={<UserOutlined />}>
+            <Menu.Item key="profile" icon={<UserOutlined />}>
               <Link to="/profile">Profile</Link>
+            </Menu.Item>
+            <Menu.Item key="logout" onClick={async () => {
+              try {
+                await Auth.signOut();
+                window.location.href = '/';
+              } catch (err) {
+                console.error('Error signing out:', err);
+              }
+            }}>
+              Logout
             </Menu.Item>
           </Menu>
         </div>
