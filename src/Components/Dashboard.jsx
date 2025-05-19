@@ -4,9 +4,7 @@ import AthleteCard from "./AthleteCard";
 import AthleteFeedback from "./AthleteFeedback";
 import NonTrainingDays from "./NonTrainingDays";
 import TermsConditions from "./TermsConditions";
-import EventManagement from "./EventManagement";
 import EventModal from "./EventModal";
-import RacePhasePlanner from "./RacePhasePlanner";
 import { eventGetIDDateTime } from "../services/eventServices";
 
 const { Panel } = Collapse;
@@ -21,6 +19,7 @@ const Dashboard = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [eventList, setEventList] = useState(events);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const handleEventCreated = async () => {
     const refreshed = await eventGetIDDateTime(customer.idCustomer);
@@ -29,6 +28,11 @@ const Dashboard = ({
 
   const removeEvent = (id) => {
     setEventList((prev) => prev.filter((e) => e.id !== id));
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedEvent(null);
   };
 
   return (
@@ -64,29 +68,45 @@ const Dashboard = ({
               </div>
 
               {eventList.map((event) => (
-                <div key={event.id} style={{ width: "100%" }}>
-                  <EventManagement
-                    event={event}
-                    removeEvent={removeEvent}
-                    allEvents={eventList}
-                  />
+                <div
+                  key={event.id}
+                  style={{
+                    width: "100%",
+                    cursor: "pointer",
+                    marginBottom: "8px",
+                    padding: "10px 16px",
+                    border: "1px solid #e8e8e8",
+                    borderRadius: "6px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    backgroundColor: "#fafafa"
+                  }}
+                  onClick={() => {
+                    setSelectedEvent(event);
+                    setIsModalOpen(true);
+                  }}
+                >
+                  <span>
+                    <strong style={{ color: event.EventPriority === "A" ? "#d32f2f" : event.EventPriority === "B" ? "#f57c00" : "#1976d2" }}>
+                      {event.EventPriority} Race
+                    </strong>
+                    &nbsp; - {event.EventName} ({event.EventDate})
+                  </span>
                 </div>
               ))}
 
               <EventModal
                 open={isModalOpen}
-                setOpen={setIsModalOpen}
+                setOpen={handleCloseModal}
                 onEventCreated={handleEventCreated}
                 customer={customer}
+                existingEvents={eventList}
+                event={selectedEvent}
               />
             </Panel>
           </Collapse>
 
-          <Collapse style={{ marginTop: 16 }}>
-            <Panel header="Race Phase Planner" key="racephases">
-              <RacePhasePlanner customer={customer} />
-            </Panel>
-          </Collapse>
         </Col>
 
         <Col xs={24}>
