@@ -43,7 +43,7 @@ const Dashboard = ({
               marginTop: "15px",
             }}
           >
-            Activity Feedback Corner
+            Dashboard
           </h1>
           <AthleteCard customer={customer} />
         </Col>

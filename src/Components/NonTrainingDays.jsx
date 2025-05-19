@@ -15,11 +15,12 @@ import Modal from "./Modal/Modal";
 
 import moment from "moment";
 
-export default function NonTrainingDays(props) {
+export default function NonTrainingDays({customer}) {
+  console.log("Incoming idCustomer: ", customer.idCustomer);
   const [nonTrainingDays, setNonTrainingDays] = useState([
     {
       id: "",
-      UserId360DSL: props.customerId,
+      UserId360DSL: customer.idCustomer,
       Valid: true,
       NonTrainingType: "Sick",
       StartDate: "",
@@ -65,7 +66,7 @@ export default function NonTrainingDays(props) {
      
       API.graphql(
         graphqlOperation(createNonTrainingDays, {
-          UserId360DSL: props.customerId,
+          UserId360DSL: customer.idCustomer,
           Valid: true,
           NonTrainingType: "Sick",
           StartDate: form.startDate,
@@ -75,7 +76,7 @@ export default function NonTrainingDays(props) {
         .then((createNonTrainingDaysResponse) => {
           alert("Off Days Added Succesfully");
           // Retrieve updated list ....
-          getNonTrainingDays(props.customerId);
+          getNonTrainingDays(customer.idCustomer);
           setOpen(false);
         })
         .catch((error) => {
@@ -98,7 +99,7 @@ export default function NonTrainingDays(props) {
       graphqlOperation(deleteNonTrainingDaysById, { id: id, _version:_version})
     );
     // Retrieve updated list ....
-    getNonTrainingDays(props.customerId);
+    getNonTrainingDays(customer.idCustomer);
   };
 
   const getNonTrainingDays = async (authenticatedUser) => {
@@ -135,15 +136,15 @@ export default function NonTrainingDays(props) {
 
   useEffect(() => {
     console.log("useEffect running ....");
-    if (props.customerId) {
+    if (customer.idCustomer) {
       // customerId Exists ....
-      console.log("props.customerId exists: ", props.customerId);
-      getNonTrainingDays(props.customerId);
+      console.log("customer.idCustomer exists: ", customer.idCustomer);
+      getNonTrainingDays(customer.idCustomer);
     } else {
       // customerId Does not exist yet ....
-      console.log("props.customerId Does NOT Exist");
+      console.log("customer.idCustomer Does NOT Exist");
     }
-  }, [props.customerId]);
+  }, [customer.idCustomer]);
 
   return (
     <Card className="maincardDiv">

@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useMediaQuery } from "react-responsive";
 import { Button as AntButton, DatePicker } from "antd";
 import WorkoutManagement from "./WorkoutManagement";
 import dayjs from "dayjs";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/swiper.min.css";
 
 const { RangePicker } = DatePicker;
 
@@ -12,6 +15,8 @@ export default function Workouts({ workoutsNoFeedback = [] }) {
     today,
   ]);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
+
+  const isMobile = useMediaQuery({ maxWidth: 768 });
 
   const formatDate = (date) => date.format("YYYY-MM-DD");
 
@@ -57,32 +62,63 @@ export default function Workouts({ workoutsNoFeedback = [] }) {
         <AntButton onClick={handleNextDays}>Next</AntButton>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: "24px" }}>
-        {Array.from({ length: 3 }).map((_, index) => {
-          const day = dateRange[0].add(index, "day");
-          const dateStr = formatDate(day);
-          const workouts = workoutsNoFeedback.filter(
-            (workout) => workout.WorkoutDateTime.slice(0, 10) === dateStr
-          );
-          return (
-            <div key={index} style={{ flex: 1, margin: "0 8px" }}>
-              <h4>{day.format("dddd, D MMMM")}</h4>
-              {workouts.length > 0 ? (
-                workouts.map((workout) => (
-                  <WorkoutManagement
-                    key={workout.id}
-                    selectedWorkout={selectedWorkout?.id === workout.id ? selectedWorkout : workout}
-                    setSelectedWorkout={setSelectedWorkout}
-                    onSave={handleSaveWorkout}
-                  />
-                ))
-              ) : (
-                <p>No Workout</p>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      {isMobile ? (
+        <Swiper spaceBetween={16} slidesPerView={1}>
+          {Array.from({ length: 1 }).map((_, index) => {
+            const day = dateRange[0].add(index, "day");
+            const dateStr = formatDate(day);
+            const workouts = workoutsNoFeedback.filter(
+              (workout) => workout.WorkoutDateTime.slice(0, 10) === dateStr
+            );
+            return (
+              <SwiperSlide key={index}>
+                <div style={{ padding: "8px" }}>
+                  <h4>{day.format("dddd, D MMMM")}</h4>
+                  {workouts.length > 0 ? (
+                    workouts.map((workout) => (
+                      <WorkoutManagement
+                        key={workout.id}
+                        selectedWorkout={selectedWorkout?.id === workout.id ? selectedWorkout : workout}
+                        setSelectedWorkout={setSelectedWorkout}
+                        onSave={handleSaveWorkout}
+                      />
+                    ))
+                  ) : (
+                    <p>No Workout</p>
+                  )}
+                </div>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: "24px" }}>
+          {Array.from({ length: 3 }).map((_, index) => {
+            const day = dateRange[0].add(index, "day");
+            const dateStr = formatDate(day);
+            const workouts = workoutsNoFeedback.filter(
+              (workout) => workout.WorkoutDateTime.slice(0, 10) === dateStr
+            );
+            return (
+              <div key={index} style={{ flex: 1, margin: "0 8px" }}>
+                <h4>{day.format("dddd, D MMMM")}</h4>
+                {workouts.length > 0 ? (
+                  workouts.map((workout) => (
+                    <WorkoutManagement
+                      key={workout.id}
+                      selectedWorkout={selectedWorkout?.id === workout.id ? selectedWorkout : workout}
+                      setSelectedWorkout={setSelectedWorkout}
+                      onSave={handleSaveWorkout}
+                    />
+                  ))
+                ) : (
+                  <p>No Workout</p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

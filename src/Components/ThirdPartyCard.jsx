@@ -1,26 +1,20 @@
 import React from "react";
-import { Card } from "antd";
-import { useLocation } from "react-router-dom";
+import { Card, Spin } from "antd";
 
-export default function ThirdPartyCard(props) {
+export default function ThirdPartyCard({customer}) {
 
-  /*
-  try{
-  //let location = useLocation();
-  //console.log("location in ThirdPartyCard: ", location);
-  //let locationStateCustomerEntity = location.state.customerEntity;
-  //console.log("locationStateCustomerEntity: ",locationStateCustomerEntity);
+  if (!customer) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+        <Spin size="large" tip="Loading Third Party Connections..." />
+      </div>
+    );
   }
-  catch(error){
-    console.log("Error: ", error);
-  }
-  */
-   console.log("props.customerEntity: ", props.customerEntity);
-  let customerUserId = props.customerEntity.id;
+
+  const customerUserId = customer.idCustomer;
+  console.log("customerId: ", customerUserId);
 
 
-  // let customerUserId = locationStateCustomerEntity.id;
-  // console.log("Customer userId: ", customerUserId);
   return (
     <Card className="maincardDiv">
       <b

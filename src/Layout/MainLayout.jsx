@@ -78,15 +78,7 @@ const MainLayout = () => {
               )}
             </Menu.Item>
 
-            <Menu.Item key="profile" icon={<UserOutlined />}>
-              {isMobile ? (
-                <Tooltip title="Profile">
-                  <Link to="/profile" />
-                </Tooltip>
-              ) : (
-                <Link to="/profile">Profile</Link>
-              )}
-            </Menu.Item>
+  
 
             <Menu.Item key="thirdparty" icon={<ApiOutlined />}>
               {isMobile ? (
@@ -95,6 +87,16 @@ const MainLayout = () => {
                 </Tooltip>
               ) : (
                 <Link to="/thirdparty">ThirdParty</Link>
+              )}
+            </Menu.Item>
+
+                      <Menu.Item key="profile" icon={<UserOutlined />}>
+              {isMobile ? (
+                <Tooltip title="Profile">
+                  <Link to="/profile" />
+                </Tooltip>
+              ) : (
+                <Link to="/profile">Profile</Link>
               )}
             </Menu.Item>
           </Menu>
