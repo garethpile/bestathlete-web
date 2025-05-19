@@ -59,45 +59,21 @@ const MainLayout = () => {
             theme="light"
           >
             <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
-              {isMobile ? (
-                <Tooltip title="Dashboard">
-                  <Link to="/" />
-                </Tooltip>
-              ) : (
-                <Link to="/">Dashboard</Link>
-              )}
+              <Link to="/">Dashboard</Link>
             </Menu.Item>
 
             <Menu.Item key="workouts" icon={<DatabaseOutlined />}>
-              {isMobile ? (
-                <Tooltip title="Workouts">
-                  <Link to="/workouts" />
-                </Tooltip>
-              ) : (
-                <Link to="/workouts">Workouts</Link>
-              )}
+              <Link to="/workouts">Workouts</Link>
             </Menu.Item>
 
   
 
             <Menu.Item key="thirdparty" icon={<ApiOutlined />}>
-              {isMobile ? (
-                <Tooltip title="Third Party">
-                  <Link to="/thirdparty" />
-                </Tooltip>
-              ) : (
-                <Link to="/thirdparty">ThirdParty</Link>
-              )}
+              <Link to="/thirdparty">ThirdParty</Link>
             </Menu.Item>
 
                       <Menu.Item key="profile" icon={<UserOutlined />}>
-              {isMobile ? (
-                <Tooltip title="Profile">
-                  <Link to="/profile" />
-                </Tooltip>
-              ) : (
-                <Link to="/profile">Profile</Link>
-              )}
+              <Link to="/profile">Profile</Link>
             </Menu.Item>
           </Menu>
         </div>
