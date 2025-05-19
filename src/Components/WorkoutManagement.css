@@ -25,3 +25,10 @@
   background-color: #40a9ff;
   border-color: #40a9ff;
 }
+
+.workout-description-date-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}

@@ -127,117 +127,108 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout }) => {
           }}
         >
           <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Text strong>Type:</Text>
-                <Input value={workoutData.type} disabled />
-              </Col>
-              <Col span={12}>
-                <Text strong>Workout:</Text>
-                <Input value={workoutData.description} disabled />
-              </Col>
-            </Row>
+            {/* Description and Date combined */}
+            <div style={{ width: "100%" }}>
+              <div className="workout-description-date-row">
+                <Input value={workoutData.description} disabled style={{ width: "65%" }} />
+                <Input value={workoutData.date.toLocaleDateString()} disabled style={{ width: "30%" }} />
+              </div>
+            </div>
 
-            <Row gutter={16}>
-              <Col span={12}>
-                <Text strong>Date:</Text>
-                <Input
-                  value={workoutData.date.toLocaleDateString()}
-                  disabled
-                />
-              </Col>
-              <Col span={12}>
+            {/* Avg Heart Rate */}
+            <div style={{ width: "100%" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <Text strong>Avg Heart Rate:</Text>
-                <Input value={workoutData.avgHeartRate} disabled />
-              </Col>
-            </Row>
+                <Input value={workoutData.avgHeartRate} disabled style={{ width: "80%" }} />
+              </div>
+            </div>
 
-            <Row gutter={16}>
-              <Col span={12}>
+            {/* Average Speed and Distance */}
+            <div style={{ width: "100%" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
                 <Text strong>Average Speed:</Text>
-                <Input value={workoutData.averageSpeed} disabled />
-              </Col>
-              <Col span={12}>
+                <Input value={workoutData.averageSpeed} disabled style={{ width: "80%" }} />
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <Text strong>Distance:</Text>
-                <Input value={workoutData.distance} disabled />
-              </Col>
-            </Row>
+                <Input value={workoutData.distance} disabled style={{ width: "80%" }} />
+              </div>
+            </div>
 
             <Divider />
 
-            <Row gutter={16}>
-              <Col span={12}>
-                <Text strong>RPE:</Text>
-                <Slider
-                  min={0}
-                  max={5}
-                  value={workoutData.workoutRPE}
-                  onChange={(value) =>
-                    handleChange("workoutRPE", value)
-                  }
-                />
-                <Text type="secondary">
-                  {getDescription(workoutData.workoutRPE, rpeDescriptions)}
-                </Text>
-              </Col>
-              <Col span={12}>
-                <Text strong>Body:</Text>
-                <Slider
-                  min={0}
-                  max={5}
-                  value={workoutData.workoutPhysicalLevel}
-                  onChange={(value) =>
-                    handleChange("workoutPhysicalLevel", value)
-                  }
-                />
-                <Text type="secondary">
-                  {getDescription(
-                    workoutData.workoutPhysicalLevel,
-                    bodyDescriptions
-                  )}
-                </Text>
-              </Col>
-            </Row>
+            {/* RPE and Body */}
+            <div style={{ width: "100%" }}>
+              <Text strong>RPE:</Text>
+              <Slider
+                min={0}
+                max={5}
+                value={workoutData.workoutRPE}
+                onChange={(value) =>
+                  handleChange("workoutRPE", value)
+                }
+                style={{ width: "100%" }}
+              />
+              <Text type="secondary" style={{ marginBottom: 16, display: "block" }}>
+                {getDescription(workoutData.workoutRPE, rpeDescriptions)}
+              </Text>
+              <Text strong>Body:</Text>
+              <Slider
+                min={0}
+                max={5}
+                value={workoutData.workoutPhysicalLevel}
+                onChange={(value) =>
+                  handleChange("workoutPhysicalLevel", value)
+                }
+                style={{ width: "100%" }}
+              />
+              <Text type="secondary" style={{ marginBottom: 16, display: "block" }}>
+                {getDescription(
+                  workoutData.workoutPhysicalLevel,
+                  bodyDescriptions
+                )}
+              </Text>
+            </div>
 
-            <Row gutter={16}>
-              <Col span={12}>
-                <Text strong>Weather:</Text>
-                <Slider
-                  min={0}
-                  max={5}
-                  value={workoutData.workoutWeatherLevel}
-                  onChange={(value) =>
-                    handleChange("workoutWeatherLevel", value)
-                  }
-                />
-                <Text type="secondary">
-                  {getDescription(
-                    workoutData.workoutWeatherLevel,
-                    weatherDescriptions
-                  )}
-                </Text>
-              </Col>
-              <Col span={12}>
-                <Text strong>Hydration:</Text>
-                <Slider
-                  min={0}
-                  max={5}
-                  value={workoutData.workoutHydrationLevel}
-                  onChange={(value) =>
-                    handleChange("workoutHydrationLevel", value)
-                  }
-                />
-                <Text type="secondary">
-                  {getDescription(
-                    workoutData.workoutHydrationLevel,
-                    hydrationDescriptions
-                  )}
-                </Text>
-              </Col>
-            </Row>
+            {/* Weather and Hydration */}
+            <div style={{ width: "100%" }}>
+              <Text strong>Weather:</Text>
+              <Slider
+                min={0}
+                max={5}
+                value={workoutData.workoutWeatherLevel}
+                onChange={(value) =>
+                  handleChange("workoutWeatherLevel", value)
+                }
+                style={{ width: "100%" }}
+              />
+              <Text type="secondary" style={{ marginBottom: 16, display: "block" }}>
+                {getDescription(
+                  workoutData.workoutWeatherLevel,
+                  weatherDescriptions
+                )}
+              </Text>
+              <Text strong>Hydration:</Text>
+              <Slider
+                min={0}
+                max={5}
+                value={workoutData.workoutHydrationLevel}
+                onChange={(value) =>
+                  handleChange("workoutHydrationLevel", value)
+                }
+                style={{ width: "100%" }}
+              />
+              <Text type="secondary" style={{ marginBottom: 16, display: "block" }}>
+                {getDescription(
+                  workoutData.workoutHydrationLevel,
+                  hydrationDescriptions
+                )}
+              </Text>
+            </div>
 
-            <Row gutter={16}>
-              <Col span={24}>
+            {/* Calories Eaten Per Hour */}
+            <div style={{ width: "100%" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <Text strong>Calories eaten per hour:</Text>
                 <Input
                   value={workoutData.workoutCaloriesEatenPerHour}
@@ -247,15 +238,17 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout }) => {
                       e.target.value
                     )
                   }
+                  style={{ width: "80%" }}
                 />
-              </Col>
-            </Row>
+              </div>
+            </div>
 
-            <Row justify="end">
+            {/* Save Button */}
+            <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
               <Button type="primary" onClick={handleSave}>
                 Save
               </Button>
-            </Row>
+            </div>
           </Space>
         </Card>
       </Panel>
