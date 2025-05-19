@@ -1,12 +1,9 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createCustomer = /* GraphQL */ `
-  mutation CreateCustomer(
-    $input: CreateCustomerInput!
-    $condition: ModelCustomerConditionInput
-  ) {
-    createCustomer(input: $input, condition: $condition) {
+export const onCreateCustomer = /* GraphQL */ `
+  subscription OnCreateCustomer($filter: ModelSubscriptionCustomerFilterInput) {
+    onCreateCustomer(filter: $filter) {
       id
       idCustomer
       LastName
@@ -52,18 +49,20 @@ export const createCustomer = /* GraphQL */ `
         ApplicationUserOauthTokenExpiryDate
         __typename
       }
+      MetricsDateCapture
+      MetricSick
+      MetricInjury
+      MetricSleep
+      MetricWorkLifeBalance
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const updateCustomer = /* GraphQL */ `
-  mutation UpdateCustomer(
-    $input: UpdateCustomerInput!
-    $condition: ModelCustomerConditionInput
-  ) {
-    updateCustomer(input: $input, condition: $condition) {
+export const onUpdateCustomer = /* GraphQL */ `
+  subscription OnUpdateCustomer($filter: ModelSubscriptionCustomerFilterInput) {
+    onUpdateCustomer(filter: $filter) {
       id
       idCustomer
       LastName
@@ -109,18 +108,20 @@ export const updateCustomer = /* GraphQL */ `
         ApplicationUserOauthTokenExpiryDate
         __typename
       }
+      MetricsDateCapture
+      MetricSick
+      MetricInjury
+      MetricSleep
+      MetricWorkLifeBalance
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const deleteCustomer = /* GraphQL */ `
-  mutation DeleteCustomer(
-    $input: DeleteCustomerInput!
-    $condition: ModelCustomerConditionInput
-  ) {
-    deleteCustomer(input: $input, condition: $condition) {
+export const onDeleteCustomer = /* GraphQL */ `
+  subscription OnDeleteCustomer($filter: ModelSubscriptionCustomerFilterInput) {
+    onDeleteCustomer(filter: $filter) {
       id
       idCustomer
       LastName
@@ -166,18 +167,20 @@ export const deleteCustomer = /* GraphQL */ `
         ApplicationUserOauthTokenExpiryDate
         __typename
       }
+      MetricsDateCapture
+      MetricSick
+      MetricInjury
+      MetricSleep
+      MetricWorkLifeBalance
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const createWorkout = /* GraphQL */ `
-  mutation CreateWorkout(
-    $input: CreateWorkoutInput!
-    $condition: ModelWorkoutConditionInput
-  ) {
-    createWorkout(input: $input, condition: $condition) {
+export const onCreateWorkout = /* GraphQL */ `
+  subscription OnCreateWorkout($filter: ModelSubscriptionWorkoutFilterInput) {
+    onCreateWorkout(filter: $filter) {
       id
       idCustomer
       WorkoutDescription
@@ -199,8 +202,6 @@ export const createWorkout = /* GraphQL */ `
       WorkoutHydrationLevel
       WorkoutCaloriesEatenPerHour
       WorkoutAthleteFeedback
-      WorkoutState
-      WorkoutSource
       WorkoutStravaActivityId
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
@@ -210,12 +211,9 @@ export const createWorkout = /* GraphQL */ `
     }
   }
 `;
-export const updateWorkout = /* GraphQL */ `
-  mutation UpdateWorkout(
-    $input: UpdateWorkoutInput!
-    $condition: ModelWorkoutConditionInput
-  ) {
-    updateWorkout(input: $input, condition: $condition) {
+export const onUpdateWorkout = /* GraphQL */ `
+  subscription OnUpdateWorkout($filter: ModelSubscriptionWorkoutFilterInput) {
+    onUpdateWorkout(filter: $filter) {
       id
       idCustomer
       WorkoutDescription
@@ -237,8 +235,6 @@ export const updateWorkout = /* GraphQL */ `
       WorkoutHydrationLevel
       WorkoutCaloriesEatenPerHour
       WorkoutAthleteFeedback
-      WorkoutState
-      WorkoutSource
       WorkoutStravaActivityId
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
@@ -248,12 +244,9 @@ export const updateWorkout = /* GraphQL */ `
     }
   }
 `;
-export const deleteWorkout = /* GraphQL */ `
-  mutation DeleteWorkout(
-    $input: DeleteWorkoutInput!
-    $condition: ModelWorkoutConditionInput
-  ) {
-    deleteWorkout(input: $input, condition: $condition) {
+export const onDeleteWorkout = /* GraphQL */ `
+  subscription OnDeleteWorkout($filter: ModelSubscriptionWorkoutFilterInput) {
+    onDeleteWorkout(filter: $filter) {
       id
       idCustomer
       WorkoutDescription
@@ -275,8 +268,6 @@ export const deleteWorkout = /* GraphQL */ `
       WorkoutHydrationLevel
       WorkoutCaloriesEatenPerHour
       WorkoutAthleteFeedback
-      WorkoutState
-      WorkoutSource
       WorkoutStravaActivityId
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
@@ -286,12 +277,9 @@ export const deleteWorkout = /* GraphQL */ `
     }
   }
 `;
-export const createEvent = /* GraphQL */ `
-  mutation CreateEvent(
-    $input: CreateEventInput!
-    $condition: ModelEventConditionInput
-  ) {
-    createEvent(input: $input, condition: $condition) {
+export const onCreateEvent = /* GraphQL */ `
+  subscription OnCreateEvent($filter: ModelSubscriptionEventFilterInput) {
+    onCreateEvent(filter: $filter) {
       id
       idCustomer
       EventName
@@ -307,28 +295,15 @@ export const createEvent = /* GraphQL */ `
       EventGoalFinish
       EventGoalPB
       EventGoalOther
-      EventPrepStart
-      EventPrepEnd
-      EventBaseStart
-      EventBaseEnd
-      EventBuildStart
-      EventBuildEnd
-      EventPeakStart
-      EventPeakEnd
-      EventTaperStart
-      EventTaperEnd
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const updateEvent = /* GraphQL */ `
-  mutation UpdateEvent(
-    $input: UpdateEventInput!
-    $condition: ModelEventConditionInput
-  ) {
-    updateEvent(input: $input, condition: $condition) {
+export const onUpdateEvent = /* GraphQL */ `
+  subscription OnUpdateEvent($filter: ModelSubscriptionEventFilterInput) {
+    onUpdateEvent(filter: $filter) {
       id
       idCustomer
       EventName
@@ -344,28 +319,15 @@ export const updateEvent = /* GraphQL */ `
       EventGoalFinish
       EventGoalPB
       EventGoalOther
-      EventPrepStart
-      EventPrepEnd
-      EventBaseStart
-      EventBaseEnd
-      EventBuildStart
-      EventBuildEnd
-      EventPeakStart
-      EventPeakEnd
-      EventTaperStart
-      EventTaperEnd
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const deleteEvent = /* GraphQL */ `
-  mutation DeleteEvent(
-    $input: DeleteEventInput!
-    $condition: ModelEventConditionInput
-  ) {
-    deleteEvent(input: $input, condition: $condition) {
+export const onDeleteEvent = /* GraphQL */ `
+  subscription OnDeleteEvent($filter: ModelSubscriptionEventFilterInput) {
+    onDeleteEvent(filter: $filter) {
       id
       idCustomer
       EventName
@@ -381,28 +343,17 @@ export const deleteEvent = /* GraphQL */ `
       EventGoalFinish
       EventGoalPB
       EventGoalOther
-      EventPrepStart
-      EventPrepEnd
-      EventBaseStart
-      EventBaseEnd
-      EventBuildStart
-      EventBuildEnd
-      EventPeakStart
-      EventPeakEnd
-      EventTaperStart
-      EventTaperEnd
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const createStravaActivities = /* GraphQL */ `
-  mutation CreateStravaActivities(
-    $input: CreateStravaActivitiesInput!
-    $condition: ModelStravaActivitiesConditionInput
+export const onCreateStravaActivities = /* GraphQL */ `
+  subscription OnCreateStravaActivities(
+    $filter: ModelSubscriptionStravaActivitiesFilterInput
   ) {
-    createStravaActivities(input: $input, condition: $condition) {
+    onCreateStravaActivities(filter: $filter) {
       id
       StravaActivityId
       StravaActivityOwnerId
@@ -432,12 +383,11 @@ export const createStravaActivities = /* GraphQL */ `
     }
   }
 `;
-export const updateStravaActivities = /* GraphQL */ `
-  mutation UpdateStravaActivities(
-    $input: UpdateStravaActivitiesInput!
-    $condition: ModelStravaActivitiesConditionInput
+export const onUpdateStravaActivities = /* GraphQL */ `
+  subscription OnUpdateStravaActivities(
+    $filter: ModelSubscriptionStravaActivitiesFilterInput
   ) {
-    updateStravaActivities(input: $input, condition: $condition) {
+    onUpdateStravaActivities(filter: $filter) {
       id
       StravaActivityId
       StravaActivityOwnerId
@@ -467,12 +417,11 @@ export const updateStravaActivities = /* GraphQL */ `
     }
   }
 `;
-export const deleteStravaActivities = /* GraphQL */ `
-  mutation DeleteStravaActivities(
-    $input: DeleteStravaActivitiesInput!
-    $condition: ModelStravaActivitiesConditionInput
+export const onDeleteStravaActivities = /* GraphQL */ `
+  subscription OnDeleteStravaActivities(
+    $filter: ModelSubscriptionStravaActivitiesFilterInput
   ) {
-    deleteStravaActivities(input: $input, condition: $condition) {
+    onDeleteStravaActivities(filter: $filter) {
       id
       StravaActivityId
       StravaActivityOwnerId
@@ -502,12 +451,11 @@ export const deleteStravaActivities = /* GraphQL */ `
     }
   }
 `;
-export const createGarminActivities = /* GraphQL */ `
-  mutation CreateGarminActivities(
-    $input: CreateGarminActivitiesInput!
-    $condition: ModelGarminActivitiesConditionInput
+export const onCreateGarminActivities = /* GraphQL */ `
+  subscription OnCreateGarminActivities(
+    $filter: ModelSubscriptionGarminActivitiesFilterInput
   ) {
-    createGarminActivities(input: $input, condition: $condition) {
+    onCreateGarminActivities(filter: $filter) {
       id
       GarminAccountId
       GarminActivityId
@@ -531,12 +479,11 @@ export const createGarminActivities = /* GraphQL */ `
     }
   }
 `;
-export const updateGarminActivities = /* GraphQL */ `
-  mutation UpdateGarminActivities(
-    $input: UpdateGarminActivitiesInput!
-    $condition: ModelGarminActivitiesConditionInput
+export const onUpdateGarminActivities = /* GraphQL */ `
+  subscription OnUpdateGarminActivities(
+    $filter: ModelSubscriptionGarminActivitiesFilterInput
   ) {
-    updateGarminActivities(input: $input, condition: $condition) {
+    onUpdateGarminActivities(filter: $filter) {
       id
       GarminAccountId
       GarminActivityId
@@ -560,12 +507,11 @@ export const updateGarminActivities = /* GraphQL */ `
     }
   }
 `;
-export const deleteGarminActivities = /* GraphQL */ `
-  mutation DeleteGarminActivities(
-    $input: DeleteGarminActivitiesInput!
-    $condition: ModelGarminActivitiesConditionInput
+export const onDeleteGarminActivities = /* GraphQL */ `
+  subscription OnDeleteGarminActivities(
+    $filter: ModelSubscriptionGarminActivitiesFilterInput
   ) {
-    deleteGarminActivities(input: $input, condition: $condition) {
+    onDeleteGarminActivities(filter: $filter) {
       id
       GarminAccountId
       GarminActivityId
@@ -589,12 +535,11 @@ export const deleteGarminActivities = /* GraphQL */ `
     }
   }
 `;
-export const createGarminMetrics = /* GraphQL */ `
-  mutation CreateGarminMetrics(
-    $input: CreateGarminMetricsInput!
-    $condition: ModelGarminMetricsConditionInput
+export const onCreateGarminMetrics = /* GraphQL */ `
+  subscription OnCreateGarminMetrics(
+    $filter: ModelSubscriptionGarminMetricsFilterInput
   ) {
-    createGarminMetrics(input: $input, condition: $condition) {
+    onCreateGarminMetrics(filter: $filter) {
       id
       idCustomer
       GarminAccountId
@@ -609,12 +554,11 @@ export const createGarminMetrics = /* GraphQL */ `
     }
   }
 `;
-export const updateGarminMetrics = /* GraphQL */ `
-  mutation UpdateGarminMetrics(
-    $input: UpdateGarminMetricsInput!
-    $condition: ModelGarminMetricsConditionInput
+export const onUpdateGarminMetrics = /* GraphQL */ `
+  subscription OnUpdateGarminMetrics(
+    $filter: ModelSubscriptionGarminMetricsFilterInput
   ) {
-    updateGarminMetrics(input: $input, condition: $condition) {
+    onUpdateGarminMetrics(filter: $filter) {
       id
       idCustomer
       GarminAccountId
@@ -629,12 +573,11 @@ export const updateGarminMetrics = /* GraphQL */ `
     }
   }
 `;
-export const deleteGarminMetrics = /* GraphQL */ `
-  mutation DeleteGarminMetrics(
-    $input: DeleteGarminMetricsInput!
-    $condition: ModelGarminMetricsConditionInput
+export const onDeleteGarminMetrics = /* GraphQL */ `
+  subscription OnDeleteGarminMetrics(
+    $filter: ModelSubscriptionGarminMetricsFilterInput
   ) {
-    deleteGarminMetrics(input: $input, condition: $condition) {
+    onDeleteGarminMetrics(filter: $filter) {
       id
       idCustomer
       GarminAccountId
@@ -649,12 +592,11 @@ export const deleteGarminMetrics = /* GraphQL */ `
     }
   }
 `;
-export const createNonTrainingDays = /* GraphQL */ `
-  mutation CreateNonTrainingDays(
-    $input: CreateNonTrainingDaysInput!
-    $condition: ModelNonTrainingDaysConditionInput
+export const onCreateNonTrainingDays = /* GraphQL */ `
+  subscription OnCreateNonTrainingDays(
+    $filter: ModelSubscriptionNonTrainingDaysFilterInput
   ) {
-    createNonTrainingDays(input: $input, condition: $condition) {
+    onCreateNonTrainingDays(filter: $filter) {
       id
       idCustomer
       Valid
@@ -667,12 +609,11 @@ export const createNonTrainingDays = /* GraphQL */ `
     }
   }
 `;
-export const updateNonTrainingDays = /* GraphQL */ `
-  mutation UpdateNonTrainingDays(
-    $input: UpdateNonTrainingDaysInput!
-    $condition: ModelNonTrainingDaysConditionInput
+export const onUpdateNonTrainingDays = /* GraphQL */ `
+  subscription OnUpdateNonTrainingDays(
+    $filter: ModelSubscriptionNonTrainingDaysFilterInput
   ) {
-    updateNonTrainingDays(input: $input, condition: $condition) {
+    onUpdateNonTrainingDays(filter: $filter) {
       id
       idCustomer
       Valid
@@ -685,12 +626,11 @@ export const updateNonTrainingDays = /* GraphQL */ `
     }
   }
 `;
-export const deleteNonTrainingDays = /* GraphQL */ `
-  mutation DeleteNonTrainingDays(
-    $input: DeleteNonTrainingDaysInput!
-    $condition: ModelNonTrainingDaysConditionInput
+export const onDeleteNonTrainingDays = /* GraphQL */ `
+  subscription OnDeleteNonTrainingDays(
+    $filter: ModelSubscriptionNonTrainingDaysFilterInput
   ) {
-    deleteNonTrainingDays(input: $input, condition: $condition) {
+    onDeleteNonTrainingDays(filter: $filter) {
       id
       idCustomer
       Valid
@@ -703,12 +643,9 @@ export const deleteNonTrainingDays = /* GraphQL */ `
     }
   }
 `;
-export const createMetric = /* GraphQL */ `
-  mutation CreateMetric(
-    $input: CreateMetricInput!
-    $condition: ModelMetricConditionInput
-  ) {
-    createMetric(input: $input, condition: $condition) {
+export const onCreateMetric = /* GraphQL */ `
+  subscription OnCreateMetric($filter: ModelSubscriptionMetricFilterInput) {
+    onCreateMetric(filter: $filter) {
       id
       idCustomer
       MetricName
@@ -722,12 +659,9 @@ export const createMetric = /* GraphQL */ `
     }
   }
 `;
-export const updateMetric = /* GraphQL */ `
-  mutation UpdateMetric(
-    $input: UpdateMetricInput!
-    $condition: ModelMetricConditionInput
-  ) {
-    updateMetric(input: $input, condition: $condition) {
+export const onUpdateMetric = /* GraphQL */ `
+  subscription OnUpdateMetric($filter: ModelSubscriptionMetricFilterInput) {
+    onUpdateMetric(filter: $filter) {
       id
       idCustomer
       MetricName
@@ -741,12 +675,9 @@ export const updateMetric = /* GraphQL */ `
     }
   }
 `;
-export const deleteMetric = /* GraphQL */ `
-  mutation DeleteMetric(
-    $input: DeleteMetricInput!
-    $condition: ModelMetricConditionInput
-  ) {
-    deleteMetric(input: $input, condition: $condition) {
+export const onDeleteMetric = /* GraphQL */ `
+  subscription OnDeleteMetric($filter: ModelSubscriptionMetricFilterInput) {
+    onDeleteMetric(filter: $filter) {
       id
       idCustomer
       MetricName

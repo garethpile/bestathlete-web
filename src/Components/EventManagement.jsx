@@ -11,12 +11,16 @@ import {
   Box,
   Slider,
   Chip,
+  IconButton,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Modal from "./Modal/Modal";
 import { eventDelete } from "../services/eventServices";
 
-export default function EventManagement({ event, removeEvent }) {
+export default function EventManagement({ event, removeEvent, allEvents = [] }) {
   const [open, setOpen] = useState(false);
+  const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+
   const [form, setForm] = useState({
     eventName: event.EventName || "",
     eventDate: event.EventDate || "",
@@ -26,6 +30,10 @@ export default function EventManagement({ event, removeEvent }) {
     eventDescription: event.EventDescription || "",
     sliderValue: [0, 33, 66],
   });
+
+  const hasExistingARace = allEvents.some(
+    (e) => e.id !== event.id && e.EventPriority === "A"
+  );
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -54,17 +62,12 @@ export default function EventManagement({ event, removeEvent }) {
   ];
 
   return (
-    <Card style={{ marginBottom: "20px", padding: "20px" }}>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        flexWrap="wrap"
-      >
-        <Box display="flex" alignItems="center" gap={2}>
+    <Card style={{ marginBottom: "5px", padding: "5px 5px" }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+        <Box display="flex" alignItems="center" gap={1}>
           {event.EventPriority && (
             <Chip
-              label={`Priority: ${event.EventPriority}`}
+              label={`${event.EventPriority} Race`}
               size="small"
               color={
                 event.EventPriority === "A"
@@ -75,18 +78,27 @@ export default function EventManagement({ event, removeEvent }) {
               }
             />
           )}
-          <div style={{ fontSize: 16, fontWeight: 500 }}>
-            {event.EventName || "No Name"} - {event.EventDate || "No Date"}
-          </div>
-        </Box>
-
-        <Box display="flex" gap={1} mt={{ xs: 1, sm: 0 }}>
-          <Button variant="contained" color="primary" onClick={handleOpenModal}>
-            View
-          </Button>
-          <Button variant="contained" color="secondary" onClick={handleDeleteEvent}>
-            Delete
-          </Button>
+          <Box
+            component="a"
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              handleOpenModal();
+            }}
+            sx={{
+              fontSize: 12,
+              fontWeight: 500,
+              color: "#333",
+              textDecoration: "none",
+              "&:hover": { textDecoration: "underline" },
+              cursor: "pointer",
+            }}
+          >
+            {event.EventName || "No Name"} : {event.EventDate || "No Date"}
+          </Box>
+          <IconButton onClick={handleDeleteEvent} size="small">
+            <DeleteIcon sx={{ color: "#9c27b0" }} />
+          </IconButton>
         </Box>
       </Box>
 
@@ -162,7 +174,13 @@ export default function EventManagement({ event, removeEvent }) {
                 <Select
                   name="eventPriority"
                   value={form.eventPriority}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    if (e.target.value === "A" && hasExistingARace) {
+                      setErrorDialogOpen(true);
+                    } else {
+                      handleChange(e);
+                    }
+                  }}
                 >
                   <MenuItem value="A">A Race</MenuItem>
                   <MenuItem value="B">B Race</MenuItem>
@@ -217,6 +235,23 @@ export default function EventManagement({ event, removeEvent }) {
             </Box>
           </Grid>
         </Grid>
+      </Modal>
+
+      {/* Error Dialog for Duplicate A Race */}
+      <Modal
+        header="Cannot Add Another A Race"
+        open={errorDialogOpen}
+        size="xs"
+        closeHandler={() => setErrorDialogOpen(false)}
+      >
+        <Box p={2}>
+          <p>You already have an A Priority race. Please change the priority or delete the existing A race.</p>
+          <Box mt={2} textAlign="center">
+            <Button variant="contained" onClick={() => setErrorDialogOpen(false)}>
+              OK
+            </Button>
+          </Box>
+        </Box>
       </Modal>
     </Card>
   );

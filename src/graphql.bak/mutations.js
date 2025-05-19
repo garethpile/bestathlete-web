@@ -52,6 +52,11 @@ export const createCustomer = /* GraphQL */ `
         ApplicationUserOauthTokenExpiryDate
         __typename
       }
+      MetricsDateCapture
+      MetricSick
+      MetricInjury
+      MetricSleep
+      MetricWorkLifeBalance
       createdAt
       updatedAt
       __typename
@@ -166,6 +171,11 @@ export const deleteCustomer = /* GraphQL */ `
         ApplicationUserOauthTokenExpiryDate
         __typename
       }
+      MetricsDateCapture
+      MetricSick
+      MetricInjury
+      MetricSleep
+      MetricWorkLifeBalance
       createdAt
       updatedAt
       __typename
@@ -199,8 +209,6 @@ export const createWorkout = /* GraphQL */ `
       WorkoutHydrationLevel
       WorkoutCaloriesEatenPerHour
       WorkoutAthleteFeedback
-      WorkoutState
-      WorkoutSource
       WorkoutStravaActivityId
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
@@ -237,8 +245,6 @@ export const updateWorkout = /* GraphQL */ `
       WorkoutHydrationLevel
       WorkoutCaloriesEatenPerHour
       WorkoutAthleteFeedback
-      WorkoutState
-      WorkoutSource
       WorkoutStravaActivityId
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
@@ -275,8 +281,6 @@ export const deleteWorkout = /* GraphQL */ `
       WorkoutHydrationLevel
       WorkoutCaloriesEatenPerHour
       WorkoutAthleteFeedback
-      WorkoutState
-      WorkoutSource
       WorkoutStravaActivityId
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
@@ -307,16 +311,6 @@ export const createEvent = /* GraphQL */ `
       EventGoalFinish
       EventGoalPB
       EventGoalOther
-      EventPrepStart
-      EventPrepEnd
-      EventBaseStart
-      EventBaseEnd
-      EventBuildStart
-      EventBuildEnd
-      EventPeakStart
-      EventPeakEnd
-      EventTaperStart
-      EventTaperEnd
       createdAt
       updatedAt
       __typename
@@ -344,16 +338,6 @@ export const updateEvent = /* GraphQL */ `
       EventGoalFinish
       EventGoalPB
       EventGoalOther
-      EventPrepStart
-      EventPrepEnd
-      EventBaseStart
-      EventBaseEnd
-      EventBuildStart
-      EventBuildEnd
-      EventPeakStart
-      EventPeakEnd
-      EventTaperStart
-      EventTaperEnd
       createdAt
       updatedAt
       __typename
@@ -381,16 +365,6 @@ export const deleteEvent = /* GraphQL */ `
       EventGoalFinish
       EventGoalPB
       EventGoalOther
-      EventPrepStart
-      EventPrepEnd
-      EventBaseStart
-      EventBaseEnd
-      EventBuildStart
-      EventBuildEnd
-      EventPeakStart
-      EventPeakEnd
-      EventTaperStart
-      EventTaperEnd
       createdAt
       updatedAt
       __typename

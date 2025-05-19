@@ -65,7 +65,11 @@ const Dashboard = ({
 
               {eventList.map((event) => (
                 <div key={event.id} style={{ width: "100%" }}>
-                  <EventManagement event={event} removeEvent={removeEvent} />
+                  <EventManagement
+                    event={event}
+                    removeEvent={removeEvent}
+                    allEvents={eventList}
+                  />
                 </div>
               ))}
 

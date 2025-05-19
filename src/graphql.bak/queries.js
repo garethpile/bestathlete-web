@@ -49,6 +49,11 @@ export const getCustomer = /* GraphQL */ `
         ApplicationUserOauthTokenExpiryDate
         __typename
       }
+      MetricsDateCapture
+      MetricSick
+      MetricInjury
+      MetricSleep
+      MetricWorkLifeBalance
       createdAt
       updatedAt
       __typename
@@ -72,6 +77,11 @@ export const listCustomers = /* GraphQL */ `
         Gender
         DateOfBirth
         Country
+        MetricsDateCapture
+        MetricSick
+        MetricInjury
+        MetricSleep
+        MetricWorkLifeBalance
         createdAt
         updatedAt
         __typename
@@ -105,8 +115,6 @@ export const getWorkout = /* GraphQL */ `
       WorkoutHydrationLevel
       WorkoutCaloriesEatenPerHour
       WorkoutAthleteFeedback
-      WorkoutState
-      WorkoutSource
       WorkoutStravaActivityId
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
@@ -145,8 +153,6 @@ export const listWorkouts = /* GraphQL */ `
         WorkoutHydrationLevel
         WorkoutCaloriesEatenPerHour
         WorkoutAthleteFeedback
-        WorkoutState
-        WorkoutSource
         WorkoutStravaActivityId
         WorkoutGarminActivityId
         WorkoutTPWorkoutId
@@ -177,16 +183,6 @@ export const getEvent = /* GraphQL */ `
       EventGoalFinish
       EventGoalPB
       EventGoalOther
-      EventPrepStart
-      EventPrepEnd
-      EventBaseStart
-      EventBaseEnd
-      EventBuildStart
-      EventBuildEnd
-      EventPeakStart
-      EventPeakEnd
-      EventTaperStart
-      EventTaperEnd
       createdAt
       updatedAt
       __typename
@@ -216,16 +212,6 @@ export const listEvents = /* GraphQL */ `
         EventGoalFinish
         EventGoalPB
         EventGoalOther
-        EventPrepStart
-        EventPrepEnd
-        EventBaseStart
-        EventBaseEnd
-        EventBuildStart
-        EventBuildEnd
-        EventPeakStart
-        EventPeakEnd
-        EventTaperStart
-        EventTaperEnd
         createdAt
         updatedAt
         __typename
@@ -520,6 +506,22 @@ export const customersByIdCustomer = /* GraphQL */ `
         Gender
         DateOfBirth
         Country
+         TrainingDays {
+          FridayTrain
+          FridayTrainHours
+          MondayTrain
+          MondayTrainHours
+          SaturdayTrain
+          SaturdayTrainHours
+          SundayTrain
+          WednesdayTrainHours
+          WednesdayTrain
+          TuesdayTrainHours
+          TuesdayTrain
+          ThursdayTrainHours
+          ThursdayTrain
+          SundayTrainHours
+          }
         createdAt
         updatedAt
         __typename
@@ -554,6 +556,11 @@ export const customersByEmailAddress = /* GraphQL */ `
         Gender
         DateOfBirth
         Country
+        MetricsDateCapture
+        MetricSick
+        MetricInjury
+        MetricSleep
+        MetricWorkLifeBalance
         createdAt
         updatedAt
         __typename
@@ -602,8 +609,6 @@ export const workoutsByIdCustomerAndWorkoutDateTime = /* GraphQL */ `
         WorkoutHydrationLevel
         WorkoutCaloriesEatenPerHour
         WorkoutAthleteFeedback
-        WorkoutState
-        WorkoutSource
         WorkoutStravaActivityId
         WorkoutGarminActivityId
         WorkoutTPWorkoutId
@@ -649,16 +654,6 @@ export const eventsByIdCustomerAndEventDate = /* GraphQL */ `
         EventGoalFinish
         EventGoalPB
         EventGoalOther
-        EventPrepStart
-        EventPrepEnd
-        EventBaseStart
-        EventBaseEnd
-        EventBuildStart
-        EventBuildEnd
-        EventPeakStart
-        EventPeakEnd
-        EventTaperStart
-        EventTaperEnd
         createdAt
         updatedAt
         __typename
