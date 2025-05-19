@@ -40,7 +40,7 @@ export default function Workouts({ workoutsNoFeedback = [] }) {
   }, []);
 
   return (
-    <div style={{ padding: "24px" }}>
+    <div style={{ padding: "1px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <AntButton onClick={() => setDaysOffset(({ start, end }) => ({ start: start - 7, end }))}>
           Load Previous 7 Days
@@ -56,7 +56,7 @@ export default function Workouts({ workoutsNoFeedback = [] }) {
         </AntButton>
       </div>
 
-      <div style={{ marginTop: "24px", maxHeight: "70vh", overflowY: "auto" }}>
+      <div style={{ marginTop: "20px", maxHeight: "70vh", overflowY: "auto" }}>
         {Array.from({ length: daysOffset.end - daysOffset.start + 1 }).map((_, index) => {
           const day = today.add(daysOffset.start + index, "day");
           const dateStr = formatDate(day);
@@ -64,7 +64,7 @@ export default function Workouts({ workoutsNoFeedback = [] }) {
             (workout) => workout.WorkoutDateTime.slice(0, 10) === dateStr
           );
           return (
-            <div key={index} style={{ marginBottom: "16px" }}>
+            <div key={index} style={{ marginBottom: "1px" }}>
               <h4>{day.format("dddd, D MMMM")}</h4>
               {workouts.length > 0 ? (
                 workouts.map((workout) => (
