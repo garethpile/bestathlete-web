@@ -4,7 +4,8 @@ import { Button as AntButton, DatePicker } from "antd";
 import WorkoutManagement from "./WorkoutManagement";
 import dayjs from "dayjs";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/swiper.min.css";
+
+import "swiper/css"; // base styles
 
 const { RangePicker } = DatePicker;
 
