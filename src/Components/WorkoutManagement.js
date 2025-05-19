@@ -121,8 +121,9 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout }) => {
       <Panel header={workoutData.type || "Workout"} key="1">
         <Card
           style={{
-            margin: 12,
-            borderRadius: 12,
+            margin: "1px auto",
+            width: "99%",
+            borderRadius: 1,
             boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
           }}
         >
