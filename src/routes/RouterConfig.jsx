@@ -10,6 +10,9 @@ const Calendar = lazy(() => import("../Components/Calendar"));
 
 const RouterConfig = ({
   customer,
+  customerAvailabilities,
+  setCustomerAvailabilities,
+  refreshCustomerAvailabilities,
   events,
   workouts,
   workoutsNoFeedback,
@@ -26,6 +29,9 @@ const RouterConfig = ({
             element={
               <Dashboard
                 customer={customer}
+                customerAvailabilities={customerAvailabilities}
+                setCustomerAvailabilities={setCustomerAvailabilities}
+                refreshCustomerAvailabilities={refreshCustomerAvailabilities}
                 events={events}
                 workouts={workouts}
                 workoutsNoFeedback={workoutsNoFeedback}
@@ -51,7 +57,17 @@ const RouterConfig = ({
             path="/thirdparty"
             element={<ThirdParty customer={customer} />}
           />
-          <Route path="/calendar" element={<Calendar customer={customer} workouts={workouts} events = {events}/>} />
+          <Route
+            path="/calendar"
+            element={
+              <Calendar
+                customer={customer}
+                workouts={workouts}
+                events={events}
+                customerAvailabilities={customerAvailabilities}
+              />
+            }
+          />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

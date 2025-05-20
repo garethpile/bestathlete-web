@@ -205,7 +205,6 @@ export const createWorkout = /* GraphQL */ `
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
       WorkoutPairId
-      WorkoutActivityAvailable
       createdAt
       updatedAt
       __typename
@@ -245,7 +244,6 @@ export const updateWorkout = /* GraphQL */ `
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
       WorkoutPairId
-      WorkoutActivityAvailable
       createdAt
       updatedAt
       __typename
@@ -285,7 +283,6 @@ export const deleteWorkout = /* GraphQL */ `
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
       WorkoutPairId
-      WorkoutActivityAvailable
       createdAt
       updatedAt
       __typename
@@ -763,6 +760,60 @@ export const deleteMetric = /* GraphQL */ `
       MetricType
       MetricValue
       MetricSource
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createCustomerAvailability = /* GraphQL */ `
+  mutation CreateCustomerAvailability(
+    $input: CreateCustomerAvailabilityInput!
+    $condition: ModelCustomerAvailabilityConditionInput
+  ) {
+    createCustomerAvailability(input: $input, condition: $condition) {
+      id
+      idCustomer
+      AvailableActivities
+      UnavailableStartDate
+      UnavailableEndDate
+      UnavailableReason
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateCustomerAvailability = /* GraphQL */ `
+  mutation UpdateCustomerAvailability(
+    $input: UpdateCustomerAvailabilityInput!
+    $condition: ModelCustomerAvailabilityConditionInput
+  ) {
+    updateCustomerAvailability(input: $input, condition: $condition) {
+      id
+      idCustomer
+      AvailableActivities
+      UnavailableStartDate
+      UnavailableEndDate
+      UnavailableReason
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteCustomerAvailability = /* GraphQL */ `
+  mutation DeleteCustomerAvailability(
+    $input: DeleteCustomerAvailabilityInput!
+    $condition: ModelCustomerAvailabilityConditionInput
+  ) {
+    deleteCustomerAvailability(input: $input, condition: $condition) {
+      id
+      idCustomer
+      AvailableActivities
+      UnavailableStartDate
+      UnavailableEndDate
+      UnavailableReason
       createdAt
       updatedAt
       __typename

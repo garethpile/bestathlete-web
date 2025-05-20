@@ -193,7 +193,6 @@ export const onCreateWorkout = /* GraphQL */ `
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
       WorkoutPairId
-      WorkoutActivityAvailable
       createdAt
       updatedAt
       __typename
@@ -230,7 +229,6 @@ export const onUpdateWorkout = /* GraphQL */ `
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
       WorkoutPairId
-      WorkoutActivityAvailable
       createdAt
       updatedAt
       __typename
@@ -267,7 +265,6 @@ export const onDeleteWorkout = /* GraphQL */ `
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
       WorkoutPairId
-      WorkoutActivityAvailable
       createdAt
       updatedAt
       __typename
@@ -715,6 +712,57 @@ export const onDeleteMetric = /* GraphQL */ `
       MetricType
       MetricValue
       MetricSource
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateCustomerAvailability = /* GraphQL */ `
+  subscription OnCreateCustomerAvailability(
+    $filter: ModelSubscriptionCustomerAvailabilityFilterInput
+  ) {
+    onCreateCustomerAvailability(filter: $filter) {
+      id
+      idCustomer
+      AvailableActivities
+      UnavailableStartDate
+      UnavailableEndDate
+      UnavailableReason
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateCustomerAvailability = /* GraphQL */ `
+  subscription OnUpdateCustomerAvailability(
+    $filter: ModelSubscriptionCustomerAvailabilityFilterInput
+  ) {
+    onUpdateCustomerAvailability(filter: $filter) {
+      id
+      idCustomer
+      AvailableActivities
+      UnavailableStartDate
+      UnavailableEndDate
+      UnavailableReason
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteCustomerAvailability = /* GraphQL */ `
+  subscription OnDeleteCustomerAvailability(
+    $filter: ModelSubscriptionCustomerAvailabilityFilterInput
+  ) {
+    onDeleteCustomerAvailability(filter: $filter) {
+      id
+      idCustomer
+      AvailableActivities
+      UnavailableStartDate
+      UnavailableEndDate
+      UnavailableReason
       createdAt
       updatedAt
       __typename

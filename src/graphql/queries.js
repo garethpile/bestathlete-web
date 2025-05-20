@@ -111,7 +111,6 @@ export const getWorkout = /* GraphQL */ `
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
       WorkoutPairId
-      WorkoutActivityAvailable
       createdAt
       updatedAt
       __typename
@@ -153,7 +152,6 @@ export const listWorkouts = /* GraphQL */ `
         WorkoutGarminActivityId
         WorkoutTPWorkoutId
         WorkoutPairId
-        WorkoutActivityAvailable
         createdAt
         updatedAt
         __typename
@@ -501,6 +499,48 @@ export const listMetrics = /* GraphQL */ `
     }
   }
 `;
+export const getCustomerAvailability = /* GraphQL */ `
+  query GetCustomerAvailability($id: ID!) {
+    getCustomerAvailability(id: $id) {
+      id
+      idCustomer
+      AvailableActivities
+      UnavailableStartDate
+      UnavailableEndDate
+      UnavailableReason
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listCustomerAvailabilities = /* GraphQL */ `
+  query ListCustomerAvailabilities(
+    $filter: ModelCustomerAvailabilityFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCustomerAvailabilities(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        idCustomer
+        AvailableActivities
+        UnavailableStartDate
+        UnavailableEndDate
+        UnavailableReason
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
 export const customersByIdCustomer = /* GraphQL */ `
   query CustomersByIdCustomer(
     $idCustomer: String!
@@ -614,7 +654,6 @@ export const workoutsByIdCustomerAndWorkoutDateTime = /* GraphQL */ `
         WorkoutGarminActivityId
         WorkoutTPWorkoutId
         WorkoutPairId
-        WorkoutActivityAvailable
         createdAt
         updatedAt
         __typename
@@ -862,6 +901,37 @@ export const metricsByIdCustomerAndMetricDate = /* GraphQL */ `
         MetricType
         MetricValue
         MetricSource
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const customerAvailabilitiesByIdCustomer = /* GraphQL */ `
+  query CustomerAvailabilitiesByIdCustomer(
+    $idCustomer: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelCustomerAvailabilityFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    customerAvailabilitiesByIdCustomer(
+      idCustomer: $idCustomer
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        idCustomer
+        AvailableActivities
+        UnavailableStartDate
+        UnavailableEndDate
+        UnavailableReason
         createdAt
         updatedAt
         __typename

@@ -15,6 +15,9 @@ import {
   metricsGet3DaysWeight,
   metricsGet3DaysSleep,
 } from "../services/metricServices";
+import {
+  customerAvailabilitiesGetByIdCustomer
+} from "../services/customerAvailabilityServices";
 import dayjs from "dayjs";
 
 dayjs.extend(isSameOrAfter);
@@ -24,6 +27,7 @@ const LandingPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [userExists, setUserExists] = useState(false);
   const [customer, setCustomer] = useState({});
+  const [customerAvailabilities, setCustomerAvailabilities] = useState([]);
   const [workouts, setWorkouts] = useState([]);
   const [workoutsNoFeedback, setWorkoutsNoFeedback] = useState([]);
   const [events, setEvents] = useState([]);
@@ -60,12 +64,14 @@ const LandingPage = () => {
           eventsRes,
           weightMetricsRes,
           sleepMetricsRes,
+          customerAvailabilitiesRes,
         ] = await Promise.all([
           workoutsGetIDDateTime(authenticatedUser.username, startDate, endDate),
           workoutsGetIDDateTimeFilterAthleteFeedback(authenticatedUser.username, startDate, endDate, 0),
           eventGetIDDateTime(authenticatedUser.username),
           metricsGet3DaysWeight(authenticatedUser.username),
           metricsGet3DaysSleep(authenticatedUser.username),
+          customerAvailabilitiesGetByIdCustomer(authenticatedUser.username),
         ]);
 
         setWorkouts(workoutsRes.body || []);
@@ -73,6 +79,20 @@ const LandingPage = () => {
         setEvents(Array.isArray(eventsRes.body) ? eventsRes.body : []);
         setMetrics3DaysWeight(weightMetricsRes.body || []);
         setMetrics3DaysSleep(sleepMetricsRes.body || []);
+        setCustomerAvailabilities(customerAvailabilitiesRes.body || []);
+
+        const refreshCustomerAvailabilities = async (idCustomer) => {
+          const result = await customerAvailabilitiesGetByIdCustomer(idCustomer);
+          if (result.statusCode === 200) {
+            setCustomerAvailabilities(result.body);
+          }
+        };
+
+        // Assign refreshCustomerAvailabilities to state or ref if needed
+        // Here, we define it inside useEffect but need to make it accessible outside
+        // So move it outside or define it here and pass it down differently
+        // For now, we will move it outside useEffect to be able to pass it to RouterConfig
+
       } catch (error) {
         console.error("Error loading user data:", error);
       } finally {
@@ -83,17 +103,27 @@ const LandingPage = () => {
     fetchData();
   }, []);
 
+  const refreshCustomerAvailabilities = async (idCustomer) => {
+    const result = await customerAvailabilitiesGetByIdCustomer(idCustomer);
+    if (result.statusCode === 200) {
+      setCustomerAvailabilities(result.body);
+    }
+  };
+
   return isLoading ? (
     <div>Loading...</div>
   ) : (
     <RouterConfig
       customer={customer}
+      customerAvailabilities={customerAvailabilities}
+      setCustomerAvailabilities={setCustomerAvailabilities}
       events={events}
       workouts={workouts}
       workoutsNoFeedback={workoutsNoFeedback}
       metrics3DaysWeight={metrics3DaysWeight}
       metrics3DaysSleep={metrics3DaysSleep}
       userExists={userExists}
+      refreshCustomerAvailabilities={refreshCustomerAvailabilities}
     />
   );
 };

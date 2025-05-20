@@ -1,6 +1,6 @@
 
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -28,12 +28,26 @@ const ACTIVITIES = [
   { value: "Walk", label: "Walk" },
 ];
 
-function UnavailabilityModal({ open, onClose, onSave }) {
+function UnavailabilityModal({ open, onClose, onSave, event }) {
   const [reason, setReason] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [activities, setActivities] = useState(["None"]);
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (event) {
+      setReason(event.UnavailableReason || "");
+      setStartDate(event.UnavailableStartDate || "");
+      setEndDate(event.UnavailableEndDate || "");
+      setActivities(event.AvailableActivities ? JSON.parse(event.AvailableActivities) : ["None"]);
+    } else {
+      setReason("");
+      setStartDate("");
+      setEndDate("");
+      setActivities(["None"]);
+    }
+  }, [event, open]);
 
   // Handle mutually exclusive 'None' for activities
   const handleActivitiesChange = (event) => {

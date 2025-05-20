@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Badge, Card, Tooltip, Modal } from "antd";
 import dayjs from "dayjs";
 import { EnvironmentOutlined, FireOutlined, ThunderboltOutlined, HeartOutlined } from "@ant-design/icons";
@@ -33,8 +33,13 @@ const getPhaseForDate = (date, aRace) => {
   return null;
 };
 
-const Calendar = ({ workouts = [], customer , events = []}) => {
+const Calendar = ({ workouts = [], customer , events = [], customerAvailabilities }) => {
   const [selectedWorkout, setSelectedWorkout] = useState(null);
+  const [availabilities, setAvailabilities] = useState(Array.isArray(customerAvailabilities) ? customerAvailabilities : []);
+
+  useEffect(() => {
+    setAvailabilities(Array.isArray(customerAvailabilities) ? customerAvailabilities : []);
+  }, [customerAvailabilities]);
 
   // Log workouts after component starts
   console.log("Workouts:", workouts);
@@ -55,6 +60,10 @@ const Calendar = ({ workouts = [], customer , events = []}) => {
     const listData = workoutMap[dateKey] || [];
 
     const phase = aRace ? getPhaseForDate(value, aRace) : null;
+    const availability = availabilities.find((entry) =>
+      dayjs(value).isSameOrAfter(dayjs(entry.UnavailableStartDate), "day") &&
+      dayjs(value).isSameOrBefore(dayjs(entry.UnavailableEndDate), "day")
+    );
     const isToday = dayjs().isSame(value, "day");
 
     return (
@@ -72,6 +81,21 @@ const Calendar = ({ workouts = [], customer , events = []}) => {
             }}
           >
             {phase.name}
+          </div>
+        )}
+        {availability && (
+          <div
+            style={{
+              backgroundColor: "#ff6b6b",
+              color: "#fff",
+              padding: "2px 4px",
+              fontSize: "10px",
+              textAlign: "center",
+              borderRadius: "2px",
+              marginBottom: "4px"
+            }}
+          >
+            {availability.UnavailableReason}
           </div>
         )}
         <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
