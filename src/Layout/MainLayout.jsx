@@ -6,6 +6,7 @@ import {
   UserOutlined,
   ApiOutlined,
   DatabaseOutlined,
+  CalendarOutlined,
 } from '@ant-design/icons';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
@@ -20,6 +21,7 @@ const MainLayout = () => {
   const getSelectedKey = () => {
     if (location.pathname.startsWith('/profile')) return 'profile';
     if (location.pathname.startsWith('/thirdparty')) return 'thirdparty';
+    if (location.pathname.startsWith('/calendar')) return 'calendar';
     if (location.pathname.startsWith('/workouts')) return 'workouts';
     return 'dashboard';
   };
@@ -67,7 +69,9 @@ const MainLayout = () => {
               <Link to="/workouts">Workouts</Link>
             </Menu.Item>
 
-  
+            <Menu.Item key="calendar" icon={<CalendarOutlined />}>
+              <Link to="/calendar">Calendar</Link>
+            </Menu.Item>
 
             <Menu.Item key="thirdparty" icon={<ApiOutlined />}>
               <Link to="/thirdparty">ThirdParty</Link>

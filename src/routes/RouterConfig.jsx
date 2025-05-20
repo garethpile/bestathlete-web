@@ -6,6 +6,7 @@ const Workouts = lazy(() => import("../Components/Workouts"));
 const Profile = lazy(() => import("../ProfilePage/Profile"));
 const ThirdParty = lazy(() => import("../ThreeSixtyDSL/ThirdParty"));
 const MainLayout = lazy(() => import("../Layout/MainLayout"));
+const Calendar = lazy(() => import("../Components/Calendar"));
 
 const RouterConfig = ({
   customer,
@@ -50,6 +51,7 @@ const RouterConfig = ({
             path="/thirdparty"
             element={<ThirdParty customer={customer} />}
           />
+          <Route path="/calendar" element={<Calendar customer={customer} workouts={workouts} events = {events}/>} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

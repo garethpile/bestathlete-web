@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { Auth } from "aws-amplify";
 import RouterConfig from "../routes/RouterConfig";
 import {
@@ -13,6 +15,10 @@ import {
   metricsGet3DaysWeight,
   metricsGet3DaysSleep,
 } from "../services/metricServices";
+import dayjs from "dayjs";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 const LandingPage = () => {
   const [isLoading, setIsLoading] = useState(true);
