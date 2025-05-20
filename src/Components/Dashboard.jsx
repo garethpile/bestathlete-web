@@ -26,7 +26,8 @@ const Dashboard = ({
   metrics3DaysWeight,
   metrics3DaysSleep,
   setCustomerAvailabilities,
-  refreshCustomerAvailabilities
+  refreshCustomerAvailabilities,
+  setEvents,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [eventList, setEventList] = useState(events);
@@ -43,12 +44,18 @@ const Dashboard = ({
 
   const handleEventCreated = async () => {
     const refreshed = await eventGetIDDateTime(customer.idCustomer);
-    setEventList(Array.isArray(refreshed.body) ? refreshed.body : []);
+    const updatedEvents = Array.isArray(refreshed.body) ? refreshed.body : [];
+    setEventList(updatedEvents);
+    if (typeof setEvents === "function") {
+      setEvents(updatedEvents);
+    }
   };
 
   const removeEvent = async (id) => {
-    await eventDelete(id); // call backend to delete
-    setEventList((prev) => prev.filter((e) => e.id !== id));
+    await eventDelete(id);
+    const refreshed = await eventGetIDDateTime(customer.idCustomer);
+    const updatedEvents = Array.isArray(refreshed.body) ? refreshed.body : [];
+    setEventList(updatedEvents);
   };
 
   const handleCloseModal = () => {
