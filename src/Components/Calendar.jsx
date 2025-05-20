@@ -142,19 +142,56 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
     );
   };
 
+  // Selected date state for horizontal date selector
+  const [selectedDate, setSelectedDate] = useState(dayjs());
+
   return (
     <Card className="maincardDiv">
       <h2 style={{ color: "crimson", textAlign: "center", marginBottom: 20 }}>Workout Calendar</h2>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "8px" }}>
+      {/* Horizontal scrollable date selector */}
+      <div style={{ display: "flex", overflowX: "auto", paddingBottom: "10px", marginBottom: "10px" }}>
+        {Array.from({ length: 28 }, (_, i) => {
+          const date = dayjs().startOf("week").subtract(7, "day").add(i, "day");
+          const isSelected = date.isSame(selectedDate, "day");
+          return (
+            <div
+              key={i}
+              onClick={() => setSelectedDate(date)}
+              style={{
+                minWidth: "60px",
+                textAlign: "center",
+                padding: "8px",
+                marginRight: "6px",
+                borderRadius: "6px",
+                cursor: "pointer",
+                backgroundColor: isSelected ? "#ffec99" : "#f0f0f0",
+                border: isSelected ? "2px solid #ffa500" : "1px solid #ccc"
+              }}
+            >
+              <div style={{ fontWeight: "bold", fontSize: "12px" }}>{date.format("ddd")}</div>
+              <div style={{ fontSize: "14px" }}>{date.format("D")}</div>
+            </div>
+          );
+        })}
+      </div>
+      {/* Scrollable multi-day detail */}
+      <div style={{ height: "60vh", overflowY: "auto", paddingBottom: "12px" }}>
         {Array.from({ length: 28 }, (_, i) => {
           const date = dayjs().startOf("week").subtract(7, "day").add(i, "day");
           return (
-            <div key={i} style={{ minHeight: "140px", border: "1px solid #ccc", padding: "4px", borderRadius: "4px", backgroundColor: dayjs().isSame(date, "day")
-    ? "#fff9db"
-    : dayjs().isBefore(date, "day")
-    ? "#f0f0f0"
-    : "#d9d9d9" }}>
-              <div style={{ fontSize: "12px", fontWeight: "bold" }}>{date.format("ddd, MMM D")}</div>
+            <div
+              key={date.format("YYYY-MM-DD")}
+              style={{
+                backgroundColor: date.isSame(selectedDate, "day") ? "#fff9db" : "#ffffff",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                marginBottom: "8px",
+                padding: "8px"
+              }}
+            >
+              <div style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "4px" }}>
+                {date.format("dddd, MMMM D, YYYY")}
+              </div>
               {dateCellRender(date)}
             </div>
           );
