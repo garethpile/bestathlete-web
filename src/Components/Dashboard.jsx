@@ -5,6 +5,7 @@ import AthleteFeedback from "./AthleteFeedback";
 import NonTrainingDays from "./NonTrainingDays";
 import TermsConditions from "./TermsConditions";
 import EventModal from "./EventModal";
+import UnavailabilityModal from "./UnavailabilityModal";
 import { eventGetIDDateTime } from "../services/eventServices";
 
 const { Panel } = Collapse;
@@ -20,6 +21,8 @@ const Dashboard = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [eventList, setEventList] = useState(events);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isUnavailModalOpen, setIsUnavailModalOpen] = useState(false);
+  const [unavailabilityList, setUnavailabilityList] = useState([]);
 
   const handleEventCreated = async () => {
     const refreshed = await eventGetIDDateTime(customer.idCustomer);
@@ -106,7 +109,48 @@ const Dashboard = ({
               />
             </Panel>
           </Collapse>
+          <Collapse style={{ marginBottom: 16 }}>
+            <Panel header="Unavailability" key="unavailability">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "8px",
+                }}
+              >
+                <h2 style={{ margin: 0 }}>Entries:</h2>
+                <AntButton onClick={() => setIsUnavailModalOpen(true)}>Add</AntButton>
+              </div>
 
+              {unavailabilityList.map((entry, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    width: "100%",
+                    marginBottom: "8px",
+                    padding: "10px 16px",
+                    border: "1px solid #e8e8e8",
+                    borderRadius: "6px",
+                    backgroundColor: "#fafafa",
+                  }}
+                >
+                  <span>
+                    <strong>{entry.reason}</strong> — {entry.startDate} to {entry.endDate}
+                  </span>
+                  <div>Activities: {entry.activities.join(", ")}</div>
+                </div>
+              ))}
+
+              <UnavailabilityModal
+                open={isUnavailModalOpen}
+                onClose={() => setIsUnavailModalOpen(false)}
+                onSave={(newEntry) =>
+                  setUnavailabilityList((prev) => [...prev, newEntry])
+                }
+              />
+            </Panel>
+          </Collapse>
         </Col>
 
         <Col xs={24}>

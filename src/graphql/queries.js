@@ -111,6 +111,7 @@ export const getWorkout = /* GraphQL */ `
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
       WorkoutPairId
+      WorkoutActivityAvailable
       createdAt
       updatedAt
       __typename
@@ -152,6 +153,7 @@ export const listWorkouts = /* GraphQL */ `
         WorkoutGarminActivityId
         WorkoutTPWorkoutId
         WorkoutPairId
+        WorkoutActivityAvailable
         createdAt
         updatedAt
         __typename
@@ -428,6 +430,7 @@ export const getNonTrainingDays = /* GraphQL */ `
       NonTrainingType
       StartDate
       EndDate
+      NonTrainingActivitiesAllowed
       createdAt
       updatedAt
       __typename
@@ -448,6 +451,7 @@ export const listNonTrainingDays = /* GraphQL */ `
         NonTrainingType
         StartDate
         EndDate
+        NonTrainingActivitiesAllowed
         createdAt
         updatedAt
         __typename
@@ -522,23 +526,6 @@ export const customersByIdCustomer = /* GraphQL */ `
         Gender
         DateOfBirth
         Country
-        TrainingDays {
-          MondayTrain
-          MondayTrainHours
-          TuesdayTrain
-          TuesdayTrainHours
-          WednesdayTrain
-          WednesdayTrainHours
-          ThursdayTrain
-          ThursdayTrainHours
-          FridayTrain
-          FridayTrainHours
-          SaturdayTrain
-          SaturdayTrainHours
-          SundayTrain
-          SundayTrainHours
-          __typename
-        }
         createdAt
         updatedAt
         __typename
@@ -627,6 +614,7 @@ export const workoutsByIdCustomerAndWorkoutDateTime = /* GraphQL */ `
         WorkoutGarminActivityId
         WorkoutTPWorkoutId
         WorkoutPairId
+        WorkoutActivityAvailable
         createdAt
         updatedAt
         __typename
@@ -839,6 +827,7 @@ export const nonTrainingDaysByIdCustomer = /* GraphQL */ `
         NonTrainingType
         StartDate
         EndDate
+        NonTrainingActivitiesAllowed
         createdAt
         updatedAt
         __typename

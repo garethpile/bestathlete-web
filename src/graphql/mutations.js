@@ -205,6 +205,7 @@ export const createWorkout = /* GraphQL */ `
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
       WorkoutPairId
+      WorkoutActivityAvailable
       createdAt
       updatedAt
       __typename
@@ -244,6 +245,7 @@ export const updateWorkout = /* GraphQL */ `
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
       WorkoutPairId
+      WorkoutActivityAvailable
       createdAt
       updatedAt
       __typename
@@ -283,6 +285,7 @@ export const deleteWorkout = /* GraphQL */ `
       WorkoutGarminActivityId
       WorkoutTPWorkoutId
       WorkoutPairId
+      WorkoutActivityAvailable
       createdAt
       updatedAt
       __typename
@@ -664,6 +667,7 @@ export const createNonTrainingDays = /* GraphQL */ `
       NonTrainingType
       StartDate
       EndDate
+      NonTrainingActivitiesAllowed
       createdAt
       updatedAt
       __typename
@@ -682,6 +686,7 @@ export const updateNonTrainingDays = /* GraphQL */ `
       NonTrainingType
       StartDate
       EndDate
+      NonTrainingActivitiesAllowed
       createdAt
       updatedAt
       __typename
@@ -700,6 +705,7 @@ export const deleteNonTrainingDays = /* GraphQL */ `
       NonTrainingType
       StartDate
       EndDate
+      NonTrainingActivitiesAllowed
       createdAt
       updatedAt
       __typename
