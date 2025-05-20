@@ -59,15 +59,24 @@ const MainLayout = () => {
 
           <div
             style={{
-              overflowX: isMobile ? 'auto' : 'visible',
-              whiteSpace: 'nowrap',
+              overflowX: isMobile ? 'auto' : 'unset',
+              overflow: isMobile ? 'auto' : 'unset',
+              whiteSpace: isMobile ? 'nowrap' : 'normal',
               flex: 1,
+              WebkitOverflowScrolling: isMobile ? 'touch' : 'unset',
+              padding: isMobile ? '4px 0' : '0',
+              backgroundColor: isMobile ? '#fff' : 'transparent',
             }}
           >
             <Menu
               mode="horizontal"
               selectedKeys={[getSelectedKey()]}
-              style={{ borderBottom: 'none', display: 'inline-flex' }}
+              style={{
+                borderBottom: 'none',
+                display: isMobile ? 'inline-flex' : 'flex',
+                minWidth: isMobile ? '600px' : 'unset',
+                width: isMobile ? 'unset' : '100%',
+              }}
               theme="light"
             >
               <Menu.Item key="dashboard" icon={<DashboardOutlined />}>

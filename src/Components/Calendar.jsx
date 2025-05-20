@@ -149,36 +149,57 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
   return (
     <Card className="maincardDiv">
       <h2 style={{ color: "crimson", textAlign: "center", marginBottom: 20 }}>Workout Calendar</h2>
-      {/* Horizontal scrollable date selector */}
-      <div style={{ display: "flex", overflowX: "auto", paddingBottom: "10px", marginBottom: "10px" }}>
-        {Array.from({ length: 28 }, (_, i) => {
-          const date = dayjs().startOf("week").subtract(7, "day").add(i, "day");
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: "8px" }}>
+        <input
+          type="month"
+          value={selectedDate.format("YYYY-MM")}
+          onChange={(e) => {
+            const newDate = dayjs(e.target.value);
+            setSelectedDate(newDate);
+          }}
+          style={{
+            fontSize: "14px",
+            padding: "4px",
+            border: "1px solid #ccc",
+            borderRadius: "4px"
+          }}
+        />
+      </div>
+      {/* Full month calendar grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", padding: "0", marginBottom: "8px" }}>
+        {Array.from({ length: 35 }, (_, i) => {
+          const startOfCalendar = dayjs().startOf("month").startOf("week");
+          const date = startOfCalendar.add(i, "day");
           const isSelected = date.isSame(selectedDate, "day");
+          const isToday = date.isSame(dayjs(), "day");
+          const isCurrentMonth = date.month() === dayjs().month();
+
           return (
             <div
               key={i}
               onClick={() => {
                 setSelectedDate(date);
-                const refIndex = i;
+                const scrollIndex = i;
                 setTimeout(() => {
-                  if (dayRefs.current[refIndex]) {
-                    dayRefs.current[refIndex].scrollIntoView({ behavior: "smooth", block: "start" });
+                  if (dayRefs.current[scrollIndex]) {
+                    dayRefs.current[scrollIndex].scrollIntoView({ behavior: "smooth", block: "start" });
                   }
                 }, 0);
               }}
               style={{
-                minWidth: "60px",
                 textAlign: "center",
-                padding: "8px",
-                marginRight: "6px",
-                borderRadius: "6px",
-                cursor: "pointer",
-                backgroundColor: isSelected ? "#ffec99" : "#f0f0f0",
-                border: isSelected ? "2px solid #ffa500" : "1px solid #ccc"
+                fontSize: "13px",
+                height: "34px",
+                lineHeight: "34px",
+                borderRadius: "18px",
+                fontWeight: isToday ? "bold" : "normal",
+                backgroundColor: isSelected ? "#e6f7ff" : "transparent",
+                color: isCurrentMonth ? "#000" : "#ccc",
+                border: isSelected ? "2px solid #1890ff" : "none",
+                cursor: "pointer"
               }}
             >
-              <div style={{ fontWeight: "bold", fontSize: "12px" }}>{date.format("ddd")}</div>
-              <div style={{ fontSize: "14px" }}>{date.format("D")}</div>
+              {date.format("D")}
             </div>
           );
         })}
