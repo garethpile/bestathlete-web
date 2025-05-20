@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Badge, Card, Tooltip, Modal } from "antd";
 import dayjs from "dayjs";
 import { EnvironmentOutlined, FireOutlined, ThunderboltOutlined, HeartOutlined } from "@ant-design/icons";
@@ -36,6 +36,7 @@ const getPhaseForDate = (date, aRace) => {
 const Calendar = ({ workouts = [], customer , events = [], customerAvailabilities }) => {
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [availabilities, setAvailabilities] = useState(Array.isArray(customerAvailabilities) ? customerAvailabilities : []);
+  const dayRefs = useRef([]);
 
   useEffect(() => {
     setAvailabilities(Array.isArray(customerAvailabilities) ? customerAvailabilities : []);
@@ -156,7 +157,15 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
           return (
             <div
               key={i}
-              onClick={() => setSelectedDate(date)}
+              onClick={() => {
+                setSelectedDate(date);
+                const refIndex = i;
+                setTimeout(() => {
+                  if (dayRefs.current[refIndex]) {
+                    dayRefs.current[refIndex].scrollIntoView({ behavior: "smooth", block: "start" });
+                  }
+                }, 0);
+              }}
               style={{
                 minWidth: "60px",
                 textAlign: "center",
@@ -181,6 +190,7 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
           return (
             <div
               key={date.format("YYYY-MM-DD")}
+              ref={(el) => (dayRefs.current[i] = el)}
               style={{
                 backgroundColor: date.isSame(selectedDate, "day") ? "#fff9db" : "#ffffff",
                 border: "1px solid #ccc",

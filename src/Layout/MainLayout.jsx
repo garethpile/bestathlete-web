@@ -42,7 +42,8 @@ const MainLayout = () => {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '24px',
+            gap: '16px',
+            overflow: 'hidden',
           }}
         >
           <div
@@ -50,47 +51,57 @@ const MainLayout = () => {
               fontWeight: 'bold',
               fontSize: isMobile ? 18 : 24,
               color: '#1890ff',
+              flexShrink: 0,
             }}
           >
             BestAthlete
           </div>
 
-          <Menu
-            mode="horizontal"
-            selectedKeys={[getSelectedKey()]}
-            style={{ borderBottom: 'none', flex: 1 }}
-            theme="light"
+          <div
+            style={{
+              overflowX: isMobile ? 'auto' : 'visible',
+              whiteSpace: 'nowrap',
+              flex: 1,
+            }}
           >
-            <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
-              <Link to="/">Dashboard</Link>
-            </Menu.Item>
+            <Menu
+              mode="horizontal"
+              selectedKeys={[getSelectedKey()]}
+              style={{ borderBottom: 'none', display: 'inline-flex' }}
+              theme="light"
+            >
+              <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
+                <Link to="/">Dashboard</Link>
+              </Menu.Item>
 
-            <Menu.Item key="workouts" icon={<DatabaseOutlined />}>
-              <Link to="/workouts">Workouts</Link>
-            </Menu.Item>
+              <Menu.Item key="workouts" icon={<DatabaseOutlined />}>
+                <Link to="/workouts">Workouts</Link>
+              </Menu.Item>
 
-            <Menu.Item key="calendar" icon={<CalendarOutlined />}>
-              <Link to="/calendar">Calendar</Link>
-            </Menu.Item>
+              <Menu.Item key="calendar" icon={<CalendarOutlined />}>
+                <Link to="/calendar">Calendar</Link>
+              </Menu.Item>
 
-            <Menu.Item key="thirdparty" icon={<ApiOutlined />}>
-              <Link to="/thirdparty">ThirdParty</Link>
-            </Menu.Item>
+              <Menu.Item key="thirdparty" icon={<ApiOutlined />}>
+                <Link to="/thirdparty">ThirdParty</Link>
+              </Menu.Item>
 
-            <Menu.Item key="profile" icon={<UserOutlined />}>
-              <Link to="/profile">Profile</Link>
-            </Menu.Item>
-            <Menu.Item key="logout" onClick={async () => {
-              try {
-                await Auth.signOut();
-                window.location.href = '/';
-              } catch (err) {
-                console.error('Error signing out:', err);
-              }
-            }}>
-              Logout
-            </Menu.Item>
-          </Menu>
+              <Menu.Item key="profile" icon={<UserOutlined />}>
+                <Link to="/profile">Profile</Link>
+              </Menu.Item>
+
+              <Menu.Item key="logout" onClick={async () => {
+                try {
+                  await Auth.signOut();
+                  window.location.href = '/';
+                } catch (err) {
+                  console.error('Error signing out:', err);
+                }
+              }}>
+                Logout
+              </Menu.Item>
+            </Menu>
+          </div>
         </div>
       </Header>
 
