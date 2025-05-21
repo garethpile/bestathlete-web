@@ -8,15 +8,17 @@ export default function AthleteCard ({customer}) {
   
     return (
       <Card className="maincardDiv">
-        <IconButton className="mainavatarIcon">
-          <Avatar
-            shape="circle"
-            size={60}
-            src="https://joeschmoe.io/api/v1/random"
-          />
-        </IconButton>
-        <div>
-          <p className="nameDiv">{customer?.FirstName } {customer?.LastName}</p>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <IconButton className="mainavatarIcon">
+            <Avatar
+              shape="circle"
+              size={60}
+              src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${customer?.FirstName || "random"}`}
+            />
+          </IconButton>
+          <p className="nameDiv" style={{ fontSize: "1.5rem", fontWeight: "bold", margin: 0 }}>
+            {customer?.FirstName } {customer?.LastName}
+          </p>
         </div>
         <div className="calculationDiv">
           <span className="spanDiv">
@@ -38,5 +40,3 @@ export default function AthleteCard ({customer}) {
     );
   
 }
-
-

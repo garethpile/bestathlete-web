@@ -15,7 +15,6 @@ const RouterConfig = ({
   refreshCustomerAvailabilities,
   events,
   workouts,
-  workoutsNoFeedback,
   metrics3DaysWeight,
   metrics3DaysSleep,
   userExists,
@@ -34,7 +33,6 @@ const RouterConfig = ({
                 refreshCustomerAvailabilities={refreshCustomerAvailabilities}
                 events={events}
                 workouts={workouts}
-                workoutsNoFeedback={workoutsNoFeedback}
                 metrics3DaysWeight={metrics3DaysWeight}
                 metrics3DaysSleep={metrics3DaysSleep}
               />
@@ -45,7 +43,6 @@ const RouterConfig = ({
             element={
               <Workouts
                 workouts={workouts}
-                workoutsNoFeedback={workoutsNoFeedback}
               />
             }
           />

@@ -162,7 +162,6 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
           borderBottom: "1px solid #e0e0e0"
         }}
       >
-        <h2 style={{ color: "crimson", textAlign: "center", margin: "12px 0" }}>Workout Calendar</h2>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "0 16px 8px 16px" }}>
           <button
             onClick={() => setShowMonthGrid(!showMonthGrid)}

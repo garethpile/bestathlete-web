@@ -8,7 +8,6 @@ import {
 } from "../services/customerServices";
 import {
   workoutsGetIDDateTime,
-  workoutsGetIDDateTimeFilterAthleteFeedback,
 } from "../services/workoutServices";
 import { eventGetIDDateTime } from "../services/eventServices";
 import {
@@ -29,7 +28,6 @@ const LandingPage = () => {
   const [customer, setCustomer] = useState({});
   const [customerAvailabilities, setCustomerAvailabilities] = useState([]);
   const [workouts, setWorkouts] = useState([]);
-  const [workoutsNoFeedback, setWorkoutsNoFeedback] = useState([]);
   const [events, setEvents] = useState([]);
   const [metrics3DaysWeight, setMetrics3DaysWeight] = useState([]);
   const [metrics3DaysSleep, setMetrics3DaysSleep] = useState([]);
@@ -50,24 +48,27 @@ const LandingPage = () => {
         setUserExists(true);
 
         const today = new Date();
-        const tomorrow = new Date();
-        const eightDaysAgo = new Date(today);
+        const dayOfWeek = today.getDay(); // Sunday = 0, Monday = 1, ..., Saturday = 6
 
-        tomorrow.setDate(today.getDate() + 1);
-        eightDaysAgo.setDate(tomorrow.getDate() - 8);
-        const startDate = eightDaysAgo.toISOString().split("T")[0];
-        const endDate = tomorrow.toISOString().split("T")[0];
+        // Get last week's Monday
+        const lastWeekMonday = new Date(today);
+        lastWeekMonday.setDate(today.getDate() - dayOfWeek - 6);
+
+        // Get next week's Sunday
+        const nextWeekSunday = new Date(today);
+        nextWeekSunday.setDate(today.getDate() + (7 - dayOfWeek) + 7);
+
+        const startDate = lastWeekMonday.toISOString().split("T")[0];
+        const endDate = nextWeekSunday.toISOString().split("T")[0];
 
         const [
           workoutsRes,
-          workoutsNoFeedbackRes,
           eventsRes,
           weightMetricsRes,
           sleepMetricsRes,
           customerAvailabilitiesRes,
         ] = await Promise.all([
           workoutsGetIDDateTime(authenticatedUser.username, startDate, endDate),
-          workoutsGetIDDateTimeFilterAthleteFeedback(authenticatedUser.username, startDate, endDate, 0),
           eventGetIDDateTime(authenticatedUser.username),
           metricsGet3DaysWeight(authenticatedUser.username),
           metricsGet3DaysSleep(authenticatedUser.username),
@@ -75,7 +76,6 @@ const LandingPage = () => {
         ]);
 
         setWorkouts(workoutsRes.body || []);
-        setWorkoutsNoFeedback(workoutsNoFeedbackRes.body || []);
         setEvents(Array.isArray(eventsRes.body) ? eventsRes.body : []);
         setMetrics3DaysWeight(weightMetricsRes.body || []);
         setMetrics3DaysSleep(sleepMetricsRes.body || []);
@@ -119,7 +119,6 @@ const LandingPage = () => {
       setCustomerAvailabilities={setCustomerAvailabilities}
       events={events}
       workouts={workouts}
-      workoutsNoFeedback={workoutsNoFeedback}
       metrics3DaysWeight={metrics3DaysWeight}
       metrics3DaysSleep={metrics3DaysSleep}
       userExists={userExists}

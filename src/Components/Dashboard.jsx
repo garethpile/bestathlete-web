@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Row, Col, Button as AntButton, Collapse } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import AthleteCard from "./AthleteCard";
+import AthleteFeedback from "./AthleteFeedback";
 import TermsConditions from "./TermsConditions";
 import EventModal from "./EventModal";
 import UnavailabilityModal from "./UnavailabilityModal";
@@ -65,16 +66,6 @@ const Dashboard = ({
     <div className="bodyDiv" style={{ padding: "16px" }}>
       <Row gutter={[16, 16]}>
         <Col xs={24}>
-          <h1
-            style={{
-              justifyContent: "center",
-              display: "flex",
-              color: "crimson",
-              marginTop: "15px",
-            }}
-          >
-            Dashboard
-          </h1>
           <AthleteCard customer={customer} />
         </Col>
 

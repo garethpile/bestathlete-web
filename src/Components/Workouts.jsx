@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
 
-export default function Workouts({ workoutsNoFeedback = [] }) {
+export default function Workouts({ workouts: allWorkouts = [] }) {
   const today = dayjs();
   const [dateRange, setDateRange] = useState([
     today.subtract(2, "day"),
@@ -21,12 +21,12 @@ export default function Workouts({ workoutsNoFeedback = [] }) {
   useEffect(() => {
     if (dateRange[1]) {
       const targetDate = formatDate(dateRange[1]);
-      const workout = workoutsNoFeedback.find(
+      const workout = allWorkouts.find(
         (workout) => workout.WorkoutDateTime.slice(0, 10) === targetDate
       );
       setSelectedWorkout(workout || null);
     }
-  }, [dateRange, workoutsNoFeedback]);
+  }, [dateRange, allWorkouts]);
 
   const handleSaveWorkout = async (updatedWorkoutData) => {
     setSelectedWorkout((prevWorkout) => ({
@@ -40,47 +40,49 @@ export default function Workouts({ workoutsNoFeedback = [] }) {
   }, []);
 
   return (
-    <div style={{ padding: "1px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <AntButton onClick={() => setDaysOffset(({ start, end }) => ({ start: start - 7, end }))}>
-          Load Previous 7 Days
-        </AntButton>
-        <RangePicker
-          value={dateRange}
-          onChange={(dates) => dates && setDateRange(dates)}
-          format="DD/MM/YYYY"
-          allowClear={false}
-        />
-        <AntButton onClick={() => setDaysOffset(({ start, end }) => ({ start, end: end + 7 }))}>
-          Load Next 7 Days
-        </AntButton>
-      </div>
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <div style={{ padding: "1px", width: "100%", maxWidth: "1000px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <AntButton onClick={() => setDaysOffset(({ start, end }) => ({ start: start - 7, end }))}>
+            Load Previous 7 Days
+          </AntButton>
+          <RangePicker
+            value={dateRange}
+            onChange={(dates) => dates && setDateRange(dates)}
+            format="DD/MM/YYYY"
+            allowClear={false}
+          />
+          <AntButton onClick={() => setDaysOffset(({ start, end }) => ({ start, end: end + 7 }))}>
+            Load Next 7 Days
+          </AntButton>
+        </div>
 
-      <div style={{ marginTop: "20px", maxHeight: "70vh", overflowY: "auto" }}>
-        {Array.from({ length: daysOffset.end - daysOffset.start + 1 }).map((_, index) => {
-          const day = today.add(daysOffset.start + index, "day");
-          const dateStr = formatDate(day);
-          const workouts = workoutsNoFeedback.filter(
-            (workout) => workout.WorkoutDateTime.slice(0, 10) === dateStr
-          );
-          return (
-            <div key={index} style={{ marginBottom: "1px" }}>
-              <h4>{day.format("dddd, D MMMM")}</h4>
-              {workouts.length > 0 ? (
-                workouts.map((workout) => (
-                  <WorkoutManagement
-                    key={workout.id}
-                    selectedWorkout={selectedWorkout?.id === workout.id ? selectedWorkout : workout}
-                    setSelectedWorkout={setSelectedWorkout}
-                    onSave={handleSaveWorkout}
-                  />
-                ))
-              ) : (
-                <p>No Workout</p>
-              )}
-            </div>
-          );
-        })}
+        <div style={{ marginTop: "20px", maxHeight: "70vh", overflowY: "auto" }}>
+          {Array.from({ length: daysOffset.end - daysOffset.start + 1 }).map((_, index) => {
+            const day = today.add(daysOffset.start + index, "day");
+            const dateStr = formatDate(day);
+            const workouts = allWorkouts.filter(
+              (workout) => workout.WorkoutDateTime.slice(0, 10) === dateStr
+            );
+            return (
+              <div key={index} style={{ marginBottom: "1px" }}>
+                <h4>{day.format("dddd, D MMMM")}</h4>
+                {workouts.length > 0 ? (
+                  workouts.map((workout) => (
+                    <WorkoutManagement
+                      key={workout.id}
+                      selectedWorkout={selectedWorkout?.id === workout.id ? selectedWorkout : workout}
+                      setSelectedWorkout={setSelectedWorkout}
+                      onSave={handleSaveWorkout}
+                    />
+                  ))
+                ) : (
+                  <p>No Workout</p>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
