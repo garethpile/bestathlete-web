@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Row, Col, Button as AntButton, Collapse } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import AthleteCard from "./AthleteCard";
-import AthleteFeedback from "./AthleteFeedback";
-import NonTrainingDays from "./NonTrainingDays";
 import TermsConditions from "./TermsConditions";
 import EventModal from "./EventModal";
 import UnavailabilityModal from "./UnavailabilityModal";
@@ -244,7 +242,7 @@ const Dashboard = ({
 
         <Col xs={24}>
           <div style={{ width: "100%" }}>
-            <NonTrainingDays customer={customer} />
+
             <TermsConditions />
           </div>
         </Col>

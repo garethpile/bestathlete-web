@@ -132,8 +132,7 @@ const Profile = ({ customer }) => {
         SundayTrain: user.TrainingDays.SundayTrain,
         SundayTrainHours: parseInt(user.TrainingDays.SundayTrainHours, 10),
       },
-      NonTrainingPeriod: user.NonTrainingPeriod || [], // Adjust this if needed
-      ThirdPartyApplications: user.ThirdPartyApplications || [], // Adjust this if needed
+
     };
   
     try {
