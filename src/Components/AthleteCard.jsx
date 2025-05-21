@@ -75,6 +75,23 @@ export default function AthleteCard ({customer , workouts = []} ) {
     }
   });
 
+  const sessionCounts = { Swim: 0, Bike: 0, Run: 0, Strength: 0 };
+
+  workouts.forEach((workout) => {
+    const workoutDate = dayjs(workout.WorkoutDateTime);
+    if (workoutDate.isSameOrAfter(sevenDaysAgo, "day")) {
+      let discipline = "";
+      if (workout.WorkoutType?.toLowerCase().includes("swim")) discipline = "Swim";
+      else if (workout.WorkoutType?.toLowerCase().includes("bike") || workout.WorkoutType?.toLowerCase().includes("ride")) discipline = "Bike";
+      else if (workout.WorkoutType?.toLowerCase().includes("run")) discipline = "Run";
+      else if (workout.WorkoutType?.toLowerCase().includes("strength")) discipline = "Strength";
+
+      if (sessionCounts.hasOwnProperty(discipline)) {
+        sessionCounts[discipline] += 1;
+      }
+    }
+  });
+
     return (
       <Card className="maincardDiv">
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -90,9 +107,9 @@ export default function AthleteCard ({customer , workouts = []} ) {
           </p>
         </div>
         <Divider light />
-        <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', gap: '24px' }}>
+        <div style={{ marginTop: 16, display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', gap: '16px' }}>
           <h3 style={{ margin: 0, whiteSpace: 'nowrap' }}>Last 7 Days Summary</h3>
-          <table style={{ borderCollapse: 'collapse', minWidth: '400px', textAlign: 'center' }}>
+          <table style={{ borderCollapse: 'collapse', width: '100%', maxWidth: '500px', textAlign: 'center' }}>
             <thead>
               <tr>
                 <th style={{ border: '1px solid #ccc', padding: '8px', backgroundColor: '#d0e8ff' }}>Swim</th>
@@ -109,6 +126,12 @@ export default function AthleteCard ({customer , workouts = []} ) {
                 <td style={{ border: '1px solid #ccc', padding: '8px' }}>{disciplineHours.Strength.toFixed(1)} hrs</td>
               </tr>
               <tr>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{sessionCounts.Swim}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{sessionCounts.Bike}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{sessionCounts.Run}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{sessionCounts.Strength}</td>
+              </tr>
+              <tr>
                 <td style={{ border: '1px solid #ccc', padding: '8px' }}>{disciplineDistance.Swim.toFixed(1)} km</td>
                 <td style={{ border: '1px solid #ccc', padding: '8px' }}>{disciplineDistance.Bike.toFixed(1)} km</td>
                 <td style={{ border: '1px solid #ccc', padding: '8px' }}>{disciplineDistance.Run.toFixed(1)} km</td>
@@ -118,7 +141,7 @@ export default function AthleteCard ({customer , workouts = []} ) {
           </table>
         </div>
         <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-          <div style={{ width: '20%' }}>
+          <div style={{ flex: '1 1 250px', minWidth: '250px' }}>
             <h4 style={{ textAlign: 'center' }}>Session Count</h4>
             <Pie
               data={sessionData}
@@ -131,7 +154,7 @@ export default function AthleteCard ({customer , workouts = []} ) {
               }}
             />
           </div>
-          <div style={{ width: '20%' }}>
+          <div style={{ flex: '1 1 250px', minWidth: '250px' }}>
             <h4 style={{ textAlign: 'center' }}>Time Distribution</h4>
             <Pie
               data={timeData}
