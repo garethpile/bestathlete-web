@@ -3,15 +3,8 @@ import { Card, Spin } from "antd";
 
 export default function ThirdPartyCard({customer}) {
 
-  if (!customer) {
-    return (
-      <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-        <Spin size="large" tip="Loading Third Party Connections..." />
-      </div>
-    );
-  }
 
-  const customerUserId = customer.idCustomer;
+  const customerUserId = customer?.idCustomer || "";
   console.log("customerId: ", customerUserId);
 
 
@@ -28,7 +21,7 @@ export default function ThirdPartyCard({customer}) {
       </b>
       <p></p>
       <div>
-        <a href="https://oauth.sandbox.trainingpeaks.com/OAuth/Authorize?client_id=m360&response_type=code&scope=workouts athlete:profile&redirect_uri=https://44vyjr3o2g.execute-api.eu-west-1.amazonaws.com/prod/tpnotification">
+        <a href="https://oauth.sandbox.trainingpeaks.com/OAuth/Authorize?client_id=m360&response_type=code&scope=workouts athlete:profile&redirect_uri=https://t3fzbc4rjb.execute-api.eu-west-1.amazonaws.com/prod/tpnotification">
           Connect your TP account
         </a>
       </div>
