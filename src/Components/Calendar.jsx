@@ -146,63 +146,93 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
   // Selected date state for horizontal date selector
   const [selectedDate, setSelectedDate] = useState(dayjs());
 
+  // Toggle state for month grid
+  const [showMonthGrid, setShowMonthGrid] = useState(true);
+
   return (
     <Card className="maincardDiv">
-      <h2 style={{ color: "crimson", textAlign: "center", marginBottom: 20 }}>Workout Calendar</h2>
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: "8px" }}>
-        <input
-          type="month"
-          value={selectedDate.format("YYYY-MM")}
-          onChange={(e) => {
-            const newDate = dayjs(e.target.value);
-            setSelectedDate(newDate);
-          }}
-          style={{
-            fontSize: "14px",
-            padding: "4px",
-            border: "1px solid #ccc",
-            borderRadius: "4px"
-          }}
-        />
-      </div>
-      {/* Full month calendar grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", padding: "0", marginBottom: "8px" }}>
-        {Array.from({ length: 35 }, (_, i) => {
-          const startOfCalendar = dayjs().startOf("month").startOf("week");
-          const date = startOfCalendar.add(i, "day");
-          const isSelected = date.isSame(selectedDate, "day");
-          const isToday = date.isSame(dayjs(), "day");
-          const isCurrentMonth = date.month() === dayjs().month();
+      {/* Sticky header with title, controls, and calendar grid */}
+      <div
+        style={{
+          position: "sticky",
+          top: 56,
+          zIndex: 2,
+          backgroundColor: "#fff",
+          paddingBottom: "8px",
+          borderBottom: "1px solid #e0e0e0"
+        }}
+      >
+        <h2 style={{ color: "crimson", textAlign: "center", margin: "12px 0" }}>Workout Calendar</h2>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "0 16px 8px 16px" }}>
+          <button
+            onClick={() => setShowMonthGrid(!showMonthGrid)}
+            style={{
+              fontSize: "16px",
+              padding: "2px 6px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              backgroundColor: "#f0f0f0",
+              cursor: "pointer"
+            }}
+          >
+            {showMonthGrid ? "▲" : "▼"}
+          </button>
+          <input
+            type="month"
+            value={selectedDate.format("YYYY-MM")}
+            onChange={(e) => {
+              const newDate = dayjs(e.target.value);
+              setSelectedDate(newDate);
+            }}
+            style={{
+              fontSize: "14px",
+              padding: "4px",
+              border: "1px solid #ccc",
+              borderRadius: "4px"
+            }}
+          />
+        </div>
 
-          return (
-            <div
-              key={i}
-              onClick={() => {
-                setSelectedDate(date);
-                const scrollIndex = i;
-                setTimeout(() => {
-                  if (dayRefs.current[scrollIndex]) {
-                    dayRefs.current[scrollIndex].scrollIntoView({ behavior: "smooth", block: "start" });
-                  }
-                }, 0);
-              }}
-              style={{
-                textAlign: "center",
-                fontSize: "13px",
-                height: "34px",
-                lineHeight: "34px",
-                borderRadius: "18px",
-                fontWeight: isToday ? "bold" : "normal",
-                backgroundColor: isSelected ? "#e6f7ff" : "transparent",
-                color: isCurrentMonth ? "#000" : "#ccc",
-                border: isSelected ? "2px solid #1890ff" : "none",
-                cursor: "pointer"
-              }}
-            >
-              {date.format("D")}
-            </div>
-          );
-        })}
+        {showMonthGrid && (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", padding: "0", marginBottom: "8px" }}>
+            {Array.from({ length: 35 }, (_, i) => {
+              const startOfCalendar = dayjs().startOf("month").startOf("week");
+              const date = startOfCalendar.add(i, "day");
+              const isSelected = date.isSame(selectedDate, "day");
+              const isToday = date.isSame(dayjs(), "day");
+              const isCurrentMonth = date.month() === dayjs().month();
+
+              return (
+                <div
+                  key={i}
+                  onClick={() => {
+                    setSelectedDate(date);
+                    const scrollIndex = i;
+                    setTimeout(() => {
+                      if (dayRefs.current[scrollIndex]) {
+                        dayRefs.current[scrollIndex].scrollIntoView({ behavior: "smooth", block: "start" });
+                      }
+                    }, 0);
+                  }}
+                  style={{
+                    textAlign: "center",
+                    fontSize: "13px",
+                    height: "34px",
+                    lineHeight: "34px",
+                    borderRadius: "18px",
+                    fontWeight: isToday ? "bold" : "normal",
+                    backgroundColor: isSelected ? "#e6f7ff" : "transparent",
+                    color: isCurrentMonth ? "#000" : "#ccc",
+                    border: isSelected ? "2px solid #1890ff" : "none",
+                    cursor: "pointer"
+                  }}
+                >
+                  {date.format("D")}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
       {/* Scrollable multi-day detail */}
       <div style={{ height: "60vh", overflowY: "auto", paddingBottom: "12px" }}>
