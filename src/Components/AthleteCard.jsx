@@ -1,5 +1,5 @@
-import React from "react";
-import { Card } from "antd";
+import React, { useEffect, useState } from "react";
+import { Card, Spin } from "antd";
 import IconButton from "@mui/material/IconButton";
 import { Avatar } from "antd";
 import Divider from "@mui/material/Divider";
@@ -14,85 +14,101 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function AthleteCard ({customer , workouts = []} ) {
   
-  const sessionData = {
-    labels: ['Swim', 'Bike', 'Run', 'Strength'],
-    datasets: [
-      {
-        label: '# of Sessions',
-        data: [2, 3, 1, 1],
-        backgroundColor: ['#36A2EB', '#FFCE56', '#FF6384', '#4BC0C0'],
-        borderWidth: 1,
-      },
-    ],
-  };
+  const [summary, setSummary] = useState(null);
 
-  const timeData = {
-    labels: ['Swim', 'Bike', 'Run', 'Strength'],
-    datasets: [
-      {
-        label: '% of Time',
-        data: [20, 40, 15, 25],
-        backgroundColor: ['#36A2EB', '#FFCE56', '#FF6384', '#4BC0C0'],
-        borderWidth: 1,
-      },
-    ],
-  };
+  useEffect(() => {
+    console.log("Processing workouts:", workouts);
+    if (!workouts || workouts.length === 0) return;
 
-  const sevenDaysAgo = dayjs().subtract(7, "day").startOf("day");
+    const sevenDaysAgo = dayjs().subtract(30, "day").startOf("day");
+    const disciplineHours = { Swim: 0, Bike: 0, Run: 0, Strength: 0 };
+    const disciplineDistance = { Swim: 0, Bike: 0, Run: 0 };
+    const sessionCounts = { Swim: 0, Bike: 0, Run: 0, Strength: 0 };
 
-  const disciplineHours = { Swim: 0, Bike: 0, Run: 0, Strength: 0 };
+    workouts.forEach((workout) => {
+      if (!workout.WorkoutType || !workout.WorkoutDateTime) return;
 
-  workouts.forEach((workout) => {
-    const workoutDate = dayjs(workout.WorkoutDateTime);
-    if (workoutDate.isSameOrAfter(sevenDaysAgo, "day")) {
+      const workoutDate = dayjs(workout.WorkoutDateTime);
+      if (!workoutDate.isValid()) return;
+      if (!workoutDate.isSameOrAfter(sevenDaysAgo, "day")) return;
+
       let discipline = "";
-      if (workout.WorkoutType?.toLowerCase().includes("swim")) discipline = "Swim";
-      else if (workout.WorkoutType?.toLowerCase().includes("bike") || workout.WorkoutType?.toLowerCase().includes("ride")) discipline = "Bike";
-      else if (workout.WorkoutType?.toLowerCase().includes("run")) discipline = "Run";
-      else if (workout.WorkoutType?.toLowerCase().includes("strength")) discipline = "Strength";
+      const typeLower = workout.WorkoutType.toLowerCase();
 
-      const duration = (workout.WorkoutMovingTime || 0) / 3600; // seconds to hours
+      if (/swim/i.test(typeLower)) discipline = "Swim";
+      else if (/bike|ride|virtualride/i.test(typeLower)) discipline = "Bike";
+      else if (/run/i.test(typeLower)) discipline = "Run";
+      else if (/strength|gym|weights/i.test(typeLower)) discipline = "Strength";
+      else return;
+
+      const duration = Number(workout.WorkoutMovingTime || 0) / 3600;
+      const distance = Number(workout.WorkoutDistance || 0) / 1000;
+
+      if (!Number.isFinite(duration) || !Number.isFinite(distance)) return;
+
       if (disciplineHours.hasOwnProperty(discipline)) {
         disciplineHours[discipline] += duration;
+        sessionCounts[discipline] += 1;
       }
-    }
-  });
-
-  const disciplineDistance = { Swim: 0, Bike: 0, Run: 0 };
-
-  workouts.forEach((workout) => {
-    const workoutDate = dayjs(workout.WorkoutDateTime);
-    if (workoutDate.isSameOrAfter(sevenDaysAgo, "day")) {
-      let discipline = "";
-      if (workout.WorkoutType?.toLowerCase().includes("swim")) discipline = "Swim";
-      else if (workout.WorkoutType?.toLowerCase().includes("bike") || workout.WorkoutType?.toLowerCase().includes("ride")) discipline = "Bike";
-      else if (workout.WorkoutType?.toLowerCase().includes("run")) discipline = "Run";
-
-      const distance = (workout.WorkoutDistance || 0) / 1000; // meters to km
       if (disciplineDistance.hasOwnProperty(discipline)) {
         disciplineDistance[discipline] += distance;
       }
-    }
-  });
+    });
 
-  const sessionCounts = { Swim: 0, Bike: 0, Run: 0, Strength: 0 };
+    setSummary({ disciplineHours, disciplineDistance, sessionCounts });
+  }, [workouts]);
 
-  workouts.forEach((workout) => {
-    const workoutDate = dayjs(workout.WorkoutDateTime);
-    if (workoutDate.isSameOrAfter(sevenDaysAgo, "day")) {
-      let discipline = "";
-      if (workout.WorkoutType?.toLowerCase().includes("swim")) discipline = "Swim";
-      else if (workout.WorkoutType?.toLowerCase().includes("bike") || workout.WorkoutType?.toLowerCase().includes("ride")) discipline = "Bike";
-      else if (workout.WorkoutType?.toLowerCase().includes("run")) discipline = "Run";
-      else if (workout.WorkoutType?.toLowerCase().includes("strength")) discipline = "Strength";
-
-      if (sessionCounts.hasOwnProperty(discipline)) {
-        sessionCounts[discipline] += 1;
+  const sessionData = summary
+    ? {
+        labels: ['Swim', 'Bike', 'Run', 'Strength'],
+        datasets: [
+          {
+            label: '# of Sessions',
+            data: [
+              summary.sessionCounts.Swim,
+              summary.sessionCounts.Bike,
+              summary.sessionCounts.Run,
+              summary.sessionCounts.Strength,
+            ],
+            backgroundColor: ['#36A2EB', '#FFCE56', '#FF6384', '#4BC0C0'],
+            borderWidth: 1,
+          },
+        ],
       }
-    }
-  });
+    : { labels: [], datasets: [] };
+
+  const timeData = summary
+    ? {
+        labels: ['Swim', 'Bike', 'Run', 'Strength'],
+        datasets: [
+          {
+            label: '% of Time',
+            data: (() => {
+              const total =
+                summary.disciplineHours.Swim +
+                summary.disciplineHours.Bike +
+                summary.disciplineHours.Run +
+                summary.disciplineHours.Strength;
+              return total > 0
+                ? [
+                    (summary.disciplineHours.Swim / total) * 100,
+                    (summary.disciplineHours.Bike / total) * 100,
+                    (summary.disciplineHours.Run / total) * 100,
+                    (summary.disciplineHours.Strength / total) * 100,
+                  ]
+                : [0, 0, 0, 0];
+            })(),
+            backgroundColor: ['#36A2EB', '#FFCE56', '#FF6384', '#4BC0C0'],
+            borderWidth: 1,
+          },
+        ],
+      }
+    : { labels: [], datasets: [] };
+
+  const isLoading = workouts.length > 0 && !summary;
 
     return (
+      <Spin spinning={isLoading}>
       <Card className="maincardDiv">
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <IconButton className="mainavatarIcon">
@@ -120,21 +136,21 @@ export default function AthleteCard ({customer , workouts = []} ) {
             </thead>
             <tbody>
               <tr>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{disciplineHours.Swim.toFixed(1)} hrs</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{disciplineHours.Bike.toFixed(1)} hrs</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{disciplineHours.Run.toFixed(1)} hrs</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{disciplineHours.Strength.toFixed(1)} hrs</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{summary?.disciplineHours.Swim.toFixed(1) || "0.0"} hrs</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{summary?.disciplineHours.Bike.toFixed(1) || "0.0"} hrs</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{summary?.disciplineHours.Run.toFixed(1) || "0.0"} hrs</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{summary?.disciplineHours.Strength.toFixed(1) || "0.0"} hrs</td>
               </tr>
               <tr>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{sessionCounts.Swim}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{sessionCounts.Bike}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{sessionCounts.Run}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{sessionCounts.Strength}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{summary?.sessionCounts.Swim || 0}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{summary?.sessionCounts.Bike || 0}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{summary?.sessionCounts.Run || 0}</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{summary?.sessionCounts.Strength || 0}</td>
               </tr>
               <tr>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{disciplineDistance.Swim.toFixed(1)} km</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{disciplineDistance.Bike.toFixed(1)} km</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{disciplineDistance.Run.toFixed(1)} km</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{summary?.disciplineDistance.Swim.toFixed(1) || "0.0"} km</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{summary?.disciplineDistance.Bike.toFixed(1) || "0.0"} km</td>
+                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{summary?.disciplineDistance.Run.toFixed(1) || "0.0"} km</td>
                 <td style={{ border: '1px solid #ccc', padding: '8px' }}>–</td>
               </tr>
             </tbody>
@@ -143,32 +159,37 @@ export default function AthleteCard ({customer , workouts = []} ) {
         <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
           <div style={{ flex: '1 1 250px', minWidth: '250px' }}>
             <h4 style={{ textAlign: 'center' }}>Session Count</h4>
-            <Pie
-              data={sessionData}
-              options={{
-                plugins: {
-                  legend: { display: true },
-                  tooltip: { enabled: true },
-                  datalabels: { display: true }
-                },
-              }}
-            />
+            {sessionData?.datasets?.[0]?.data?.some(val => val > 0) && (
+              <Pie
+                data={sessionData}
+                options={{
+                  plugins: {
+                    legend: { display: true },
+                    tooltip: { enabled: true },
+                    datalabels: { display: true }
+                  },
+                }}
+              />
+            )}
           </div>
           <div style={{ flex: '1 1 250px', minWidth: '250px' }}>
             <h4 style={{ textAlign: 'center' }}>Time Distribution</h4>
-            <Pie
-              data={timeData}
-              options={{
-                plugins: {
-                  legend: { display: true },
-                  tooltip: { enabled: true },
-                  datalabels: { display: true }
-                },
-              }}
-            />
+            {timeData?.datasets?.[0]?.data?.some(val => val > 0) && (
+              <Pie
+                data={timeData}
+                options={{
+                  plugins: {
+                    legend: { display: true },
+                    tooltip: { enabled: true },
+                    datalabels: { display: true }
+                  },
+                }}
+              />
+            )}
           </div>
         </div>
       </Card>
+      </Spin>
     );
   
 }
