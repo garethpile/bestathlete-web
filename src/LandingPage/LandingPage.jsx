@@ -3,6 +3,7 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { Auth } from "aws-amplify";
 import RouterConfig from "../routes/RouterConfig";
+import Administration from "../Administration/Administration";
 import {
   customerGetByIdCustomer,
 } from "../services/customerServices";
@@ -123,6 +124,8 @@ const LandingPage = () => {
       metrics3DaysSleep={metrics3DaysSleep}
       userExists={userExists}
       refreshCustomerAvailabilities={refreshCustomerAvailabilities}
+      showAdministration={true}
+      AdministrationComponent={Administration}
     />
   );
 };
