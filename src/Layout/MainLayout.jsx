@@ -23,6 +23,7 @@ const MainLayout = () => {
     if (location.pathname.startsWith('/thirdparty')) return 'thirdparty';
     if (location.pathname.startsWith('/calendar')) return 'calendar';
     if (location.pathname.startsWith('/workouts')) return 'workouts';
+    if (location.pathname.startsWith('/administration')) return 'administration';
     return 'dashboard';
   };
 
@@ -93,6 +94,10 @@ const MainLayout = () => {
 
               <Menu.Item key="thirdparty" icon={<ApiOutlined />}>
                 <Link to="/thirdparty">ThirdParty</Link>
+              </Menu.Item>
+              
+             <Menu.Item key="administration" icon={<DatabaseOutlined />}>
+                <Link to="/administration">Administration</Link>
               </Menu.Item>
 
               <Menu.Item key="profile" icon={<UserOutlined />}>
