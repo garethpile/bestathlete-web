@@ -52,6 +52,28 @@ export const createCustomer = /* GraphQL */ `
         ApplicationUserOauthTokenExpiryDate
         __typename
       }
+      CustomerTrainingBenchmarks {
+        Last30DaysSwimDuration
+        Last30DaysSwimDistance
+        Last30DaysBikeDuration
+        Last30DaysBikeDistance
+        Last30DaysRunDuration
+        Last30DaysRunDistance
+        Last30DaysStrengthDuration
+        Last30DaysTSS
+        Last30DaysLongestSwimDistance
+        Last30DaysLongestBikeDistance
+        Last30DaysLongestRunDistance
+        Last7DaysSwimDuration
+        Last7DaysSwimDistance
+        Last7DaysBikeDuration
+        Last7DaysBikeDistance
+        Last7DaysRunDuration
+        Last7DaysRunDistance
+        Last7DaysStrengthDuration
+        Last7DaysTSS
+        __typename
+      }
       createdAt
       updatedAt
       __typename
@@ -109,6 +131,28 @@ export const updateCustomer = /* GraphQL */ `
         ApplicationUserOauthTokenExpiryDate
         __typename
       }
+      CustomerTrainingBenchmarks {
+        Last30DaysSwimDuration
+        Last30DaysSwimDistance
+        Last30DaysBikeDuration
+        Last30DaysBikeDistance
+        Last30DaysRunDuration
+        Last30DaysRunDistance
+        Last30DaysStrengthDuration
+        Last30DaysTSS
+        Last30DaysLongestSwimDistance
+        Last30DaysLongestBikeDistance
+        Last30DaysLongestRunDistance
+        Last7DaysSwimDuration
+        Last7DaysSwimDistance
+        Last7DaysBikeDuration
+        Last7DaysBikeDistance
+        Last7DaysRunDuration
+        Last7DaysRunDistance
+        Last7DaysStrengthDuration
+        Last7DaysTSS
+        __typename
+      }
       createdAt
       updatedAt
       __typename
@@ -164,6 +208,28 @@ export const deleteCustomer = /* GraphQL */ `
         ApplicationUserOauthSecret
         ApplicationUserOauthRefreshToken
         ApplicationUserOauthTokenExpiryDate
+        __typename
+      }
+      CustomerTrainingBenchmarks {
+        Last30DaysSwimDuration
+        Last30DaysSwimDistance
+        Last30DaysBikeDuration
+        Last30DaysBikeDistance
+        Last30DaysRunDuration
+        Last30DaysRunDistance
+        Last30DaysStrengthDuration
+        Last30DaysTSS
+        Last30DaysLongestSwimDistance
+        Last30DaysLongestBikeDistance
+        Last30DaysLongestRunDistance
+        Last7DaysSwimDuration
+        Last7DaysSwimDistance
+        Last7DaysBikeDuration
+        Last7DaysBikeDistance
+        Last7DaysRunDuration
+        Last7DaysRunDistance
+        Last7DaysStrengthDuration
+        Last7DaysTSS
         __typename
       }
       createdAt
