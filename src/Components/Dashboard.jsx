@@ -66,7 +66,7 @@ const Dashboard = ({
     <div className="bodyDiv" style={{ padding: "16px" }}>
       <Row gutter={[16, 16]}>
         <Col xs={24}>
-          <AthleteCard customer={customer} />
+          <AthleteCard customer={customer} workouts={workouts}/>
         </Col>
 
         <Col xs={24}>
