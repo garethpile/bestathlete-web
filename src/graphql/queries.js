@@ -590,6 +590,23 @@ export const customersByIdCustomer = /* GraphQL */ `
         Country
         createdAt
         updatedAt
+        TrainingDays {
+          MondayTrain
+          MondayTrainHours
+          TuesdayTrain
+          TuesdayTrainHours
+          WednesdayTrain
+          WednesdayTrainHours
+          ThursdayTrain
+          ThursdayTrainHours
+          FridayTrain
+          FridayTrainHours
+          SaturdayTrain
+          SaturdayTrainHours
+          SundayTrain
+          SundayTrainHours
+          __typename
+      }
         __typename
       }
       nextToken

@@ -1,12 +1,9 @@
 import React from "react";
-import { Card } from "antd";
+import { Card, Avatar, Select, Button } from "antd";
 import IconButton from "@mui/material/IconButton";
-import { Avatar } from "antd";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { Select } from "antd";
-import { Button } from "antd";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import PoolIcon from "@mui/icons-material/Pool";
@@ -14,7 +11,7 @@ import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import PedalBikeIcon from "@mui/icons-material/PedalBike";
 import moment from "moment";
 import { API, graphqlOperation } from "aws-amplify";
-import { updateStravaActivity } from "../Apollo/queries";
+import { updateWorkout } from "../graphql/mutations.js";
 
 const { Option } = Select;
 
@@ -34,9 +31,10 @@ function secondsToHms(d) {
   var m = Math.floor((d % 3600) / 60);
   var s = Math.floor((d % 3600) % 60);
 
-  var hDisplay = h > 0 ? h + (h === 1 ? ":" : ":") : "";
-  var mDisplay = m > 0 ? m + (m === 1 ? ":" : ":") : "";
-  var sDisplay = s > 0 ? s + (s === 1 ? ":" : "") : "";
+  var hDisplay = h > 0 ? h + ":" : "";
+  var mDisplay =
+    m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : h > 0 ? "00:" : m > 0 ? m + ":" : "";
+  var sDisplay = s < 10 ? "0" + s : s;
   return hDisplay + mDisplay + sDisplay;
 }
 
@@ -89,20 +87,23 @@ export default function WorkoutNoFeedbackCard({ workout }) {
     try {
       if (!dropdownActivityBody || !dropdownActivityEffort) {
         alert("Please Select Required Fields");
+        return;
       }
-      console.log("Strava ActivityAthleteBody: ", dropdownActivityBody);
+      //console.log("Workout WorkoutPhysicalLevel: ", dropdownActivityBody);
 
       const updateActivity = await API.graphql(
-        graphqlOperation(updateStravaActivity, {
+        graphqlOperation(updateWorkout, {
           id: id,
-          StravaActivityAthleteBody: dropdownActivityBody,
-          StravaActivityAthleteEffort: dropdownActivityEffort,
-          StravaActivityAthleteFeedback: true,
-          _version: workout.version,
+          WorkoutPhysicalLevel: dropdownActivityBody,
+          WorkoutRPE: dropdownActivityEffort,
+          WorkoutAthleteFeedback: true,
+  
         })
       );
       console.log("updateActivity response: ", updateActivity);
-      workout.fetcchActivity(workout.StravaActivityOwnerId);
+      if (typeof workout.fetchActivity === "function") {
+        workout.fetchActivity(workout.StravaActivityOwnerId);
+      }
     } catch (err) {
       console.log("Error updating activity", err);
     }
@@ -110,53 +111,39 @@ export default function WorkoutNoFeedbackCard({ workout }) {
 
   return (
     <Card className="maincardDiv">
-      <div className="activityDiv">
-        <span className="activitySpan">
-          <IconButton className="activityAvator">
-            <Avatar shape="circle" size={60}>
-              {iconDictionary[workout.WorkoutType] || workout.WorkoutType}
-            </Avatar>
-          </IconButton>
-        </span>
 
-        <span className="activityHead">
-          <p>{workout.WorkoutDescription}</p>
-          <p className="metricValue">
-            {moment(new Date(workout.WorkoutDateTime)).format("DD/MM/YYYY HH:MM")}
-          </p>
-        </span>
-      </div>
 
-      <div className="metricDiv">
-        <span className="metricSpan">
-          <p className="metricHead">Distance(km)</p>
-          <p className="metricValue">
+      <div className="metricDiv" style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 24 }}>
+        <div className="metricRow">
+          <span className="metricHead" style={{ fontWeight: "bold" }}>Distance:</span>{" "}
+          <span className="metricValue">
             {workout.WorkoutDistance != null
               ? (workout.WorkoutDistance / 1000).toFixed(2)
               : "-"}
-          </p>
-        </span>
-        <span className="metricSpan">
-          <p className="metricHead">Time</p>
-          <p className="metricValue">{secondsToHms(workout.WorkoutMovingTime)}</p>
-        </span>
-        <span className="metricSpan">
-          <p className="metricHead">Pace</p>
-          <p className="metricValue">
+            {" km"}
+          </span>
+        </div>
+        <div className="metricRow">
+          <span className="metricHead" style={{ fontWeight: "bold" }}>Time:</span>{" "}
+          <span className="metricValue">{secondsToHms(workout.WorkoutMovingTime)}</span>
+        </div>
+        <div className="metricRow">
+          <span className="metricHead" style={{ fontWeight: "bold" }}>Pace:</span>{" "}
+          <span className="metricValue">
             {MetresPerSecondToMinsPerKm(
               workout.WorkoutAverageSpeed,
               workout.WorkoutType
             )}
-          </p>
-        </span>
-        <span className="metricSpan">
-          <p className="metricHead">Avg HR</p>
-          <p className="metricValue">
+          </span>
+        </div>
+        <div className="metricRow">
+          <span className="metricHead" style={{ fontWeight: "bold" }}>Avg HR:</span>{" "}
+          <span className="metricValue">
             {workout.WorkoutAverageHeartRate != null
               ? Math.round(workout.WorkoutAverageHeartRate)
               : "-"}
-          </p>
-        </span>
+          </span>
+        </div>
       </div>
       <Divider light />
       <Box padding={2}>

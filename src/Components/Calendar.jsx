@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { EnvironmentOutlined, FireOutlined, ThunderboltOutlined, HeartOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWater, faBicycle, faRunning, faDumbbell } from '@fortawesome/free-solid-svg-icons';
+import WorkoutNoFeedbackCard from "./WorkoutNoFeedbackCard";
 
 const getColorByWorkoutType = (type) => {
   const typeLower = (type || "").toLowerCase();
@@ -60,7 +61,8 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
     const dateKey = value.format("YYYY-MM-DD");
     const listData = workoutMap[dateKey] || [];
 
-    const phase = aRace ? getPhaseForDate(value, aRace) : null;
+    // Removed phase rendering from here as per instructions
+
     const availability = availabilities.find((entry) =>
       dayjs(value).isSameOrAfter(dayjs(entry.UnavailableStartDate), "day") &&
       dayjs(value).isSameOrBefore(dayjs(entry.UnavailableEndDate), "day")
@@ -69,21 +71,6 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
 
     return (
       <div style={isToday ? { backgroundColor: "#fff9db", padding: "4px", borderRadius: "4px" } : {}}>
-        {phase && (
-          <div
-            style={{
-              backgroundColor: phase.color,
-              color: "#000",
-              padding: "2px 4px",
-              fontSize: "10px",
-              textAlign: "center",
-              borderRadius: "2px",
-              marginBottom: "4px"
-            }}
-          >
-            {phase.name}
-          </div>
-        )}
         {availability && (
           <div
             style={{
@@ -146,8 +133,6 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
   // Selected date state for horizontal date selector
   const [selectedDate, setSelectedDate] = useState(dayjs());
 
-  // Toggle state for month grid
-  const [showMonthGrid, setShowMonthGrid] = useState(true);
 
   return (
     <Card className="maincardDiv">
@@ -163,19 +148,36 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "0 16px 8px 16px" }}>
-          <button
-            onClick={() => setShowMonthGrid(!showMonthGrid)}
-            style={{
-              fontSize: "16px",
-              padding: "2px 6px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              backgroundColor: "#f0f0f0",
-              cursor: "pointer"
-            }}
-          >
-            {showMonthGrid ? "▲" : "▼"}
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <button
+              onClick={() => setSelectedDate(selectedDate.subtract(7, "day"))}
+              style={{
+                fontSize: "16px",
+                padding: "2px 6px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                backgroundColor: "#f0f0f0",
+                cursor: "pointer"
+              }}
+              aria-label="Previous week"
+            >
+              &#8592;
+            </button>
+            <button
+              onClick={() => setSelectedDate(selectedDate.add(7, "day"))}
+              style={{
+                fontSize: "16px",
+                padding: "2px 6px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                backgroundColor: "#f0f0f0",
+                cursor: "pointer"
+              }}
+              aria-label="Next week"
+            >
+              &#8594;
+            </button>
+          </div>
           <input
             type="month"
             value={selectedDate.format("YYYY-MM")}
@@ -191,71 +193,124 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
             }}
           />
         </div>
+        {/* Always show week grid */}
+        {(() => {
+          // Get start of the current week (Monday) based on selectedDate
+          const startOfWeek = selectedDate.startOf("week").add(1, "day");
+          const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+          // Build array for each day in current week
+          const weekDays = Array.from({ length: 7 }, (_, i) => startOfWeek.add(i, "day"));
 
-        {showMonthGrid && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", padding: "0", marginBottom: "8px" }}>
-            {Array.from({ length: 35 }, (_, i) => {
-              const startOfCalendar = dayjs().startOf("month").startOf("week");
-              const date = startOfCalendar.add(i, "day");
-              const isSelected = date.isSame(selectedDate, "day");
-              const isToday = date.isSame(dayjs(), "day");
-              const isCurrentMonth = date.month() === dayjs().month();
-
-              return (
-                <div
-                  key={i}
-                  onClick={() => {
-                    setSelectedDate(date);
-                    const scrollIndex = i;
-                    setTimeout(() => {
-                      if (dayRefs.current[scrollIndex]) {
-                        dayRefs.current[scrollIndex].scrollIntoView({ behavior: "smooth", block: "start" });
-                      }
-                    }, 0);
-                  }}
-                  style={{
-                    textAlign: "center",
-                    fontSize: "13px",
-                    height: "34px",
-                    lineHeight: "34px",
-                    borderRadius: "18px",
-                    fontWeight: isToday ? "bold" : "normal",
-                    backgroundColor: isSelected ? "#e6f7ff" : "transparent",
-                    color: isCurrentMonth ? "#000" : "#ccc",
-                    border: isSelected ? "2px solid #1890ff" : "none",
-                    cursor: "pointer"
-                  }}
-                >
-                  {date.format("D")}
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-      {/* Scrollable multi-day detail */}
-      <div style={{ height: "60vh", overflowY: "auto", paddingBottom: "12px" }}>
-        {Array.from({ length: 28 }, (_, i) => {
-          const date = dayjs().startOf("week").subtract(7, "day").add(i, "day");
           return (
-            <div
-              key={date.format("YYYY-MM-DD")}
-              ref={(el) => (dayRefs.current[i] = el)}
-              style={{
-                backgroundColor: date.isSame(selectedDate, "day") ? "#fff9db" : "#ffffff",
-                border: "1px solid #ccc",
-                borderRadius: "4px",
-                marginBottom: "8px",
-                padding: "8px"
-              }}
-            >
-              <div style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "4px" }}>
-                {date.format("dddd, MMMM D, YYYY")}
+            <div style={{ width: "100%", marginBottom: "8px" }}>
+              {/* Headings */}
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(7, 1fr)",
+                marginBottom: "6px",
+                textAlign: "center",
+                fontWeight: "bold"
+              }}>
+                {daysOfWeek.map((day, idx) => {
+                  const date = weekDays[idx];
+                  const phase = aRace ? getPhaseForDate(date, aRace) : null;
+                  return (
+                    <div
+                      key={day}
+                      style={{
+                        fontSize: "14px",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center"
+                      }}
+                    >
+                      <span>{day}</span>
+                      {phase && (
+                        <span
+                          style={{
+                            fontSize: "11px",
+                            background: phase.color,
+                            color: "#333",
+                            borderRadius: "8px",
+                            padding: "2px 8px",
+                            marginTop: "3px",
+                            minWidth: "38px",
+                            textAlign: "center",
+                            fontWeight: 500,
+                            letterSpacing: "0.2px"
+                          }}
+                        >
+                          {phase.name}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-              {dateCellRender(date)}
+              {/* Dates */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)" }}>
+                {weekDays.map((date, i) => {
+                  const isSelected = date.isSame(selectedDate, "day");
+                  const isToday = date.isSame(dayjs(), "day");
+                  return (
+                    <div
+                      key={i}
+                      onClick={() => setSelectedDate(date)}
+                      style={{
+                        textAlign: "center",
+                        fontSize: "17px",
+                        fontWeight: isToday ? "bold" : "normal",
+                        borderRadius: "18px",
+                        backgroundColor: isSelected ? "#e6f7ff" : "transparent",
+                        border: isSelected ? "2px solid #1890ff" : "none",
+                        color: "#222",
+                        padding: "7px",
+                        margin: "2px",
+                        cursor: "pointer",
+                        transition: "background .15s"
+                      }}
+                    >
+                      {date.format("D")}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           );
-        })}
+        })()}
+      </div>
+      <style>{`
+        .scrollable-detail {
+          height: 60vh;
+          overflow-y: auto;
+          padding-bottom: 12px;
+          width: 33%;
+          margin: 0 auto;
+        }
+        @media (max-width: 600px) {
+          .scrollable-detail {
+            width: 100%;
+          }
+        }
+      `}</style>
+      {/* Scrollable multi-day detail */}
+      <div className="scrollable-detail">
+        <div
+          key={selectedDate.format("YYYY-MM-DD")}
+          ref={(el) => (dayRefs.current[0] = el)}
+          style={{
+            backgroundColor: selectedDate.isSame(selectedDate, "day") ? "#fff9db" : "#ffffff",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+            marginBottom: "8px",
+            padding: "8px"
+          }}
+        >
+          <div style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "4px" }}>
+            {selectedDate.format("dddd, MMMM D, YYYY")}
+          </div>
+          {dateCellRender(selectedDate)}
+        </div>
       </div>
       <Modal
         title={
@@ -283,10 +338,7 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
         footer={null}
       >
         {selectedWorkout && (
-          <div>
-            <p><strong>Distance:</strong> {selectedWorkout.WorkoutDistance ? `${(selectedWorkout.WorkoutDistance / 1000).toFixed(2)} km` : "N/A"}</p>
-            <p><strong>Duration:</strong> {selectedWorkout.WorkoutMovingTime ? `${Math.round(selectedWorkout.WorkoutMovingTime / 60)} min` : "N/A"}</p>
-          </div>
+          <WorkoutNoFeedbackCard workout={selectedWorkout} />
         )}
       </Modal>
     </Card>
