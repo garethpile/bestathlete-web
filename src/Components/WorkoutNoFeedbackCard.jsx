@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Avatar, Select, Button } from "antd";
+import Slider from "@mui/material/Slider";
 import IconButton from "@mui/material/IconButton";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
@@ -12,6 +13,7 @@ import PedalBikeIcon from "@mui/icons-material/PedalBike";
 import moment from "moment";
 import { API, graphqlOperation } from "aws-amplify";
 import { updateWorkout } from "../graphql/mutations.js";
+import Modal from "@mui/material/Modal";
 
 const { Option } = Select;
 
@@ -80,8 +82,25 @@ function MinPerKmFraction(MinPerKm, StravaActivityType) {
 export default function WorkoutNoFeedbackCard({ workout }) {
   console.log("WorkoutNoFeedbackCard Component loading .... workout: ", workout);
 
+  const effortLabels = {
+    1: "Super easy",
+    2: "Easy",
+    3: "Smooth",
+    4: "Moderate",
+    5: "Medium",
+    6: "Slightly taxing",
+    7: "Hard",
+    8: "Really tough",
+    9: "Extremely tough",
+    10: "All out effort",
+  };
+
   const [dropdownActivityEffort, setDropdownActivityEffort] = React.useState("");
   const [dropdownActivityBody, setDropdownActivityBody] = React.useState("");
+  const [dropdownRunType, setDropdownRunType] = React.useState("");
+  const [painModalOpen, setPainModalOpen] = React.useState(false);
+  const [painSeverity, setPainSeverity] = React.useState(0);
+  const [painLocations, setPainLocations] = React.useState({});
 
   async function updateActivity(id) {
     try {
@@ -97,6 +116,7 @@ export default function WorkoutNoFeedbackCard({ workout }) {
           WorkoutPhysicalLevel: dropdownActivityBody,
           WorkoutRPE: dropdownActivityEffort,
           WorkoutAthleteFeedback: true,
+          WorkoutRunType: dropdownRunType,
   
         })
       );
@@ -147,46 +167,99 @@ export default function WorkoutNoFeedbackCard({ workout }) {
       </div>
       <Divider light />
       <Box padding={2}>
-        <Typography className="dropDownLabel">How was it?</Typography>
-        <Select
-          value={dropdownActivityEffort}
-          onChange={(e) => setDropdownActivityEffort(e)}
-          placeholder="ActivityEffort"
-          style={{ width: "100%" }}
-        >
-          <Option selected disabled value="">
-            Please Select ActivityEffort
-          </Option>
-          <Option value="SuperEasy">Super easy</Option>
-          <Option value="GoodWorkout">Good Workout</Option>
-          <Option value="SolidWorkout">Solid workout</Option>
-          <Option value="Struggled">Struggled</Option>
-          <Option value="Broke">Broke me!</Option>
-        </Select>
+        <Typography className="dropDownLabel">Run Type</Typography>
+        <Box display="flex" flexWrap="wrap" gap={1} mt={1}>
+          {[
+            "Moderate",
+            "Fartlek",
+            "Intervals",
+            "Hill Repeats",
+            "Tempo Run",
+            "Threshold",
+            "Cruise Intervals",
+            "Strides",
+            "Progression Run",
+            "Pace Run"
+          ].map((type) => (
+            <Button
+              key={type}
+              size="small"
+              type={dropdownRunType === type ? "primary" : "default"}
+              onClick={() => setDropdownRunType(type)}
+              style={{
+                borderRadius: 20,
+                padding: "4px 12px",
+                fontWeight: "bold"
+              }}
+            >
+              {type}
+            </Button>
+          ))}
+        </Box>
       </Box>
-      <Divider light />
       <Box padding={2}>
-        <Typography className="dropDownLabel">How's the body?</Typography>
-        <Select
-          value={dropdownActivityBody}
-          onChange={(e) => setDropdownActivityBody(e)}
-          placeholder="BodyFeedback"
-          style={{ width: "100%" }}
-        >
-          <Option selected disabled value="">
-            Please Select BodyFeedback
-          </Option>
-          <Option value="Awesome">Awesome!</Option>
-          <Option value="Good">Feels good!</Option>
-          <Option value="Tired">Quite tired</Option>
-          <Option value="Fatigued">Seriously fatigued!</Option>
-          <Option value="Sore">I'm sore!</Option>
-        </Select>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography className="dropDownLabel">Any physical pain?</Typography>
+          <Typography
+            style={{ color: "#1890ff", cursor: "pointer" }}
+            onClick={() => setPainModalOpen(true)}
+          >
+            Update
+          </Typography>
+        </Box>
+      </Box>
+      <Box padding={2}>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography className="dropDownLabel">Perceived effort?</Typography>
+          <Typography variant="body2" fontWeight="bold">
+            {effortLabels[dropdownActivityEffort] || ""}
+          </Typography>
+        </Box>
+        <Slider
+          value={dropdownActivityEffort ? Number(dropdownActivityEffort) : 0}
+          onChange={(e, val) => setDropdownActivityEffort(val.toString())}
+          step={1}
+          min={1}
+          max={10}
+          valueLabelDisplay="off"
+        />
       </Box>
       <Divider light />
       <Box mt={1}>
         <Button onClick={() => updateActivity(workout.id)}>Save</Button>
       </Box>
+      <Modal open={painModalOpen} onClose={() => setPainModalOpen(false)}>
+        <Box sx={{ background: "#fff", p: 4, maxWidth: 400, margin: "10vh auto", borderRadius: 2 }}>
+          <Typography variant="h6" gutterBottom>Pain and Discomfort</Typography>
+          <Typography gutterBottom>Severity of pain</Typography>
+          <Slider
+            min={0}
+            max={10}
+            value={painSeverity}
+            onChange={(e, val) => setPainSeverity(val)}
+          />
+          <Typography gutterBottom mt={2}>What locations?</Typography>
+          <Box display="flex" flexDirection="column" gap={1}>
+            {["Achilles", "Ankle", "Calf", "Foot", "Hamstring", "Hip", "Knee", "Plantar"].map(part => (
+              <Box key={part} display="flex" alignItems="center" justifyContent="space-between">
+                <Typography>{part}</Typography>
+                <Box>
+                  <Button size="small" onClick={() =>
+                    setPainLocations(prev => ({ ...prev, [part]: { ...prev[part], L: !prev[part]?.L } }))
+                  } type={painLocations[part]?.L ? "primary" : "default"}>L</Button>
+                  <Button size="small" onClick={() =>
+                    setPainLocations(prev => ({ ...prev, [part]: { ...prev[part], R: !prev[part]?.R } }))
+                  } type={painLocations[part]?.R ? "primary" : "default"} style={{ marginLeft: 4 }}>R</Button>
+                </Box>
+              </Box>
+            ))}
+          </Box>
+          <Box mt={3} display="flex" justifyContent="flex-end" gap={1}>
+            <Button onClick={() => setPainModalOpen(false)}>Cancel</Button>
+            <Button type="primary" onClick={() => setPainModalOpen(false)}>Apply</Button>
+          </Box>
+        </Box>
+      </Modal>
     </Card>
   );
 }

@@ -102,12 +102,20 @@ export const workoutUpdate = async (updatedFields) => {
     console.log("<workoutServices><workoutUpdate>: executing ...");
     console.log("<workoutServices><workoutUpdate>: updatedFields: ", updatedFields);
 
-    const result = await API.graphql(graphqlOperation(updateWorkout, { input: updatedFields }));
+    if (!updatedFields || !updatedFields.id) {
+      throw new Error("Missing required 'id' in updatedFields");
+    }
+
+    const cleanedInput = Object.fromEntries(
+      Object.entries(updatedFields).filter(([_, v]) => v !== undefined)
+    );
+
+    const result = await API.graphql(graphqlOperation(updateWorkout, { input: cleanedInput }));
     console.log("<workoutServices><workoutUpdate>: Result: ", result);
     return true;
 
   } catch (error) {
-    console.error('<workoutServices><workoutUpdate><Error><001>: Error updating workout data:', error);
+    console.error('<workoutServices><workoutUpdate><Error><001>: Error updating workout data:', JSON.stringify(error, null, 2));
     return false;
   }
 };
