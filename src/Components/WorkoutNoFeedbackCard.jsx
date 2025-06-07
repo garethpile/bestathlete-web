@@ -95,28 +95,37 @@ export default function WorkoutNoFeedbackCard({ workout }) {
     10: "All out effort",
   };
 
-  const [dropdownActivityEffort, setDropdownActivityEffort] = React.useState("");
-  const [dropdownActivityBody, setDropdownActivityBody] = React.useState("");
-  const [dropdownRunType, setDropdownRunType] = React.useState("");
+  const [dropdownActivityEffort, setDropdownActivityEffort] = React.useState(
+    workout.WorkoutRPE ? workout.WorkoutRPE.toString() : ""
+  );
+  const [dropdownActivityBody, setDropdownActivityBody] = React.useState(
+    workout.WorkoutPhysicalLevel !== undefined ? workout.WorkoutPhysicalLevel.toString() : ""
+  );
+  const [dropdownRunType, setDropdownRunType] = React.useState(
+    workout.WorkoutClassification || ""
+  );
   const [painModalOpen, setPainModalOpen] = React.useState(false);
-  const [painSeverity, setPainSeverity] = React.useState(0);
-  const [painLocations, setPainLocations] = React.useState({});
+  const [painSeverity, setPainSeverity] = React.useState(
+    workout.WorkoutPhysicalLevel || 0
+  );
+  const [painLocations, setPainLocations] = React.useState(
+    workout.WorkoutPhysicalLevelPain ? JSON.parse(workout.WorkoutPhysicalLevelPain) : {}
+  );
 
   async function updateActivity(id) {
     try {
-      if (!dropdownActivityBody || !dropdownActivityEffort) {
-        alert("Please Select Required Fields");
-        return;
-      }
       //console.log("Workout WorkoutPhysicalLevel: ", dropdownActivityBody);
 
       const updateActivity = await API.graphql(
         graphqlOperation(updateWorkout, {
-          id: id,
-          WorkoutPhysicalLevel: painSeverity,
-          WorkoutRPE: parseInt(dropdownActivityEffort, 10),
-          WorkoutAthleteFeedback: true,
-          WorkoutRunType: dropdownRunType,
+          input: {
+            id: id,
+            WorkoutPhysicalLevel: painSeverity || 0,
+            WorkoutRPE: parseInt(dropdownActivityEffort, 10) || 0,
+            WorkoutAthleteFeedback: 1,
+            WorkoutClassification: dropdownRunType,
+            WorkoutPhysicalLevelPain: JSON.stringify(painLocations),
+          }
         })
       );
       console.log("updateActivity response: ", updateActivity);
@@ -203,7 +212,7 @@ export default function WorkoutNoFeedbackCard({ workout }) {
             style={{ color: "#1890ff", cursor: "pointer" }}
             onClick={() => setPainModalOpen(true)}
           >
-            Update
+            {painSeverity > 0 ? `Level: ${painSeverity}` : "Update"}
           </Typography>
         </Box>
       </Box>
