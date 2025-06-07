@@ -113,11 +113,10 @@ export default function WorkoutNoFeedbackCard({ workout }) {
       const updateActivity = await API.graphql(
         graphqlOperation(updateWorkout, {
           id: id,
-          WorkoutPhysicalLevel: dropdownActivityBody,
-          WorkoutRPE: dropdownActivityEffort,
+          WorkoutPhysicalLevel: painSeverity,
+          WorkoutRPE: parseInt(dropdownActivityEffort, 10),
           WorkoutAthleteFeedback: true,
           WorkoutRunType: dropdownRunType,
-  
         })
       );
       console.log("updateActivity response: ", updateActivity);
@@ -231,7 +230,10 @@ export default function WorkoutNoFeedbackCard({ workout }) {
       <Modal open={painModalOpen} onClose={() => setPainModalOpen(false)}>
         <Box sx={{ background: "#fff", p: 4, maxWidth: 400, margin: "10vh auto", borderRadius: 2 }}>
           <Typography variant="h6" gutterBottom>Pain and Discomfort</Typography>
-          <Typography gutterBottom>Severity of pain</Typography>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Typography gutterBottom>Severity of pain</Typography>
+            <Typography fontWeight="bold">{painSeverity}</Typography>
+          </Box>
           <Slider
             min={0}
             max={10}
@@ -256,7 +258,15 @@ export default function WorkoutNoFeedbackCard({ workout }) {
           </Box>
           <Box mt={3} display="flex" justifyContent="flex-end" gap={1}>
             <Button onClick={() => setPainModalOpen(false)}>Cancel</Button>
-            <Button type="primary" onClick={() => setPainModalOpen(false)}>Apply</Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                setDropdownActivityBody(painSeverity.toString());
+                setPainModalOpen(false);
+              }}
+            >
+              Apply
+            </Button>
           </Box>
         </Box>
       </Modal>
