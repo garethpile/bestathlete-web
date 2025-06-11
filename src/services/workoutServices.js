@@ -110,6 +110,7 @@ export const workoutUpdate = async (updatedFields) => {
       Object.entries(updatedFields).filter(([_, v]) => v !== undefined)
     );
 
+    console.log("Cleaned input: ", cleanedInput);
     const result = await API.graphql(graphqlOperation(updateWorkout, { input: cleanedInput }));
     console.log("<workoutServices><workoutUpdate>: Result: ", result);
     return true;

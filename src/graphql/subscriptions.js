@@ -247,8 +247,10 @@ export const onCreateWorkout = /* GraphQL */ `
       WorkoutAverageCadence
       WorkoutAverageTemp
       WorkoutLocation
+      WorkoutClassification
       WorkoutRPE
       WorkoutPhysicalLevel
+      WorkoutPhysicalLevelPain
       WorkoutWeatherLevel
       WorkoutHydrationLevel
       WorkoutCaloriesEatenPerHour
@@ -283,8 +285,10 @@ export const onUpdateWorkout = /* GraphQL */ `
       WorkoutAverageCadence
       WorkoutAverageTemp
       WorkoutLocation
+      WorkoutClassification
       WorkoutRPE
       WorkoutPhysicalLevel
+      WorkoutPhysicalLevelPain
       WorkoutWeatherLevel
       WorkoutHydrationLevel
       WorkoutCaloriesEatenPerHour
@@ -319,8 +323,10 @@ export const onDeleteWorkout = /* GraphQL */ `
       WorkoutAverageCadence
       WorkoutAverageTemp
       WorkoutLocation
+      WorkoutClassification
       WorkoutRPE
       WorkoutPhysicalLevel
+      WorkoutPhysicalLevelPain
       WorkoutWeatherLevel
       WorkoutHydrationLevel
       WorkoutCaloriesEatenPerHour
