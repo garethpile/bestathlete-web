@@ -145,62 +145,64 @@ export default function AthleteCard({ customer, workouts = [] }) {
         <Divider light />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
           <h3 style={{ marginTop: 16, marginBottom: 8, textAlign: 'center' }}>Last 7 Days Summary</h3>
-          <table style={{ borderCollapse: 'collapse', width: '100%', maxWidth: '650px', textAlign: 'center' }}>
-            <thead>
-              <tr>
-                <th style={{ borderTop: 'none', borderBottom: 'none', borderLeft: 'none', fontWeight: "bold", textAlign: "right", padding: '8px', minWidth: 40 }}></th>
-                <th style={{ border: '1px solid #ccc', padding: '8px', backgroundColor: '#d0e8ff' }}>Swim</th>
-                <th style={{ border: '1px solid #ccc', padding: '8px', backgroundColor: '#d0e8ff' }}>Bike</th>
-                <th style={{ border: '1px solid #ccc', padding: '8px', backgroundColor: '#d0e8ff' }}>Run</th>
-                <th style={{ border: '1px solid #ccc', padding: '8px', backgroundColor: '#d0e8ff' }}>Strength</th>
-                <th style={{ border: '1px solid #ccc', padding: '8px', backgroundColor: '#d0e8ff' }}>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th style={{ borderTop: 'none', borderBottom: 'none', borderLeft: 'none', fontWeight: "bold", textAlign: "right", padding: '8px', minWidth: 40 }}>Time Spent</th>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Swim) || "0:00"}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Bike) || "0:00"}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Run) || "0:00"}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Strength) || "0:00"}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>
-                  {formatHoursMinutes(
-                    (summary?.disciplineHours.Swim || 0) +
-                    (summary?.disciplineHours.Bike || 0) +
-                    (summary?.disciplineHours.Run || 0) +
-                    (summary?.disciplineHours.Strength || 0)
-                  )}
-                </td>
-              </tr>
-              <tr>
-                <th style={{ borderTop: 'none', borderBottom: 'none', borderLeft: 'none', fontWeight: "bold", textAlign: "right", padding: '8px', minWidth: 40 }}># Sessions</th>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.sessionCounts.Swim || 0}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.sessionCounts.Bike || 0}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.sessionCounts.Run || 0}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.sessionCounts.Strength || 0}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>
-                  {(summary?.sessionCounts.Swim || 0) +
-                    (summary?.sessionCounts.Bike || 0) +
-                    (summary?.sessionCounts.Run || 0) +
-                    (summary?.sessionCounts.Strength || 0)}
-                </td>
-              </tr>
-              <tr>
-                <th style={{ borderTop: 'none', borderBottom: 'none', borderLeft: 'none', fontWeight: "bold", textAlign: "right", padding: '8px', minWidth: 40 }}>Distance</th>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.disciplineDistance.Swim.toFixed(1) || "0.0"} km</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.disciplineDistance.Bike.toFixed(1) || "0.0"} km</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.disciplineDistance.Run.toFixed(1) || "0.0"} km</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>–</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>
-                  {(
-                    (summary?.disciplineDistance.Swim || 0) +
-                    (summary?.disciplineDistance.Bike || 0) +
-                    (summary?.disciplineDistance.Run || 0)
-                  ).toFixed(1)} km
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div style={{ overflowX: 'auto', width: '100%' }}>
+            <table style={{ borderCollapse: 'collapse', width: '100%', maxWidth: '650px', textAlign: 'center' }}>
+              <thead>
+                <tr>
+                  <th style={{ borderTop: 'none', borderBottom: 'none', borderLeft: 'none', fontWeight: "bold", textAlign: "right", padding: '8px', minWidth: 40 }}></th>
+                  <th style={{ border: '1px solid #ccc', padding: '8px', backgroundColor: '#d0e8ff' }}>Swim</th>
+                  <th style={{ border: '1px solid #ccc', padding: '8px', backgroundColor: '#d0e8ff' }}>Bike</th>
+                  <th style={{ border: '1px solid #ccc', padding: '8px', backgroundColor: '#d0e8ff' }}>Run</th>
+                  <th style={{ border: '1px solid #ccc', padding: '8px', backgroundColor: '#d0e8ff' }}>Strength</th>
+                  <th style={{ border: '1px solid #ccc', padding: '8px', backgroundColor: '#d0e8ff' }}>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th style={{ borderTop: 'none', borderBottom: 'none', borderLeft: 'none', fontWeight: "bold", textAlign: "right", padding: '8px', minWidth: 40 }}>Time Spent</th>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Swim) || "0:00"}</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Bike) || "0:00"}</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Run) || "0:00"}</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Strength) || "0:00"}</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>
+                    {formatHoursMinutes(
+                      (summary?.disciplineHours.Swim || 0) +
+                      (summary?.disciplineHours.Bike || 0) +
+                      (summary?.disciplineHours.Run || 0) +
+                      (summary?.disciplineHours.Strength || 0)
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <th style={{ borderTop: 'none', borderBottom: 'none', borderLeft: 'none', fontWeight: "bold", textAlign: "right", padding: '8px', minWidth: 40 }}># Sessions</th>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.sessionCounts.Swim || 0}</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.sessionCounts.Bike || 0}</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.sessionCounts.Run || 0}</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.sessionCounts.Strength || 0}</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>
+                    {(summary?.sessionCounts.Swim || 0) +
+                      (summary?.sessionCounts.Bike || 0) +
+                      (summary?.sessionCounts.Run || 0) +
+                      (summary?.sessionCounts.Strength || 0)}
+                  </td>
+                </tr>
+                <tr>
+                  <th style={{ borderTop: 'none', borderBottom: 'none', borderLeft: 'none', fontWeight: "bold", textAlign: "right", padding: '8px', minWidth: 40 }}>Distance</th>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.disciplineDistance.Swim.toFixed(1) || "0.0"} km</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.disciplineDistance.Bike.toFixed(1) || "0.0"} km</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.disciplineDistance.Run.toFixed(1) || "0.0"} km</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>–</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>
+                    {(
+                      (summary?.disciplineDistance.Swim || 0) +
+                      (summary?.disciplineDistance.Bike || 0) +
+                      (summary?.disciplineDistance.Run || 0)
+                    ).toFixed(1)} km
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           <div style={{ flex: '1 1 250px', minWidth: '250px' }}>

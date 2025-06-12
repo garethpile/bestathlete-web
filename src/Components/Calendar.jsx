@@ -267,7 +267,8 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
                         padding: "7px",
                         margin: "2px",
                         cursor: "pointer",
-                        transition: "background .15s"
+                        transition: "background .15s",
+                        borderRight: i < 6 ? "1px solid #e0e0e0" : "none"
                       }}
                     >
                       {date.format("D")}
