@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { EnvironmentOutlined, FireOutlined, ThunderboltOutlined, HeartOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWater, faBicycle, faRunning, faDumbbell } from '@fortawesome/free-solid-svg-icons';
-import WorkoutNoFeedbackCard from "./WorkoutNoFeedbackCard.jsx";
+import WorkoutNoFeedbackCard from "./WorkoutNoFeedbackCard";
 
 const getColorByWorkoutType = (type) => {
   const typeLower = (type || "").toLowerCase();
@@ -34,7 +34,7 @@ const getPhaseForDate = (date, aRace) => {
   return null;
 };
 
-const Calendar = ({ workouts = [], customer, events = [], customerAvailabilities }) => {
+const Calendar = ({ workouts = [], customer , events = [], customerAvailabilities }) => {
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [availabilities, setAvailabilities] = useState(Array.isArray(customerAvailabilities) ? customerAvailabilities : []);
   const dayRefs = useRef([]);
@@ -59,11 +59,7 @@ const Calendar = ({ workouts = [], customer, events = [], customerAvailabilities
 
   const dateCellRender = (value) => {
     const dateKey = value.format("YYYY-MM-DD");
-    const isMobile = window.innerWidth <= 768;
-    const listData =
-      isMobile && !value.isSame(selectedDate, "day")
-        ? []
-        : workoutMap[dateKey] || [];
+    const listData = workoutMap[dateKey] || [];
 
     // Removed phase rendering from here as per instructions
 
@@ -72,11 +68,6 @@ const Calendar = ({ workouts = [], customer, events = [], customerAvailabilities
       dayjs(value).isSameOrBefore(dayjs(entry.UnavailableEndDate), "day")
     );
     const isToday = dayjs().isSame(value, "day");
-
-    // Only render content for the selected day on mobile (narrow) screens
-    if (isMobile && !value.isSame(selectedDate, "day")) {
-      return null;
-    }
 
     return (
       <div style={isToday ? { backgroundColor: "#fff9db", padding: "4px", borderRadius: "4px" } : {}}>
@@ -116,24 +107,13 @@ const Calendar = ({ workouts = [], customer, events = [], customerAvailabilities
                 <li key={index}>
                   <div style={{ backgroundColor: "#e6f4ea", border: "1px solid #e0e0e0", padding: "4px", borderRadius: "4px", marginBottom: "4px" }}>
                     <Tooltip title={item.WorkoutDescription || "No description"}>
-                      <span
-                        onClick={() => setSelectedWorkout(item)}
-                        className="workout-content"
-                        style={{ cursor: "pointer", display: "flex", flexDirection: "column" }}
-                      >
+                      <span onClick={() => setSelectedWorkout(item)} style={{ cursor: "pointer", display: "flex", flexDirection: "column" }}>
                         <div style={{ display: "flex", alignItems: "center" }}>
                           {renderIcon()}
-                          <span
-                            className="workout-hide-on-narrow"
-                            style={{ fontSize: "11px", fontWeight: "bold" }}
-                          >
-                            {(item.WorkoutType === "WeightTraining") ? "Strength" : (item.WorkoutType || "")}
-                          </span>
+                          <strong>{item.WorkoutType || "Workout"}</strong>
                         </div>
-                        <span className="workout-hide-on-narrow">
-                          {item.WorkoutDistance ? (item.WorkoutDistance / 1000).toFixed(2) : "0.00"} km
-                        </span>
-                        <span className="workout-hide-on-narrow">
+                        <span>{item.WorkoutDistance ? (item.WorkoutDistance / 1000).toFixed(2) : "0.00"} km</span>
+                        <span>
                           {item.WorkoutMovingTime
                             ? `${String(Math.floor(item.WorkoutMovingTime / 3600)).padStart(2, "0")}:${String(Math.floor((item.WorkoutMovingTime % 3600) / 60)).padStart(2, "0")}`
                             : "00:00"}
@@ -153,10 +133,6 @@ const Calendar = ({ workouts = [], customer, events = [], customerAvailabilities
   // Selected date state for horizontal date selector
   const [selectedDate, setSelectedDate] = useState(dayjs());
 
-  // Move startOfWeek and weekDays calculation outside JSX for reuse
-  const startOfWeek = selectedDate.startOf("week").add(1, "day");
-  const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const weekDays = Array.from({ length: 7 }, (_, i) => startOfWeek.add(i, "day"));
 
   return (
     <Card className="maincardDiv">
@@ -219,6 +195,12 @@ const Calendar = ({ workouts = [], customer, events = [], customerAvailabilities
         </div>
         {/* Always show week grid */}
         {(() => {
+          // Get start of the current week (Monday) based on selectedDate
+          const startOfWeek = selectedDate.startOf("week").add(1, "day");
+          const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+          // Build array for each day in current week
+          const weekDays = Array.from({ length: 7 }, (_, i) => startOfWeek.add(i, "day"));
+
           return (
             <div style={{ width: "100%", marginBottom: "8px" }}>
               {/* Headings */}
@@ -239,8 +221,7 @@ const Calendar = ({ workouts = [], customer, events = [], customerAvailabilities
                         fontSize: "14px",
                         display: "flex",
                         flexDirection: "column",
-                        alignItems: "center",
-                        boxSizing: "border-box"
+                        alignItems: "center"
                       }}
                     >
                       <span>{day}</span>
@@ -267,7 +248,7 @@ const Calendar = ({ workouts = [], customer, events = [], customerAvailabilities
                 })}
               </div>
               {/* Dates */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", minWidth: 0 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)" }}>
                 {weekDays.map((date, i) => {
                   const isSelected = date.isSame(selectedDate, "day");
                   const isToday = date.isSame(dayjs(), "day");
@@ -286,23 +267,10 @@ const Calendar = ({ workouts = [], customer, events = [], customerAvailabilities
                         padding: "7px",
                         margin: "2px",
                         cursor: "pointer",
-                        transition: "background .15s",
-                        borderRight: i < 6 ? "1px solid #f0f0f0" : "none",
-                        width: "100%",
-                        boxSizing: "border-box",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                        minWidth: 0
+                        transition: "background .15s"
                       }}
                     >
-                      <div>{date.format("D")}</div>
-                      {window.innerWidth > 768 && (
-                        <div style={{ marginTop: "6px", width: "100%" }}>
-                          {dateCellRender(date)}
-                        </div>
-                      )}
+                      {date.format("D")}
                     </div>
                   );
                 })}
@@ -310,12 +278,6 @@ const Calendar = ({ workouts = [], customer, events = [], customerAvailabilities
             </div>
           );
         })()}
-        {/* Render selected day's workouts below the grid on small screens */}
-        {window.innerWidth <= 768 && (
-          <div style={{ padding: "8px", marginTop: "8px", overflowY: "auto" }}>
-            {dateCellRender(selectedDate)}
-          </div>
-        )}
       </div>
       <style>{`
         .scrollable-detail {
@@ -330,29 +292,26 @@ const Calendar = ({ workouts = [], customer, events = [], customerAvailabilities
             width: 100%;
           }
         }
-        @media (max-width: 400px) {
-          .workout-type-label {
-            display: none;
-          }
-        }
-        /* Responsive workout-content styles */
-        @media (max-width: 600px) {
-          .workout-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-          }
-          .workout-content:has(.workout-hide-on-narrow) {
-            overflow: hidden;
-          }
-        }
-
-        @media (max-width: 360px) {
-          .workout-hide-on-narrow {
-            display: none;
-          }
-        }
       `}</style>
+      {/* Scrollable multi-day detail */}
+      <div className="scrollable-detail">
+        <div
+          key={selectedDate.format("YYYY-MM-DD")}
+          ref={(el) => (dayRefs.current[0] = el)}
+          style={{
+            backgroundColor: selectedDate.isSame(selectedDate, "day") ? "#fff9db" : "#ffffff",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+            marginBottom: "8px",
+            padding: "8px"
+          }}
+        >
+          <div style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "4px" }}>
+            {selectedDate.format("dddd, MMMM D, YYYY")}
+          </div>
+          {dateCellRender(selectedDate)}
+        </div>
+      </div>
       <Modal
         title={
           selectedWorkout ? (
@@ -379,7 +338,7 @@ const Calendar = ({ workouts = [], customer, events = [], customerAvailabilities
         footer={null}
       >
         {selectedWorkout && (
-          <WorkoutNoFeedbackCard workout={{ ...selectedWorkout, closeComponent: () => setSelectedWorkout(null) }} />
+          <WorkoutNoFeedbackCard workout={selectedWorkout} />
         )}
       </Modal>
     </Card>

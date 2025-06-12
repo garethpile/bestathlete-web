@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Avatar, Select, Button } from "antd";
+import { Card, Avatar, Select, Button, Modal as AntModal } from "antd";
 import Slider from "@mui/material/Slider";
 import IconButton from "@mui/material/IconButton";
 import Divider from "@mui/material/Divider";
@@ -12,7 +12,7 @@ import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import PedalBikeIcon from "@mui/icons-material/PedalBike";
 import moment from "moment";
 import { API, graphqlOperation } from "aws-amplify";
-import { updateWorkout } from "../graphql/mutations.js";
+import { updateWorkout, deleteWorkout } from "../graphql/mutations.js";
 import Modal from "@mui/material/Modal";
 
 const { Option } = Select;
@@ -79,6 +79,7 @@ function MinPerKmFraction(MinPerKm, StravaActivityType) {
   }
 }
 
+// Expect closeComponent to be passed in workout prop from parent
 export default function WorkoutNoFeedbackCard({ workout }) {
   console.log("WorkoutNoFeedbackCard Component loading .... workout: ", workout);
 
@@ -111,6 +112,7 @@ export default function WorkoutNoFeedbackCard({ workout }) {
   const [painLocations, setPainLocations] = React.useState(
     workout.WorkoutPhysicalLevelPain ? JSON.parse(workout.WorkoutPhysicalLevelPain) : {}
   );
+  const [confirmDeleteVisible, setConfirmDeleteVisible] = React.useState(false);
 
   async function updateActivity(id) {
     try {
@@ -134,6 +136,26 @@ export default function WorkoutNoFeedbackCard({ workout }) {
       }
     } catch (err) {
       console.log("Error updating activity", err);
+    }
+  }
+
+  async function deleteActivity(id) {
+    try {
+      const response = await API.graphql(
+        graphqlOperation(deleteWorkout, {
+          input: { id: id }
+        })
+      );
+      console.log("Workout deleted:", response);
+      if (typeof workout.fetchActivity === "function") {
+        workout.fetchActivity(workout.StravaActivityOwnerId);
+      }
+    } catch (err) {
+      console.log("Error deleting activity", err);
+    } finally {
+      if (typeof workout.closeComponent === "function") {
+        workout.closeComponent();
+      }
     }
   }
 
@@ -233,8 +255,9 @@ export default function WorkoutNoFeedbackCard({ workout }) {
         />
       </Box>
       <Divider light />
-      <Box mt={1}>
+      <Box mt={1} display="flex" justifyContent="space-between">
         <Button onClick={() => updateActivity(workout.id)}>Save</Button>
+        <Button danger onClick={() => setConfirmDeleteVisible(true)}>Delete</Button>
       </Box>
       <Modal open={painModalOpen} onClose={() => setPainModalOpen(false)}>
         <Box sx={{ background: "#fff", p: 4, maxWidth: 400, margin: "10vh auto", borderRadius: 2 }}>
@@ -279,6 +302,20 @@ export default function WorkoutNoFeedbackCard({ workout }) {
           </Box>
         </Box>
       </Modal>
+      <AntModal
+        title="Confirm Delete"
+        open={confirmDeleteVisible}
+        onOk={async () => {
+          setConfirmDeleteVisible(false);
+          await deleteActivity(workout.id);
+        }}
+        onCancel={() => setConfirmDeleteVisible(false)}
+        okText="Delete"
+        cancelText="Cancel"
+        okButtonProps={{ danger: true }}
+      >
+        <p>Are you sure you want to delete this workout?</p>
+      </AntModal>
     </Card>
   );
 }
