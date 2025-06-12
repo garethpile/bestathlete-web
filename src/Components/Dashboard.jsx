@@ -35,6 +35,9 @@ const Dashboard = ({
   const [unavailabilityList, setUnavailabilityList] = useState(Array.isArray(customerAvailabilities) ? customerAvailabilities : []);
   const [selectedUnavailability, setSelectedUnavailability] = useState(null);
 
+  // Assuming timeDistributionData is derived from workouts or other props
+  const timeDistributionData = []; // Replace with actual data computation or props
+
   useEffect(() => {
     if (Array.isArray(customerAvailabilities)) {
       setUnavailabilityList(customerAvailabilities);
@@ -67,6 +70,23 @@ const Dashboard = ({
       <Row gutter={[16, 16]}>
         <Col xs={24}>
           <AthleteCard customer={customer} workouts={workouts}/>
+        </Col>
+
+        <Col xs={24}>
+          <div style={{ textAlign: 'center', marginBottom: 16 }}>
+            <h2>Last 7 Days Summary</h2>
+          </div>
+
+          <div style={{ overflowX: 'auto', maxWidth: '100%', marginBottom: 16 }}>
+            <table className="seven-day-summary-table">
+              {/* Existing table content here */}
+            </table>
+          </div>
+
+          <div style={{ textAlign: 'center' }}>
+            <h3>Time Distribution</h3>
+            <PieChart data={timeDistributionData} /> {/* or however your chart is rendered */}
+          </div>
         </Col>
 
         <Col xs={24}>
