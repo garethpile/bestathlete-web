@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { EnvironmentOutlined, FireOutlined, ThunderboltOutlined, HeartOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWater, faBicycle, faRunning, faDumbbell } from '@fortawesome/free-solid-svg-icons';
-import WorkoutNoFeedbackCard from "./WorkoutNoFeedbackCard";
+import WorkoutNoFeedbackCard from "./WorkoutNoFeedbackCard.jsx";
 
 const getColorByWorkoutType = (type) => {
   const typeLower = (type || "").toLowerCase();
@@ -34,7 +34,7 @@ const getPhaseForDate = (date, aRace) => {
   return null;
 };
 
-const Calendar = ({ workouts = [], customer , events = [], customerAvailabilities }) => {
+const Calendar = ({ workouts = [], customer, events = [], customerAvailabilities }) => {
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [availabilities, setAvailabilities] = useState(Array.isArray(customerAvailabilities) ? customerAvailabilities : []);
   const dayRefs = useRef([]);
@@ -59,7 +59,11 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
 
   const dateCellRender = (value) => {
     const dateKey = value.format("YYYY-MM-DD");
-    const listData = workoutMap[dateKey] || [];
+    const isMobile = window.innerWidth <= 768;
+    const listData =
+      isMobile && !value.isSame(selectedDate, "day")
+        ? []
+        : workoutMap[dateKey] || [];
 
     // Removed phase rendering from here as per instructions
 
@@ -68,6 +72,11 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
       dayjs(value).isSameOrBefore(dayjs(entry.UnavailableEndDate), "day")
     );
     const isToday = dayjs().isSame(value, "day");
+
+    // Only render content for the selected day on mobile (narrow) screens
+    if (isMobile && !value.isSame(selectedDate, "day")) {
+      return null;
+    }
 
     return (
       <div style={isToday ? { backgroundColor: "#fff9db", padding: "4px", borderRadius: "4px" } : {}}>
@@ -289,9 +298,11 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
                       }}
                     >
                       <div>{date.format("D")}</div>
-                      <div style={{ marginTop: "6px", width: "100%" }}>
-                        {dateCellRender(date)}
-                      </div>
+                      {window.innerWidth > 768 && (
+                        <div style={{ marginTop: "6px", width: "100%" }}>
+                          {dateCellRender(date)}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -299,6 +310,12 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
             </div>
           );
         })()}
+        {/* Render selected day's workouts below the grid on small screens */}
+        {window.innerWidth <= 768 && (
+          <div style={{ padding: "8px", marginTop: "8px", overflowY: "auto" }}>
+            {dateCellRender(selectedDate)}
+          </div>
+        )}
       </div>
       <style>{`
         .scrollable-detail {
@@ -362,7 +379,7 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
         footer={null}
       >
         {selectedWorkout && (
-          <WorkoutNoFeedbackCard workout={selectedWorkout} />
+          <WorkoutNoFeedbackCard workout={{ ...selectedWorkout, closeComponent: () => setSelectedWorkout(null) }} />
         )}
       </Modal>
     </Card>
