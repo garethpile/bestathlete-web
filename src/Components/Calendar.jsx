@@ -107,13 +107,24 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
                 <li key={index}>
                   <div style={{ backgroundColor: "#e6f4ea", border: "1px solid #e0e0e0", padding: "4px", borderRadius: "4px", marginBottom: "4px" }}>
                     <Tooltip title={item.WorkoutDescription || "No description"}>
-                      <span onClick={() => setSelectedWorkout(item)} style={{ cursor: "pointer", display: "flex", flexDirection: "column" }}>
+                      <span
+                        onClick={() => setSelectedWorkout(item)}
+                        className="workout-content"
+                        style={{ cursor: "pointer", display: "flex", flexDirection: "column" }}
+                      >
                         <div style={{ display: "flex", alignItems: "center" }}>
                           {renderIcon()}
-                          <strong>{item.WorkoutType || "Workout"}</strong>
+                          <span
+                            className="workout-hide-on-narrow"
+                            style={{ fontSize: "11px", fontWeight: "bold" }}
+                          >
+                            {(item.WorkoutType === "WeightTraining") ? "Strength" : (item.WorkoutType || "")}
+                          </span>
                         </div>
-                        <span>{item.WorkoutDistance ? (item.WorkoutDistance / 1000).toFixed(2) : "0.00"} km</span>
-                        <span>
+                        <span className="workout-hide-on-narrow">
+                          {item.WorkoutDistance ? (item.WorkoutDistance / 1000).toFixed(2) : "0.00"} km
+                        </span>
+                        <span className="workout-hide-on-narrow">
                           {item.WorkoutMovingTime
                             ? `${String(Math.floor(item.WorkoutMovingTime / 3600)).padStart(2, "0")}:${String(Math.floor((item.WorkoutMovingTime % 3600) / 60)).padStart(2, "0")}`
                             : "00:00"}
@@ -133,6 +144,10 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
   // Selected date state for horizontal date selector
   const [selectedDate, setSelectedDate] = useState(dayjs());
 
+  // Move startOfWeek and weekDays calculation outside JSX for reuse
+  const startOfWeek = selectedDate.startOf("week").add(1, "day");
+  const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const weekDays = Array.from({ length: 7 }, (_, i) => startOfWeek.add(i, "day"));
 
   return (
     <Card className="maincardDiv">
@@ -195,12 +210,6 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
         </div>
         {/* Always show week grid */}
         {(() => {
-          // Get start of the current week (Monday) based on selectedDate
-          const startOfWeek = selectedDate.startOf("week").add(1, "day");
-          const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-          // Build array for each day in current week
-          const weekDays = Array.from({ length: 7 }, (_, i) => startOfWeek.add(i, "day"));
-
           return (
             <div style={{ width: "100%", marginBottom: "8px" }}>
               {/* Headings */}
@@ -221,7 +230,8 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
                         fontSize: "14px",
                         display: "flex",
                         flexDirection: "column",
-                        alignItems: "center"
+                        alignItems: "center",
+                        boxSizing: "border-box"
                       }}
                     >
                       <span>{day}</span>
@@ -248,7 +258,7 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
                 })}
               </div>
               {/* Dates */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", minWidth: 0 }}>
                 {weekDays.map((date, i) => {
                   const isSelected = date.isSame(selectedDate, "day");
                   const isToday = date.isSame(dayjs(), "day");
@@ -268,10 +278,20 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
                         margin: "2px",
                         cursor: "pointer",
                         transition: "background .15s",
-                        borderRight: i < 6 ? "1px solid #e0e0e0" : "none"
+                        borderRight: i < 6 ? "1px solid #f0f0f0" : "none",
+                        width: "100%",
+                        boxSizing: "border-box",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        minWidth: 0
                       }}
                     >
-                      {date.format("D")}
+                      <div>{date.format("D")}</div>
+                      <div style={{ marginTop: "6px", width: "100%" }}>
+                        {dateCellRender(date)}
+                      </div>
                     </div>
                   );
                 })}
@@ -293,26 +313,29 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
             width: 100%;
           }
         }
+        @media (max-width: 400px) {
+          .workout-type-label {
+            display: none;
+          }
+        }
+        /* Responsive workout-content styles */
+        @media (max-width: 600px) {
+          .workout-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+          .workout-content:has(.workout-hide-on-narrow) {
+            overflow: hidden;
+          }
+        }
+
+        @media (max-width: 360px) {
+          .workout-hide-on-narrow {
+            display: none;
+          }
+        }
       `}</style>
-      {/* Scrollable multi-day detail */}
-      <div className="scrollable-detail">
-        <div
-          key={selectedDate.format("YYYY-MM-DD")}
-          ref={(el) => (dayRefs.current[0] = el)}
-          style={{
-            backgroundColor: selectedDate.isSame(selectedDate, "day") ? "#fff9db" : "#ffffff",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            marginBottom: "8px",
-            padding: "8px"
-          }}
-        >
-          <div style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "4px" }}>
-            {selectedDate.format("dddd, MMMM D, YYYY")}
-          </div>
-          {dateCellRender(selectedDate)}
-        </div>
-      </div>
       <Modal
         title={
           selectedWorkout ? (
