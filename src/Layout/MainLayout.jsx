@@ -84,9 +84,6 @@ const MainLayout = () => {
                 <Link to="/">Dashboard</Link>
               </Menu.Item>
 
-              <Menu.Item key="workouts" icon={<DatabaseOutlined />}>
-                <Link to="/workouts">Workouts</Link>
-              </Menu.Item>
 
               <Menu.Item key="calendar" icon={<CalendarOutlined />}>
                 <Link to="/calendar">Calendar</Link>

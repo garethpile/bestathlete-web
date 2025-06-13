@@ -119,7 +119,6 @@ const LandingPage = () => {
       customerAvailabilities={customerAvailabilities}
       setCustomerAvailabilities={setCustomerAvailabilities}
       events={events}
-      workouts={workouts}
       metrics3DaysWeight={metrics3DaysWeight}
       metrics3DaysSleep={metrics3DaysSleep}
       userExists={userExists}
