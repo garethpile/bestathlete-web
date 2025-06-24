@@ -198,6 +198,7 @@ const Dashboard = ({
                   setSelectedUnavailability(null);
                 }}
                 event={selectedUnavailability}
+                mode={selectedUnavailability ? "edit" : "add"}
                 onSave={async (newEntry) => {
                   const payload = {
                     idCustomer: customer.idCustomer,
@@ -220,15 +221,23 @@ const Dashboard = ({
                   setIsUnavailModalOpen(false);
                   setSelectedUnavailability(null);
                 }}
+                onDelete={async () => {
+                  if (!selectedUnavailability) return;
+
+                  await customerAvailabilityDelete(selectedUnavailability.id);
+                  const result = await customerAvailabilitiesGetByIdCustomer(customer.idCustomer);
+                  const updatedList = (result.statusCode === 200 && Array.isArray(result.body)) ? result.body : [];
+                  setUnavailabilityList(updatedList);
+                  if (setCustomerAvailabilities) {
+                    setCustomerAvailabilities(updatedList);
+                  }
+
+                  setIsUnavailModalOpen(false);
+                  setSelectedUnavailability(null);
+                }}
               />
             </Panel>
           </Collapse>
-        </Col>
-
-        <Col xs={24}>
-          <div style={{ width: "100%" }}>
-            <AthleteFeedback customer={customer} />
-          </div>
         </Col>
 
         <Col xs={24}>

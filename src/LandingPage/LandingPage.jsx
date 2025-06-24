@@ -125,6 +125,7 @@ const LandingPage = () => {
       refreshCustomerAvailabilities={refreshCustomerAvailabilities}
       showAdministration={true}
       AdministrationComponent={Administration}
+      workouts = {workouts}
     />
   );
 };

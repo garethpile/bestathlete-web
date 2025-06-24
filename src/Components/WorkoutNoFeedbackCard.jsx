@@ -14,6 +14,7 @@ import moment from "moment";
 import { API, graphqlOperation } from "aws-amplify";
 import { updateWorkout, deleteWorkout } from "../graphql/mutations.js";
 import Modal from "@mui/material/Modal";
+import { workoutUpdate } from "../services/workoutServices.js";
 
 const { Option } = Select;
 
@@ -197,37 +198,6 @@ export default function WorkoutNoFeedbackCard({ workout }) {
       </div>
       <Divider light />
       <Box padding={2}>
-        <Typography className="dropDownLabel">Run Type</Typography>
-        <Box display="flex" flexWrap="wrap" gap={1} mt={1}>
-          {[
-            "Moderate",
-            "Fartlek",
-            "Intervals",
-            "Hill Repeats",
-            "Tempo Run",
-            "Threshold",
-            "Cruise Intervals",
-            "Strides",
-            "Progression Run",
-            "Pace Run"
-          ].map((type) => (
-            <Button
-              key={type}
-              size="small"
-              type={dropdownRunType === type ? "primary" : "default"}
-              onClick={() => setDropdownRunType(type)}
-              style={{
-                borderRadius: 20,
-                padding: "4px 12px",
-                fontWeight: "bold"
-              }}
-            >
-              {type}
-            </Button>
-          ))}
-        </Box>
-      </Box>
-      <Box padding={2}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography className="dropDownLabel">Any physical pain?</Typography>
           <Typography
@@ -292,9 +262,18 @@ export default function WorkoutNoFeedbackCard({ workout }) {
             <Button onClick={() => setPainModalOpen(false)}>Cancel</Button>
             <Button
               type="primary"
-              onClick={() => {
-                setDropdownActivityBody(painSeverity.toString());
-                setPainModalOpen(false);
+              onClick={async () => {
+                try {
+                  await workoutUpdate({
+                    id: workout.id,
+                    WorkoutPhysicalLevel: painSeverity,
+                    WorkoutPhysicalLevelPain: JSON.stringify(painLocations)
+                  });
+                  setDropdownActivityBody(painSeverity.toString());
+                  setPainModalOpen(false);
+                } catch (error) {
+                  alert("Failed to update pain information. Please try again.");
+                }
               }}
             >
               Apply

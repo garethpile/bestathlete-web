@@ -1,6 +1,7 @@
 
 
 import React, { useState, useEffect } from "react";
+import { customerAvailabilityUpdate } from "../services/customerAvailabilityServices";
 import {
   Dialog,
   DialogTitle,
@@ -70,17 +71,27 @@ function UnavailabilityModal({ open, onClose, onSave, event }) {
     return newErrors;
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const newErrors = validate();
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
-      onSave({
-        reason,
-        startDate,
-        endDate,
-        activities: activities.length === 0 ? ["None"] : activities,
-      });
-      handleClose();
+      const updatedData = {
+        id: event?.id,
+        idCustomer: event?.idCustomer,
+        UnavailableReason: reason,
+        UnavailableStartDate: startDate,
+        UnavailableEndDate: endDate,
+        AvailableActivities: JSON.stringify(activities.length === 0 ? ["None"] : activities),
+      };
+
+      const success = await customerAvailabilityUpdate(updatedData);
+
+      if (success) {
+        onSave({ ...updatedData, refresh: true });
+        handleClose();
+      } else {
+        console.error("Failed to update availability");
+      }
     }
   };
 
@@ -163,11 +174,40 @@ function UnavailabilityModal({ open, onClose, onSave, event }) {
           </Select>
         </FormControl>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSave} variant="contained" color="primary">
-          Save
-        </Button>
+      <DialogActions style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div>
+          {event ? (
+            <>
+              <Button onClick={handleSave} variant="contained" color="primary">
+                Save
+              </Button>
+              <Button onClick={handleClose}>Cancel</Button>
+            </>
+          ) : (
+            <>
+              <Button onClick={handleSave} variant="contained" color="primary">
+                Add
+              </Button>
+              <Button onClick={handleClose}>Cancel</Button>
+            </>
+          )}
+        </div>
+        {event && (
+          <div style={{ marginLeft: "auto" }}>
+            <Button
+              onClick={() => {
+                if (window.confirm("Are you sure you want to delete this unavailability entry?")) {
+                  onSave({ ...event, delete: true });
+                  handleClose();
+                }
+              }}
+              variant="outlined"
+              color="error"
+            >
+              Delete
+            </Button>
+          </div>
+        )}
       </DialogActions>
     </Dialog>
   );

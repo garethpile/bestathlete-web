@@ -13,13 +13,13 @@ dayjs.extend(isSameOrAfter);
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-// Utility function to convert decimal hours to "HH:MM" format
+// Utility function to convert decimal hours to "<hours> hrs : <minutes> mins" format
 function formatHoursMinutes(decimalHours) {
-  if (!Number.isFinite(decimalHours) || decimalHours <= 0) return "0:00";
+  if (!Number.isFinite(decimalHours) || decimalHours <= 0) return "0 hrs : 00 mins";
   const totalMinutes = Math.round(decimalHours * 60);
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
-  return `${hours}:${minutes.toString().padStart(2, '0')}`;
+  return `${hours} hrs : ${minutes.toString().padStart(2, '0')} mins`;
 }
 
 export default function AthleteCard({ customer, workouts = [] }) {
@@ -131,13 +131,11 @@ export default function AthleteCard({ customer, workouts = [] }) {
     <Spin spinning={isLoading}>
       <Card className="maincardDiv">
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <IconButton className="mainavatarIcon">
-            <Avatar
-              shape="circle"
-              size={60}
-              src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${customer?.FirstName || "random"}`}
-            />
-          </IconButton>
+          <Avatar
+            shape="circle"
+            size={60}
+            src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${customer?.FirstName || "random"}`}
+          />
           <p className="nameDiv" style={{ fontSize: "1.5rem", fontWeight: "bold", margin: 0 }}>
             {customer?.FirstName} {customer?.LastName}
           </p>
@@ -145,11 +143,10 @@ export default function AthleteCard({ customer, workouts = [] }) {
         <Divider light />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
           <h3 style={{ marginTop: 16, marginBottom: 8, textAlign: 'center' }}>Last 7 Days Summary</h3>
-          <div style={{ overflowX: 'auto', width: '100%' }}>
+          <div style={{ overflowX: 'auto', width: '100%', display: 'flex', justifyContent: 'center' }}>
             <table style={{ borderCollapse: 'collapse', width: '100%', maxWidth: '650px', textAlign: 'center' }}>
               <thead>
                 <tr>
-                  <th style={{ borderTop: 'none', borderBottom: 'none', borderLeft: 'none', fontWeight: "bold", textAlign: "right", padding: '8px', minWidth: 40 }}></th>
                   <th style={{ border: '1px solid #ccc', padding: '8px', backgroundColor: '#d0e8ff' }}>Swim</th>
                   <th style={{ border: '1px solid #ccc', padding: '8px', backgroundColor: '#d0e8ff' }}>Bike</th>
                   <th style={{ border: '1px solid #ccc', padding: '8px', backgroundColor: '#d0e8ff' }}>Run</th>
@@ -159,11 +156,22 @@ export default function AthleteCard({ customer, workouts = [] }) {
               </thead>
               <tbody>
                 <tr>
-                  <th style={{ borderTop: 'none', borderBottom: 'none', borderLeft: 'none', fontWeight: "bold", textAlign: "right", padding: '8px', minWidth: 40 }}>Time Spent</th>
-                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Swim) || "0:00"}</td>
-                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Bike) || "0:00"}</td>
-                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Run) || "0:00"}</td>
-                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Strength) || "0:00"}</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{(summary?.sessionCounts.Swim || 0)} sessions</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{(summary?.sessionCounts.Bike || 0)} sessions</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{(summary?.sessionCounts.Run || 0)} sessions</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{(summary?.sessionCounts.Strength || 0)} sessions</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>
+                    {((summary?.sessionCounts.Swim || 0) +
+                      (summary?.sessionCounts.Bike || 0) +
+                      (summary?.sessionCounts.Run || 0) +
+                      (summary?.sessionCounts.Strength || 0))} sessions
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Swim)}</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Bike)}</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Run)}</td>
+                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{formatHoursMinutes(summary?.disciplineHours.Strength)}</td>
                   <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>
                     {formatHoursMinutes(
                       (summary?.disciplineHours.Swim || 0) +
@@ -174,20 +182,6 @@ export default function AthleteCard({ customer, workouts = [] }) {
                   </td>
                 </tr>
                 <tr>
-                  <th style={{ borderTop: 'none', borderBottom: 'none', borderLeft: 'none', fontWeight: "bold", textAlign: "right", padding: '8px', minWidth: 40 }}># Sessions</th>
-                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.sessionCounts.Swim || 0}</td>
-                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.sessionCounts.Bike || 0}</td>
-                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.sessionCounts.Run || 0}</td>
-                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.sessionCounts.Strength || 0}</td>
-                  <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>
-                    {(summary?.sessionCounts.Swim || 0) +
-                      (summary?.sessionCounts.Bike || 0) +
-                      (summary?.sessionCounts.Run || 0) +
-                      (summary?.sessionCounts.Strength || 0)}
-                  </td>
-                </tr>
-                <tr>
-                  <th style={{ borderTop: 'none', borderBottom: 'none', borderLeft: 'none', fontWeight: "bold", textAlign: "right", padding: '8px', minWidth: 40 }}>Distance</th>
                   <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.disciplineDistance.Swim.toFixed(1) || "0.0"} km</td>
                   <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.disciplineDistance.Bike.toFixed(1) || "0.0"} km</td>
                   <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{summary?.disciplineDistance.Run.toFixed(1) || "0.0"} km</td>

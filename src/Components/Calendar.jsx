@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
+import { customerAvailabilityDelete } from "../services/customerAvailabilityServices";
 import { Badge, Card, Tooltip, Modal } from "antd";
 import dayjs from "dayjs";
 import { EnvironmentOutlined, FireOutlined, ThunderboltOutlined, HeartOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWater, faBicycle, faRunning, faDumbbell } from '@fortawesome/free-solid-svg-icons';
+import { faWater, faBicycle, faRunning, faDumbbell, faGolfBallTee } from '@fortawesome/free-solid-svg-icons';
 import WorkoutNoFeedbackCard from "./WorkoutNoFeedbackCard";
+import UnavailabilityModal from "./UnavailabilityModal";
 
 const getColorByWorkoutType = (type) => {
   const typeLower = (type || "").toLowerCase();
@@ -34,9 +36,11 @@ const getPhaseForDate = (date, aRace) => {
   return null;
 };
 
-const Calendar = ({ workouts = [], customer , events = [], customerAvailabilities }) => {
+const Calendar = ({ workouts = [], customer , events = [], customerAvailabilities, onAvailabilityClick }) => {
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [availabilities, setAvailabilities] = useState(Array.isArray(customerAvailabilities) ? customerAvailabilities : []);
+  const [selectedAvailability, setSelectedAvailability] = useState(null);
+  const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
   const dayRefs = useRef([]);
 
   useEffect(() => {
@@ -58,7 +62,8 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
   const aRace = events.find((e) => e.EventPriority === "A");
 
   const dateCellRender = (value) => {
-    const dateKey = value.format("YYYY-MM-DD");
+    // Ensure value is wrapped in dayjs for correct key format
+    const dateKey = dayjs(value).format("YYYY-MM-DD");
     const listData = workoutMap[dateKey] || [];
 
     // Removed phase rendering from here as per instructions
@@ -73,6 +78,10 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
       <div style={isToday ? { backgroundColor: "#fff9db", padding: "4px", borderRadius: "4px" } : {}}>
         {availability && (
           <div
+            onClick={() => {
+              setSelectedAvailability(availability);
+              setIsAvailabilityModalOpen(true);
+            }}
             style={{
               backgroundColor: "#ff6b6b",
               color: "#fff",
@@ -80,58 +89,79 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
               fontSize: "10px",
               textAlign: "center",
               borderRadius: "2px",
-              marginBottom: "4px"
+              marginBottom: "4px",
+              cursor: "pointer"
             }}
           >
             {availability.UnavailableReason}
           </div>
         )}
-        <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-          {listData.length === 0 ? (
-            <li style={{ fontSize: 12, color: "#999" }}>No Workouts</li>
-          ) : (
-            listData.map((item, index) => {
-              const timeStr = item.WorkoutDateTime ? dayjs(item.WorkoutDateTime).format("HH:mm") : "N/A";
-              const durationStr = item.WorkoutMovingTime ? `${Math.round(item.WorkoutMovingTime / 60)} min` : "N/A";
+        {listData.length === 0 ? (
+          <div style={{ fontSize: 12, color: "#999" }}>No Workouts</div>
+        ) : (
+          listData.map((item, index) => {
+            const timeStr = item.WorkoutMovingTime
+              ? `${String(Math.floor(item.WorkoutMovingTime / 3600)).padStart(1, "0")}:${String(Math.floor((item.WorkoutMovingTime % 3600) / 60)).padStart(2, "0")}:00`
+              : "00:00:00";
 
-              const renderIcon = () => {
-                const type = (item.WorkoutType || "").toLowerCase();
-                if (type.includes("swim")) return <FontAwesomeIcon icon={faWater} style={{ marginRight: 4 }} />;
-                if (type.includes("ride") || type.includes("bike")) return <FontAwesomeIcon icon={faBicycle} style={{ marginRight: 4 }} />;
-                if (type.includes("strength") || type.includes("weight")) return <FontAwesomeIcon icon={faDumbbell} style={{ marginRight: 4 }} />;
-                if (type.includes("run")) return <FontAwesomeIcon icon={faRunning} style={{ marginRight: 4 }} />;
-                return null;
-              };
+            const renderIcon = () => {
+              const type = (item.WorkoutType || "").toLowerCase();
+              if (type.includes("swim")) return faWater;
+              if (type.includes("ride") || type.includes("bike")) return faBicycle;
+              if (type.includes("strength") || type.includes("weight")) return faDumbbell;
+              if (type.includes("run")) return faRunning;
+              if (type.includes("golf")) return faGolfBallTee;
+              return null;
+            };
 
-              return (
-                <li key={index}>
-                  <div style={{ backgroundColor: "#e6f4ea", border: "1px solid #e0e0e0", padding: "4px", borderRadius: "4px", marginBottom: "4px" }}>
-                    <Tooltip title={item.WorkoutDescription || "No description"}>
-                      <span onClick={() => setSelectedWorkout(item)} style={{ cursor: "pointer", display: "flex", flexDirection: "column" }}>
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          {renderIcon()}
-                          <strong>{item.WorkoutType || "Workout"}</strong>
-                        </div>
-                        <span>{item.WorkoutDistance ? (item.WorkoutDistance / 1000).toFixed(2) : "0.00"} km</span>
-                        <span>
-                          {item.WorkoutMovingTime
-                            ? `${String(Math.floor(item.WorkoutMovingTime / 3600)).padStart(2, "0")}:${String(Math.floor((item.WorkoutMovingTime % 3600) / 60)).padStart(2, "0")}`
-                            : "00:00"}
-                        </span>
-                      </span>
-                    </Tooltip>
+            return (
+              <Tooltip title={item.WorkoutDescription || ""} key={index}>
+                <div
+                  onClick={() => setSelectedWorkout(item)}
+                  style={{
+                    cursor: "pointer",
+                    backgroundColor: "transparent",
+                    border: "1px solid #cce0cc",
+                    borderRadius: "6px",
+                    padding: "6px",
+                    marginBottom: "6px",
+                    fontSize: "12px"
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {renderIcon() && (
+                        <FontAwesomeIcon icon={renderIcon()} style={{ marginRight: 6 }} />
+                      )}
+                      <></>
+                    </div>
+                    {item.WorkoutState === "Completed" && (
+                      <span style={{ fontSize: "11px", color: "darkgreen", fontWeight: "bold" }}>Completed</span>
+                    )}
                   </div>
-                </li>
-              );
-            })
-          )}
-        </ul>
+                  <div>⏱ {timeStr}</div>
+                  <div>🏋️ {item.WorkoutStressScore || "0"} TSS</div>
+                </div>
+              </Tooltip>
+            );
+          })
+        )}
       </div>
     );
   };
 
   // Selected date state for horizontal date selector
   const [selectedDate, setSelectedDate] = useState(dayjs());
+
+  // Responsive: track if mobile
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 600);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
 
   return (
@@ -193,8 +223,8 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
             }}
           />
         </div>
-        {/* Always show week grid */}
-        {(() => {
+        {/* Show week grid only on mobile */}
+        {isMobile && (() => {
           // Get start of the current week (Monday) based on selectedDate
           const startOfWeek = selectedDate.startOf("week").add(1, "day");
           const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -292,26 +322,82 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
             width: 100%;
           }
         }
+        .month-grid {
+          padding: 8px;
+        }
       `}</style>
-      {/* Scrollable multi-day detail */}
-      <div className="scrollable-detail">
-        <div
-          key={selectedDate.format("YYYY-MM-DD")}
-          ref={(el) => (dayRefs.current[0] = el)}
-          style={{
-            backgroundColor: selectedDate.isSame(selectedDate, "day") ? "#fff9db" : "#ffffff",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            marginBottom: "8px",
-            padding: "8px"
-          }}
-        >
-          <div style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "4px" }}>
-            {selectedDate.format("dddd, MMMM D, YYYY")}
+      {/* Responsive detail: mobile or web */}
+      {isMobile ? (
+        <div className="scrollable-detail">
+          <div
+            key={selectedDate.format("YYYY-MM-DD")}
+            ref={(el) => (dayRefs.current[0] = el)}
+            style={{
+              backgroundColor: selectedDate.isSame(selectedDate, "day") ? "#fff9db" : "#ffffff",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              marginBottom: "8px",
+              padding: "8px"
+            }}
+          >
+            <div style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "4px" }}>
+              {selectedDate.format("dddd, MMMM D, YYYY")}
+            </div>
+            {dateCellRender(selectedDate)}
           </div>
-          {dateCellRender(selectedDate)}
         </div>
-      </div>
+      ) : (
+        <div className="month-grid">
+          {(() => {
+            // Only calculate startOfMonth once for the entire grid, starting on Monday
+            const startOfMonth = selectedDate.startOf("month").startOf("week").add(1, "day");
+            return Array.from({ length: 4 }, (_, weekIndex) => (
+              <div key={weekIndex} style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", marginBottom: "8px", gap: "4px" }}>
+                {Array.from({ length: 7 }, (_, dayOffset) => {
+                  const date = dayjs(startOfMonth).add(weekIndex * 7 + dayOffset, "day");
+                  return (
+                    <div
+                      key={dayOffset}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        border: "1px solid #ddd",
+                        borderRadius: "4px",
+                        padding: "4px"
+                      }}
+                    >
+                      <div style={{ width: "100%", display: "flex", justifyContent: "space-between", fontSize: "14px", fontWeight: "bold" }}>
+                        <span>{date.format("ddd D MMM")}</span>
+                        {(() => {
+                          const phase = aRace ? getPhaseForDate(date, aRace) : null;
+                          return phase ? (
+                            <span style={{
+                              fontSize: "11px",
+                              background: phase.color,
+                              color: "#333",
+                              borderRadius: "8px",
+                              padding: "2px 6px",
+                              marginLeft: "4px",
+                              fontWeight: 500,
+                              letterSpacing: "0.2px"
+                            }}>
+                              {phase.name}
+                            </span>
+                          ) : null;
+                        })()}
+                      </div>
+                      <div style={{ width: "100%" }}>
+                        {dateCellRender(date)}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ));
+          })()}
+        </div>
+      )}
       <Modal
         title={
           selectedWorkout ? (
@@ -341,6 +427,27 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
           <WorkoutNoFeedbackCard workout={selectedWorkout} />
         )}
       </Modal>
+      <UnavailabilityModal
+        open={isAvailabilityModalOpen}
+        onClose={() => {
+          setIsAvailabilityModalOpen(false);
+          setSelectedAvailability(null);
+        }}
+        event={selectedAvailability}
+        onSave={async (data) => {
+          if (data?.delete && data.id) {
+            await customerAvailabilityDelete(data.id);
+            const updated = availabilities.filter(a => a.id !== data.id);
+            setAvailabilities(updated);
+          } else if (data?.refresh && data.id) {
+            // Update availability item in state
+            const updated = availabilities.map(a => a.id === data.id ? { ...a, ...data } : a);
+            setAvailabilities(updated);
+          }
+          setIsAvailabilityModalOpen(false);
+          setSelectedAvailability(null);
+        }}
+      />
     </Card>
   );
 };
