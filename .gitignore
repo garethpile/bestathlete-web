@@ -1,0 +1,14 @@
+# Node
+node_modules/
+build/
+dist/
+
+# Amplify Gen 2
+amplify_outputs.json
+
+# VSCode/IDE
+.vscode/
+.DS_Store
+
+# AWS credentials (never commit your keys)
+*.env
