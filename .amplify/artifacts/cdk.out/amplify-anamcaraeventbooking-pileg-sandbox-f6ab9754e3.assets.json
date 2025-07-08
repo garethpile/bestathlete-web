@@ -1,0 +1,34 @@
+{
+  "version": "45.0.0",
+  "files": {
+    "8f75599f282978fecb5cbae9f4a7993f70ccb527d6e044683e01cace7d730387": {
+      "displayName": "auth Nested Stack Template",
+      "source": {
+        "path": "amplifyanamcaraeventbookingpilegsandboxf6ab9754e3authA1546AD3.nested.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "8f75599f282978fecb5cbae9f4a7993f70ccb527d6e044683e01cace7d730387.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "6f6e48bc41a1dce3e2da247a365699778ac805b9bcd55a619d27a669a0b5e541": {
+      "displayName": "amplify-anamcaraeventbooking-pileg-sandbox-f6ab9754e3 Template",
+      "source": {
+        "path": "amplify-anamcaraeventbooking-pileg-sandbox-f6ab9754e3.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "6f6e48bc41a1dce3e2da247a365699778ac805b9bcd55a619d27a669a0b5e541.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
