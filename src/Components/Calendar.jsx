@@ -13,7 +13,12 @@ const getColorByWorkoutType = (type) => {
   if (typeLower.includes("run")) return "#8B0000"; // Dark red
   if (typeLower.includes("swim")) return "#00008B"; // Dark blue
   if (typeLower.includes("ride") || typeLower.includes("bike")) return "#006400"; // Dark green
-  if (typeLower.includes("strength") || typeLower.includes("weight")) return "#000000"; // Black
+  if (
+    typeLower.includes("strength") ||
+    typeLower.includes("weight") ||
+    typeLower.includes("weighttraining")
+  )
+    return "#000000"; // Black
   return "gray";
 };
 
@@ -108,7 +113,12 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
               const type = (item.WorkoutType || "").toLowerCase();
               if (type.includes("swim")) return faWater;
               if (type.includes("ride") || type.includes("bike")) return faBicycle;
-              if (type.includes("strength") || type.includes("weight")) return faDumbbell;
+              if (
+                type.includes("strength") ||
+                type.includes("weight") ||
+                type.includes("weighttraining")
+              )
+                return faDumbbell;
               if (type.includes("run")) return faRunning;
               if (type.includes("golf")) return faGolfBallTee;
               return null;
@@ -120,7 +130,7 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
                   onClick={() => setSelectedWorkout(item)}
                   style={{
                     cursor: "pointer",
-                    backgroundColor: "transparent",
+                    backgroundColor: item.WorkoutState === "Completed" ? "#e6ffe6" : "transparent",
                     border: "1px solid #cce0cc",
                     borderRadius: "6px",
                     padding: "6px",
@@ -179,6 +189,7 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "0 16px 8px 16px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            {/* Navigation buttons: up and down arrows for week navigation */}
             <button
               onClick={() => setSelectedDate(selectedDate.subtract(7, "day"))}
               style={{
@@ -191,7 +202,7 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
               }}
               aria-label="Previous week"
             >
-              &#8592;
+              ↑
             </button>
             <button
               onClick={() => setSelectedDate(selectedDate.add(7, "day"))}
@@ -205,7 +216,7 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
               }}
               aria-label="Next week"
             >
-              &#8594;
+              ↓
             </button>
           </div>
           <input
@@ -349,8 +360,10 @@ const Calendar = ({ workouts = [], customer , events = [], customerAvailabilitie
       ) : (
         <div className="month-grid">
           {(() => {
-            // Only calculate startOfMonth once for the entire grid, starting on Monday
-            const startOfMonth = selectedDate.startOf("month").startOf("week").add(1, "day");
+            // Calculate the current week as the second row.
+            const today = dayjs();
+            const currentWeekStart = today.startOf("week").add(1, "day");
+            const startOfMonth = currentWeekStart.subtract(7, "day");
             return Array.from({ length: 4 }, (_, weekIndex) => (
               <div key={weekIndex} style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", marginBottom: "8px", gap: "4px" }}>
                 {Array.from({ length: 7 }, (_, dayOffset) => {

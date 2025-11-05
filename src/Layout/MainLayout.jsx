@@ -9,11 +9,13 @@ import {
   CalendarOutlined,
 } from '@ant-design/icons';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import AIAssistant from '../Components/AIAssistant';
 
 const { Header, Content } = Layout;
 const { useBreakpoint } = Grid;
 
-const MainLayout = () => {
+const MainLayout = ({ customer }) => {
   const location = useLocation();
   const screens = useBreakpoint();
   const isMobile = !screens.md;
@@ -126,8 +128,20 @@ const MainLayout = () => {
       >
         <Outlet />
       </Content>
+      <AIAssistant customer={customer} />
     </Layout>
   );
+};
+
+MainLayout.propTypes = {
+  customer: PropTypes.shape({
+    idCustomer: PropTypes.string,
+    FirstName: PropTypes.string,
+  }),
+};
+
+MainLayout.defaultProps = {
+  customer: null,
 };
 
 export default MainLayout;

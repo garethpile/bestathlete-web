@@ -8,6 +8,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import DashboardMiniCalendar from "./DashboardMiniCalendar";
 
 dayjs.extend(isSameOrAfter);
 
@@ -22,7 +23,7 @@ function formatHoursMinutes(decimalHours) {
   return `${hours} hrs : ${minutes.toString().padStart(2, '0')} mins`;
 }
 
-export default function AthleteCard({ customer, workouts = [] }) {
+export default function AthleteCard({ customer, workouts = [], customerAvailabilities = [] }) {
 
   const [summary, setSummary] = useState(null);
 
@@ -57,7 +58,7 @@ export default function AthleteCard({ customer, workouts = [] }) {
       if (/swim/i.test(typeLower)) discipline = "Swim";
       else if (/bike|ride|virtualride/i.test(typeLower)) discipline = "Bike";
       else if (/run/i.test(typeLower)) discipline = "Run";
-      else if (/strength|gym|weights/i.test(typeLower)) discipline = "Strength";
+      else if (/strength|gym|weights|weighttraining|weight training/i.test(typeLower)) discipline = "Strength";
       else return;
 
       const duration = Number(workout.WorkoutMovingTime || 0) / 3600;
@@ -198,6 +199,12 @@ export default function AthleteCard({ customer, workouts = [] }) {
             </table>
           </div>
         </div>
+
+        <DashboardMiniCalendar
+          workouts={workouts}
+          customerAvailabilities={customerAvailabilities}
+        />
+
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           <div style={{ flex: '1 1 250px', minWidth: '250px' }}>
             <h4 style={{ textAlign: 'center' }}>Time Distribution</h4>

@@ -23,7 +23,7 @@ const RouterConfig = ({
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
-        <Route element={<MainLayout />}>
+        <Route element={<MainLayout customer={customer} />}>
           <Route
             path="/"
             element={
