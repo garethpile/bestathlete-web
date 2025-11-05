@@ -26,7 +26,7 @@ export default function ThirdPartyCard({customer}) {
         </a>
       </div>
       <div>
-        <a href="http://www.strava.com/oauth/authorize?client_id=7947&response_type=code&scope=activity:read_all&redirect_uri=https://lm88c7efxc.execute-api.eu-west-1.amazonaws.com/prod/notification">
+        <a href="http://www.strava.com/oauth/authorize?client_id=7947&response_type=code&scope=activity:read_all&redirect_uri=https://47fzqsmjsk.execute-api.eu-west-1.amazonaws.com/prod/notification">
           Connect your Strava account
         </a>
       </div>
