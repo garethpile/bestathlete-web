@@ -1,4 +1,5 @@
 // src/services/adminServices.js
+import { getTraceHeaders } from "./traceHelpers";
 
 const API_BASE = "https://fxga0x7bo5.execute-api.eu-west-1.amazonaws.com/prod/ssmparameter"; // Update to your real API Gateway base if needed
 
@@ -10,7 +11,11 @@ const API_BASE = "https://fxga0x7bo5.execute-api.eu-west-1.amazonaws.com/prod/ss
 export async function getSSMParameter(key) {
   // Encode key to safely use in a URL
   const encodedKey = encodeURIComponent(key);
-  const response = await fetch(`${API_BASE}?key=${encodedKey}`);
+  const response = await fetch(`${API_BASE}?key=${encodedKey}`, {
+    headers: {
+      ...getTraceHeaders(),
+    },
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch SSM parameter");
   }
@@ -31,6 +36,7 @@ export async function putSSMParameter(key, value) {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      ...getTraceHeaders(),
     },
     body: JSON.stringify({ key, value }),
   });

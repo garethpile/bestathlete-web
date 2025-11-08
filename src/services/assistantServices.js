@@ -12,6 +12,8 @@
  * canned response so that the UI can function without breaking.
  */
 
+import { getTraceHeaders } from "./traceHelpers";
+
 const { REACT_APP_ASSISTANT_ENDPOINT } = process.env;
 
 /**
@@ -50,6 +52,7 @@ export const assistantSendMessage = async ({ customerId, messages }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...getTraceHeaders(),
       },
       body: JSON.stringify(payload),
     });
@@ -78,4 +81,3 @@ export const assistantSendMessage = async ({ customerId, messages }) => {
     throw error;
   }
 };
-
