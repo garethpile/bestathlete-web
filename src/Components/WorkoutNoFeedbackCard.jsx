@@ -1,32 +1,13 @@
 import React from "react";
-import { Card, Avatar, Select, Button, Modal as AntModal } from "antd";
+import { Card, Button, Modal as AntModal } from "antd";
 import Slider from "@mui/material/Slider";
-import IconButton from "@mui/material/IconButton";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
-import PoolIcon from "@mui/icons-material/Pool";
-import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
-import PedalBikeIcon from "@mui/icons-material/PedalBike";
-import moment from "moment";
 import { API, graphqlOperation } from "aws-amplify";
 import { updateWorkout, deleteWorkout } from "../graphql/mutations.js";
 import Modal from "@mui/material/Modal";
 import { workoutUpdate } from "../services/workoutServices.js";
-
-const { Option } = Select;
-
-const iconDictionary = {
-  Swim: <PoolIcon fontSize="large" />,
-  WeightTraining: <FitnessCenterIcon fontSize="large" />,
-  Workout: <FitnessCenterIcon fontSize="large" />,
-  Run: <DirectionsRunIcon fontSize="large" />,
-  Hike: <DirectionsRunIcon fontSize="large" />,
-  Ride: <DirectionsBikeIcon fontSize="large" />,
-  VirtualRide: <PedalBikeIcon fontSize="large" />,
-};
 
 function secondsToHms(d) {
   d = Number(d);
@@ -100,10 +81,7 @@ export default function WorkoutNoFeedbackCard({ workout }) {
   const [dropdownActivityEffort, setDropdownActivityEffort] = React.useState(
     workout.WorkoutRPE ? workout.WorkoutRPE.toString() : ""
   );
-  const [dropdownActivityBody, setDropdownActivityBody] = React.useState(
-    workout.WorkoutPhysicalLevel !== undefined ? workout.WorkoutPhysicalLevel.toString() : ""
-  );
-  const [dropdownRunType, setDropdownRunType] = React.useState(
+  const [dropdownRunType] = React.useState(
     workout.WorkoutClassification || ""
   );
   const [painModalOpen, setPainModalOpen] = React.useState(false);
@@ -117,8 +95,6 @@ export default function WorkoutNoFeedbackCard({ workout }) {
 
   async function updateActivity(id) {
     try {
-      //console.log("Workout WorkoutPhysicalLevel: ", dropdownActivityBody);
-
       const updateActivity = await API.graphql(
         graphqlOperation(updateWorkout, {
           input: {
@@ -269,7 +245,6 @@ export default function WorkoutNoFeedbackCard({ workout }) {
                     WorkoutPhysicalLevel: painSeverity,
                     WorkoutPhysicalLevelPain: JSON.stringify(painLocations)
                   });
-                  setDropdownActivityBody(painSeverity.toString());
                   setPainModalOpen(false);
                 } catch (error) {
                   alert("Failed to update pain information. Please try again.");

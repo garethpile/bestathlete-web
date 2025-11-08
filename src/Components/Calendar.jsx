@@ -1,26 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { customerAvailabilityDelete } from "../services/customerAvailabilityServices";
-import { Badge, Card, Tooltip, Modal } from "antd";
+import { Card, Tooltip, Modal } from "antd";
 import dayjs from "dayjs";
-import { EnvironmentOutlined, FireOutlined, ThunderboltOutlined, HeartOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWater, faBicycle, faRunning, faDumbbell, faGolfBallTee } from '@fortawesome/free-solid-svg-icons';
 import WorkoutNoFeedbackCard from "./WorkoutNoFeedbackCard";
 import UnavailabilityModal from "./UnavailabilityModal";
-
-const getColorByWorkoutType = (type) => {
-  const typeLower = (type || "").toLowerCase();
-  if (typeLower.includes("run")) return "#8B0000"; // Dark red
-  if (typeLower.includes("swim")) return "#00008B"; // Dark blue
-  if (typeLower.includes("ride") || typeLower.includes("bike")) return "#006400"; // Dark green
-  if (
-    typeLower.includes("strength") ||
-    typeLower.includes("weight") ||
-    typeLower.includes("weighttraining")
-  )
-    return "#000000"; // Black
-  return "gray";
-};
 
 const getPhaseForDate = (date, aRace) => {
   const phases = [

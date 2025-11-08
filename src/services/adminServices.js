@@ -31,7 +31,6 @@ export async function getSSMParameter(key) {
  * @returns {Promise<void>}
  */
 export async function putSSMParameter(key, value) {
-  const encodedKey = encodeURIComponent(key);
   const response = await fetch(`${API_BASE}`, {
     method: "PUT",
     headers: {

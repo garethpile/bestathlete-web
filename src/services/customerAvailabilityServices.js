@@ -39,7 +39,7 @@ export const customerAvailabilityUpdate = async (updatedFields) => {
   try {
     console.log("<customerAvailabilityServices><customerAvailabilityUpdate>: executing ...");
 
-    const result = await API.graphql(graphqlOperation(updateCustomerAvailability, { input: updatedFields }));
+    await API.graphql(graphqlOperation(updateCustomerAvailability, { input: updatedFields }));
     //console.log("<customerAvailabilityServices><customerAvailabilityUpdate>: Result: ", result);
     return true; 
 
@@ -53,7 +53,7 @@ export const customerAvailabilityDelete = async (id) => {
   try {
     console.log("<customerAvailabilityServices><customerAvailabilityDelete>: executing ...");
 
-    const result = await API.graphql(graphqlOperation(deleteCustomerAvailability, {input: { id: id }}));
+    await API.graphql(graphqlOperation(deleteCustomerAvailability, {input: { id: id }}));
 
     //console.log("<customerAvailabilityServices><customerAvailabilityDelete>: Result: ", result);
     return true; 

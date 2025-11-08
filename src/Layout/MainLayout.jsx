@@ -1,6 +1,6 @@
 import { Auth } from 'aws-amplify';
 import React from 'react';
-import { Layout, Menu, Tooltip, Grid } from 'antd';
+import { Layout, Menu, Grid } from 'antd';
 import {
   DashboardOutlined,
   UserOutlined,

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useMediaQuery } from "react-responsive";
 import { Button as AntButton, DatePicker } from "antd";
 import WorkoutManagement from "./WorkoutManagement";
 import dayjs from "dayjs";

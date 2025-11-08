@@ -82,18 +82,6 @@ const LandingPage = () => {
         setMetrics3DaysSleep(sleepMetricsRes.body || []);
         setCustomerAvailabilities(customerAvailabilitiesRes.body || []);
 
-        const refreshCustomerAvailabilities = async (idCustomer) => {
-          const result = await customerAvailabilitiesGetByIdCustomer(idCustomer);
-          if (result.statusCode === 200) {
-            setCustomerAvailabilities(result.body);
-          }
-        };
-
-        // Assign refreshCustomerAvailabilities to state or ref if needed
-        // Here, we define it inside useEffect but need to make it accessible outside
-        // So move it outside or define it here and pass it down differently
-        // For now, we will move it outside useEffect to be able to pass it to RouterConfig
-
       } catch (error) {
         console.error("Error loading user data:", error);
       } finally {

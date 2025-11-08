@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Card, Spin } from "antd";
-import IconButton from "@mui/material/IconButton";
 import { Avatar } from "antd";
 import Divider from "@mui/material/Divider";
 import { Pie } from 'react-chartjs-2';
@@ -78,25 +77,6 @@ export default function AthleteCard({ customer, workouts = [], customerAvailabil
 
     setSummary({ disciplineHours, disciplineDistance, sessionCounts });
   }, [workouts]);
-
-  const sessionData = summary
-    ? {
-      labels: ['Swim', 'Bike', 'Run', 'Strength'],
-      datasets: [
-        {
-          label: '# of Sessions',
-          data: [
-            summary.sessionCounts.Swim,
-            summary.sessionCounts.Bike,
-            summary.sessionCounts.Run,
-            summary.sessionCounts.Strength,
-          ],
-          backgroundColor: ['#36A2EB', '#4BC04B', '#FF6384', '#222222'],
-          borderWidth: 1,
-        },
-      ],
-    }
-    : { labels: [], datasets: [] };
 
   const timeData = summary
     ? {

@@ -33,7 +33,7 @@ export const customerUpdate = async (updatedCustomer, idCustomer) => {
 
   try {
 
-    const result = await API.graphql(graphqlOperation(updateCustomer, { input: updatedCustomer }));
+    await API.graphql(graphqlOperation(updateCustomer, { input: updatedCustomer }));
     return true;
 
   } catch (error) {
@@ -56,4 +56,3 @@ export const customerCreate = async (newCustomerData) => {
     return false;
   }
 };
-

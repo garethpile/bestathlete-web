@@ -95,7 +95,6 @@ const EventModal = ({ open, setOpen, onEventCreated, customer, existingEvents, e
       peak = Math.round(totalDays * 0.25);
     }
 
-    const taper = totalDays - (prep + base + build + peak);
     let cursor = start.clone();
 
     const data = {

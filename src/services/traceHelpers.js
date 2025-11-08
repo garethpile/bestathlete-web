@@ -1,3 +1,5 @@
+/* eslint-env es2020 */
+
 const TRACE_HEADER_NAME = "x-amzn-trace-id";
 
 const randomHex = (byteLength) => {

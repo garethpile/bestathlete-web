@@ -39,7 +39,7 @@ export const eventUpdate = async (updatedFields) => {
   try {
     console.log("<eventServices><eventUpdate>: executing ...");
 
-    const result = await API.graphql(graphqlOperation(updateEvent, { input: updatedFields }));
+    await API.graphql(graphqlOperation(updateEvent, { input: updatedFields }));
     //console.log("<eventServices><eventUpdate>: Result: ", result);
     return true; 
 
@@ -53,7 +53,7 @@ export const eventDelete = async (id) => {
   try {
     console.log("<eventServices><eventDelete>: executing ...");
 
-    const result = await API.graphql(graphqlOperation(deleteEvent, {input: { id: id }}));
+    await API.graphql(graphqlOperation(deleteEvent, {input: { id: id }}));
 
     //console.log("<eventServices><eventDelete>: Result: ", result);
     return true; 

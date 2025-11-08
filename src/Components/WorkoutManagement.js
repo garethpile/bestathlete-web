@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Input,
   Button,
-  Row,
-  Col,
   Card,
   Typography,
   Divider,
@@ -15,7 +13,7 @@ import "rc-slider/assets/index.css";
 import "./WorkoutManagement.css";
 import { workoutUpdate } from "../services/workoutServices";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 const { Panel } = Collapse;
 
 const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout }) => {
