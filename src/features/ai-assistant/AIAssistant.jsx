@@ -3,7 +3,7 @@ import { Button, Input, Spin, Tooltip } from "antd";
 import { MessageOutlined, SendOutlined, CloseOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
 import dayjs from "dayjs";
-import { assistantSendMessage } from "../services/assistantServices";
+import { assistantSendMessage } from "../../services/assistantServices";
 
 const { TextArea } = Input;
 
@@ -266,4 +266,3 @@ AIAssistant.defaultProps = {
 };
 
 export default AIAssistant;
-

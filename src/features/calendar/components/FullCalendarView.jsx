@@ -62,6 +62,20 @@ const FullCalendarView = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const getDisciplineFromType = useCallback((type = "") => {
+    const lowered = type.toLowerCase();
+    if (lowered.includes("swim")) return "Swim";
+    if (lowered.includes("bike") || lowered.includes("ride")) return "Bike";
+    if (lowered.includes("run")) return "Run";
+    if (
+      lowered.includes("strength") ||
+      lowered.includes("weight") ||
+      lowered.includes("weighttraining")
+    )
+      return "Strength";
+    return null;
+  }, []);
+
   const workoutMap = useMemo(() => {
     return workouts.reduce((acc, workout) => {
       if (!workout.WorkoutDateTime) return acc;
@@ -71,6 +85,37 @@ const FullCalendarView = ({
       return acc;
     }, {});
   }, [workouts]);
+
+  const weekSummaries = useMemo(() => {
+    const emptyBucket = () => ({
+      planned: { Swim: 0, Bike: 0, Run: 0, Strength: 0 },
+      completed: { Swim: 0, Bike: 0, Run: 0, Strength: 0 },
+    });
+
+    return workouts.reduce((acc, workout) => {
+      if (!workout.WorkoutDateTime) return acc;
+      const discipline = getDisciplineFromType(workout.WorkoutType || "");
+      if (!discipline) return acc;
+
+      const weekKey = dayjs(workout.WorkoutDateTime)
+        .startOf("week")
+        .add(1, "day")
+        .format("YYYY-MM-DD");
+
+      const summary = acc[weekKey] || emptyBucket();
+      const hours = Math.max(Number(workout.WorkoutMovingTime || 0) / 3600, 0);
+      const state = (workout.WorkoutState || "").toLowerCase();
+
+      if (state === "completed") {
+        summary.completed[discipline] += hours;
+      } else {
+        summary.planned[discipline] += hours;
+      }
+
+      acc[weekKey] = summary;
+      return acc;
+    }, {});
+  }, [workouts, getDisciplineFromType]);
 
   const dateCellRender = useCallback(
     (value) => {
@@ -185,6 +230,14 @@ const FullCalendarView = ({
 
   const aRace = events.find((e) => e.EventPriority === "A");
 
+  const getWeekSummary = useCallback(
+    (weekStart) => {
+      const key = dayjs(weekStart).startOf("week").add(1, "day").format("YYYY-MM-DD");
+      return weekSummaries[key] || null;
+    },
+    [weekSummaries]
+  );
+
   return (
     <Card className="maincardDiv">
       <CalendarHeaderControls
@@ -218,6 +271,7 @@ const FullCalendarView = ({
         dateCellRender={dateCellRender}
         activeRace={aRace}
         getPhaseForDate={getPhaseForDate}
+        getWeekSummary={getWeekSummary}
       />
       <Modal
         title={

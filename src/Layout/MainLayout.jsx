@@ -10,7 +10,7 @@ import {
 } from '@ant-design/icons';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import AIAssistant from '../Components/AIAssistant';
+import AIAssistant from '../features/ai-assistant/AIAssistant';
 
 const { Header, Content } = Layout;
 const { useBreakpoint } = Grid;
