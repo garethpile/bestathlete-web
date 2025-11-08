@@ -16,7 +16,7 @@ import {
 import CountryList from "./CountryList";
 import { Box } from "@mui/system";
 import { API, graphqlOperation } from "aws-amplify";
-import { updateCustomer } from "../graphql/mutations";
+import { updateCustomer } from "../../../graphql/mutations";
 
 const Profile = ({ customer }) => {
   const [user, setUser] = useState({

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getSSMParameter, putSSMParameter } from "../services/adminServices"; // You'll need to implement these API calls
+import { getSSMParameter, putSSMParameter } from "../../../services/adminServices";
 
 const SSM_KEY = "/chatgpt/prompts/plannedWorkout";
 

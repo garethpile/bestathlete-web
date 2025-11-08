@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
 
-export default function Workouts({ workouts: allWorkouts = [] }) {
+const WorkoutsView = ({ workouts: allWorkouts = [] }) => {
   const today = dayjs();
   const [dateRange, setDateRange] = useState([
     today.subtract(2, "day"),
@@ -85,4 +85,6 @@ export default function Workouts({ workouts: allWorkouts = [] }) {
       </div>
     </div>
   );
-}
+};
+
+export default WorkoutsView;

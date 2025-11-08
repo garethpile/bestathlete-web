@@ -11,7 +11,7 @@ import {
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "./WorkoutManagement.css";
-import { workoutUpdate } from "../services/workoutServices";
+import { workoutUpdate } from "../../../services/workoutServices";
 
 const { Text } = Typography;
 const { Panel } = Collapse;

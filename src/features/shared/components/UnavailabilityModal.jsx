@@ -1,7 +1,7 @@
 
 
 import React, { useState, useEffect } from "react";
-import { customerAvailabilityUpdate } from "../services/customerAvailabilityServices";
+import { customerAvailabilityUpdate } from "../../../services/customerAvailabilityServices";
 import {
   Dialog,
   DialogTitle,

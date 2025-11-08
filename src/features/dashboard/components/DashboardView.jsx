@@ -4,14 +4,14 @@ import { DeleteOutlined } from "@ant-design/icons";
 import AthleteCard from "./AthleteCard";
 import TermsConditions from "./TermsConditions";
 import EventModal from "./EventModal";
-import UnavailabilityModal from "./UnavailabilityModal";
-import { eventGetIDDateTime, eventDelete } from "../services/eventServices";
+import UnavailabilityModal from "../../shared/components/UnavailabilityModal";
+import { eventGetIDDateTime, eventDelete } from "../../../services/eventServices";
 import {
   customerAvailabilitiesGetByIdCustomer,
   customerAvailabilityCreate,
   customerAvailabilityUpdate,
   customerAvailabilityDelete,
-} from "../services/customerAvailabilityServices";
+} from "../../../services/customerAvailabilityServices";
 
 const { Panel } = Collapse;
 

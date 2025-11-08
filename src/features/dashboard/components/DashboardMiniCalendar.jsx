@@ -9,7 +9,7 @@ import {
   faDumbbell,
   faGolfBallTee,
 } from "@fortawesome/free-solid-svg-icons";
-import WorkoutNoFeedbackCard from "./WorkoutNoFeedbackCard";
+import WorkoutNoFeedbackCard from "../../shared/components/WorkoutNoFeedbackCard";
 
 const getWorkoutIcon = (type = "") => {
   const lowered = type.toLowerCase();

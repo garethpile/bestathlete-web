@@ -5,9 +5,9 @@ import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { API, graphqlOperation } from "aws-amplify";
-import { updateWorkout, deleteWorkout } from "../graphql/mutations.js";
+import { updateWorkout, deleteWorkout } from "../../../graphql/mutations.js";
 import Modal from "@mui/material/Modal";
-import { workoutUpdate } from "../services/workoutServices.js";
+import { workoutUpdate } from "../../../services/workoutServices.js";
 
 function secondsToHms(d) {
   d = Number(d);

@@ -18,7 +18,7 @@ import {
   Slider,
 } from "@mui/material";
 import moment from "moment";
-import { eventCreate, eventUpdate } from "../services/eventServices";
+import { eventCreate, eventUpdate } from "../../../services/eventServices";
 
 const EventModal = ({ open, setOpen, onEventCreated, customer, existingEvents, event }) => {
   const [form, setForm] = useState({});
