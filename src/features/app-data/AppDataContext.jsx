@@ -60,6 +60,27 @@ const TRAINING_DAY_TEMPLATE = {
 
 const buildDefaultTrainingDays = () => ({ ...TRAINING_DAY_TEMPLATE });
 
+const DEFAULT_PHONE_NUMBER = "+12065550100";
+const E164_REGEX = /^\+[1-9]\d{1,14}$/;
+
+const sanitizePhoneNumber = (rawNumber) => {
+  if (!rawNumber) {
+    return null;
+  }
+  const trimmed = rawNumber.trim();
+  if (E164_REGEX.test(trimmed)) {
+    return trimmed;
+  }
+  const digitsOnly = trimmed.replace(/\D/g, "");
+  if (!digitsOnly) {
+    return null;
+  }
+  const normalized = digitsOnly.startsWith("0")
+    ? `+${digitsOnly.replace(/^0+/, "")}`
+    : `+${digitsOnly}`;
+  return E164_REGEX.test(normalized) ? normalized : null;
+};
+
 const buildNewCustomerPayload = (username, attributes = {}) => {
   const nameParts = (attributes.name || "").trim().split(" ").filter(Boolean);
   const derivedFirstName = attributes.given_name || nameParts[0] || "New";
@@ -73,7 +94,8 @@ const buildNewCustomerPayload = (username, attributes = {}) => {
     LastName: derivedLastName,
     EmailAddress:
       attributes.email || `${username}@placeholder.example.com`,
-    MobileNumber: attributes.phone_number || "+10000000000",
+    MobileNumber:
+      sanitizePhoneNumber(attributes.phone_number) || DEFAULT_PHONE_NUMBER,
     Gender: attributes.gender || "Unspecified",
     DateOfBirth: attributes.birthdate || "1970-01-01",
     Country: attributes["custom:country"] || "",
