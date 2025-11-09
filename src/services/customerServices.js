@@ -46,13 +46,12 @@ export const customerCreate = async (newCustomerData) => {
   //console.log('<customerServices><customerCreate>: newCustomerData: ', newCustomerData);
 
   try {
-
     const result = await API.graphql(graphqlOperation(createCustomer, { input: newCustomerData }));
-    console.log("<customerServices><customerCreate>: result: ", result);
-    return result;
-
+    const createdCustomer = result?.data?.createCustomer ?? null;
+    console.log("<customerServices><customerCreate>: result: ", createdCustomer);
+    return createdCustomer;
   } catch (error) {
     console.error('<customerServices><customerCreate><Error><001>: Error creating customer:', error);
-    return false;
+    throw error;
   }
 };

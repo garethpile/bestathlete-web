@@ -11,17 +11,19 @@ const Calendar = lazy(() => import("../features/calendar/CalendarPage"));
 const Administration = lazy(() => import("../features/administration/AdministrationPage"));
 
 const RouterConfig = () => {
-  const { customer } = useAppData();
+  const { customer, requiresProfileSetup } = useAppData();
+  const guard = (element) =>
+    requiresProfileSetup ? <Navigate to="/profile" replace /> : element;
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route element={<MainLayout customer={customer} />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/workouts" element={<Workouts />} />
+          <Route path="/" element={guard(<Dashboard />)} />
+          <Route path="/workouts" element={guard(<Workouts />)} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/thirdparty" element={<ThirdParty />} />
-          <Route path="/administration" element={<Administration />} />
-          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/thirdparty" element={guard(<ThirdParty />)} />
+          <Route path="/administration" element={guard(<Administration />)} />
+          <Route path="/calendar" element={guard(<Calendar />)} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

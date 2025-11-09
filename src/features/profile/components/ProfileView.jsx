@@ -18,7 +18,7 @@ import { Box } from "@mui/system";
 import { API, graphqlOperation } from "aws-amplify";
 import { updateCustomer } from "../../../graphql/mutations";
 
-const Profile = ({ customer }) => {
+const Profile = ({ customer, onProfileSaved }) => {
   const [user, setUser] = useState({
     id: "",
     FirstName: "",
@@ -28,6 +28,7 @@ const Profile = ({ customer }) => {
     MobileNumber: "",
     Country: "",
     DateOfBirth: "",
+    idCustomer: "",
     TrainingDays: {
       MondayTrain: false,
       MondayTrainHours: 0,
@@ -139,6 +140,9 @@ const Profile = ({ customer }) => {
       const response = await API.graphql(graphqlOperation(updateCustomer, { input }));
       alert("Customer data updated successfully");
       console.log("Update response:", response);
+      if (typeof onProfileSaved === "function") {
+        await onProfileSaved();
+      }
     } catch (error) {
       console.error("Error updating customer data:", error);
       alert("Error updating customer data. Please try again.");

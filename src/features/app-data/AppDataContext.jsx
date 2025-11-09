@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 import { Auth } from "aws-amplify";
-import { customerGetByIdCustomer } from "../../services/customerServices";
+import { customerCreate, customerGetByIdCustomer } from "../../services/customerServices";
 import { workoutsGetIDDateTime } from "../../services/workoutServices";
 import { eventGetIDDateTime } from "../../services/eventServices";
 import {
@@ -41,6 +41,46 @@ const initialStatus = {
 const parseBody = (response) =>
   Array.isArray(response?.body) ? response.body : [];
 
+const TRAINING_DAY_TEMPLATE = {
+  MondayTrain: false,
+  MondayTrainHours: 0,
+  TuesdayTrain: false,
+  TuesdayTrainHours: 0,
+  WednesdayTrain: false,
+  WednesdayTrainHours: 0,
+  ThursdayTrain: false,
+  ThursdayTrainHours: 0,
+  FridayTrain: false,
+  FridayTrainHours: 0,
+  SaturdayTrain: false,
+  SaturdayTrainHours: 0,
+  SundayTrain: false,
+  SundayTrainHours: 0,
+};
+
+const buildDefaultTrainingDays = () => ({ ...TRAINING_DAY_TEMPLATE });
+
+const buildNewCustomerPayload = (username, attributes = {}) => {
+  const nameParts = (attributes.name || "").trim().split(" ").filter(Boolean);
+  const derivedFirstName = attributes.given_name || nameParts[0] || "New";
+  const derivedLastName =
+    attributes.family_name ||
+    (nameParts.length > 1 ? nameParts.slice(1).join(" ") : "Athlete");
+
+  return {
+    idCustomer: username,
+    FirstName: derivedFirstName,
+    LastName: derivedLastName,
+    EmailAddress:
+      attributes.email || `${username}@placeholder.example.com`,
+    MobileNumber: attributes.phone_number || "+10000000000",
+    Gender: attributes.gender || "Unspecified",
+    DateOfBirth: attributes.birthdate || "1970-01-01",
+    Country: attributes["custom:country"] || "",
+    TrainingDays: buildDefaultTrainingDays(),
+  };
+};
+
 const getDefaultDateWindow = () => {
   const today = new Date();
   const dayOfWeek = today.getDay();
@@ -60,6 +100,7 @@ export const AppDataProvider = ({ children }) => {
   const [status, setStatus] = useState(initialStatus);
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [requiresProfileSetup, setRequiresProfileSetup] = useState(false);
 
   const updateSegment = useCallback(async (key, fn, parser = (x) => x) => {
     setStatus((prev) => ({ ...prev, [key]: "loading" }));
@@ -77,6 +118,26 @@ export const AppDataProvider = ({ children }) => {
     }
   }, []);
 
+  const ensureCustomerProfile = useCallback(
+    async (username, attributes) => {
+      const existingCustomer = await customerGetByIdCustomer(username);
+      if (existingCustomer) {
+        setRequiresProfileSetup(false);
+        return existingCustomer;
+      }
+
+      const createdCustomer = await customerCreate(
+        buildNewCustomerPayload(username, attributes)
+      );
+      if (!createdCustomer) {
+        throw new Error("Unable to create customer profile");
+      }
+      setRequiresProfileSetup(true);
+      return createdCustomer;
+    },
+    []
+  );
+
   const loadAll = useCallback(async () => {
     setError(null);
     try {
@@ -84,10 +145,11 @@ export const AppDataProvider = ({ children }) => {
         bypassCache: true,
       });
       const username = authenticatedUser.username;
+      const attributes = authenticatedUser?.attributes || {};
       setUserId(username);
 
       const customerData = await updateSegment("customer", () =>
-        customerGetByIdCustomer(username)
+        ensureCustomerProfile(username, attributes)
       );
 
       if (!customerData) {
@@ -125,7 +187,7 @@ export const AppDataProvider = ({ children }) => {
       console.error("Failed to bootstrap application data", loadError);
       setError(loadError);
     }
-  }, [updateSegment]);
+  }, [ensureCustomerProfile, updateSegment]);
 
   useEffect(() => {
     loadAll();
@@ -149,6 +211,10 @@ export const AppDataProvider = ({ children }) => {
     await updateSegment("events", () => eventGetIDDateTime(userId), parseBody);
   }, [updateSegment, userId]);
 
+  const markProfileComplete = useCallback(() => {
+    setRequiresProfileSetup(false);
+  }, []);
+
   const contextValue = useMemo(
     () => ({
       ...data,
@@ -157,6 +223,8 @@ export const AppDataProvider = ({ children }) => {
       refreshAll: loadAll,
       refreshCustomerAvailabilities,
       refreshEvents,
+      requiresProfileSetup,
+      markProfileComplete,
       setCustomerAvailabilities: (list) =>
         setData((prev) => ({ ...prev, customerAvailabilities: list })),
       setEvents: (list) => setData((prev) => ({ ...prev, events: list })),
@@ -167,6 +235,8 @@ export const AppDataProvider = ({ children }) => {
       loadAll,
       refreshCustomerAvailabilities,
       refreshEvents,
+      requiresProfileSetup,
+      markProfileComplete,
       status,
     ]
   );
