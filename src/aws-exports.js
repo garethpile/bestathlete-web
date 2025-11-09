@@ -6,8 +6,7 @@ const awsmobile = {
     "aws_project_region": "us-east-1",
     "aws_appsync_graphqlEndpoint": "https://6ytdelytwbdfbbyojwmxqit6ou.appsync-api.us-east-1.amazonaws.com/graphql",
     "aws_appsync_region": "us-east-1",
-    "aws_appsync_authenticationType": "API_KEY",
-    "aws_appsync_apiKey": "da2-bila5xsilzegjgtqsfncolxeve",
+    "aws_appsync_authenticationType": "AMAZON_COGNITO_USER_POOLS",
     "aws_cloud_logic_custom": [
         {
             "name": "Garmin360dsl",
@@ -20,10 +19,10 @@ const awsmobile = {
             "region": "eu-west-1"
         }
     ],
-    "aws_cognito_identity_pool_id": "eu-west-1:af6b6d68-e8d8-489b-ab67-363d00fe64a9",
-    "aws_cognito_region": "eu-west-1",
-    "aws_user_pools_id": "eu-west-1_71S8wDMsE",
-    "aws_user_pools_web_client_id": "2b43se7aighl9f0sqi25apqg41",
+    "aws_cognito_identity_pool_id": "us-east-1:7ede5064-d5fd-4e1e-ba7c-5703284bb395",
+    "aws_cognito_region": "us-east-1",
+    "aws_user_pools_id": "us-east-1_TG8I6Bb6H",
+    "aws_user_pools_web_client_id": "3jfjp01fkstqti8ametm13r1i5",
     "oauth": {},
     "aws_cognito_username_attributes": [
         "EMAIL"
@@ -47,4 +46,3 @@ const awsmobile = {
 
 
 export default awsmobile;
-

@@ -1,16 +1,38 @@
-import {
-    ApolloClient,
-    InMemoryCache,
-  } from "@apollo/client";
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import { Auth } from "aws-amplify";
+import awsconfig from "../aws-exports";
+import { getTraceHeaders } from "../services/traceHelpers";
 
-const client = new ApolloClient({
-    headers : {
-        "API-ID": "lfdjpwzwbjhr3psfq5w7wyakui",
-        "API KEY": "da2-bila5xsilzegjgtqsfncolxeve",
-    },
-    uri: 'https://qciohjhxuvgchjsvrpghrcdsqy.appsync-api.eu-west-1.amazonaws.com/graphql',
-    cache: new InMemoryCache()
+const httpLink = createHttpLink({
+  uri: awsconfig.aws_appsync_graphqlEndpoint,
 });
 
+const authLink = setContext(async (_, { headers }) => {
+  try {
+    const session = await Auth.currentSession();
+    const token = session.getIdToken().getJwtToken();
+    return {
+      headers: {
+        ...headers,
+        Authorization: token,
+        ...getTraceHeaders(),
+      },
+    };
+  } catch (error) {
+    console.warn("Unable to obtain Cognito session for GraphQL auth", error);
+    return {
+      headers: {
+        ...headers,
+        ...getTraceHeaders(),
+      },
+    };
+  }
+});
 
-export default client
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
+
+export default client;
