@@ -1,6 +1,15 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Input, Spin, Tooltip } from "antd";
-import { MessageOutlined, SendOutlined, CloseOutlined } from "@ant-design/icons";
+import {
+  MessageOutlined,
+  SendOutlined,
+  CloseOutlined,
+  SmileOutlined,
+  MehOutlined,
+  FrownOutlined,
+  ThunderboltOutlined,
+  HeartOutlined,
+} from "@ant-design/icons";
 import PropTypes from "prop-types";
 import dayjs from "dayjs";
 import { assistantSendMessage } from "../../services/assistantServices";
@@ -19,8 +28,16 @@ const buildInitialMessage = (firstName) => ({
  * On open it greets the athlete and forwards subsequent conversation turns
  * to the backend assistant service.
  */
+const SENTIMENT_PRESETS = [
+  { label: "All Good", text: "All good", icon: <SmileOutlined /> },
+  { label: "Body Tired", text: "Body tired", icon: <MehOutlined /> },
+  { label: "Injured", text: "I'm injured", icon: <FrownOutlined /> },
+  { label: "Stressed", text: "Feeling stressed", icon: <ThunderboltOutlined /> },
+  { label: "Struggling mentally", text: "Struggling mentally", icon: <HeartOutlined /> },
+];
+
 const AIAssistant = ({ customer }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -48,20 +65,22 @@ const AIAssistant = ({ customer }) => {
     setIsOpen((prev) => !prev);
   };
 
-  const handleSend = async () => {
-    if (!inputValue.trim()) return;
+  const handleSend = async (presetText) => {
+    const textToSend = typeof presetText === "string" ? presetText : inputValue.trim();
+    if (!textToSend) return;
 
-    const trimmed = inputValue.trim();
     const outgoingMessage = {
       id: `user-${Date.now()}`,
       role: "user",
-      content: trimmed,
+      content: textToSend,
       createdAt: new Date().toISOString(),
     };
 
     const updatedHistory = [...messages, outgoingMessage];
     setMessages(updatedHistory);
-    setInputValue("");
+    if (!presetText) {
+      setInputValue("");
+    }
     setErrorMessage("");
     setIsSending(true);
 
@@ -209,6 +228,31 @@ const AIAssistant = ({ customer }) => {
           </div>
 
           <div style={{ padding: "12px 16px", borderTop: "1px solid #e5e7eb" }}>
+            {messages.length === 1 && messages[0].role === "assistant" && (
+              <div
+                style={{
+                  marginBottom: 12,
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 8,
+                }}
+              >
+                {SENTIMENT_PRESETS.map((preset) => (
+                  <Button
+                    key={preset.label}
+                    icon={preset.icon}
+                    size="small"
+                    style={{ borderRadius: 999 }}
+                    onClick={() => {
+                      setInputValue(preset.text);
+                      handleSend(preset.text);
+                    }}
+                  >
+                    {preset.label}
+                  </Button>
+                ))}
+              </div>
+            )}
             <TextArea
               rows={2}
               placeholder="Tell me how you're feeling today..."
@@ -226,7 +270,7 @@ const AIAssistant = ({ customer }) => {
               <Button
                 type="primary"
                 icon={<SendOutlined />}
-                onClick={handleSend}
+                onClick={() => handleSend()}
                 disabled={isSending || !inputValue.trim()}
               >
                 Send
