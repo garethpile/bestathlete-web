@@ -14,10 +14,11 @@ const headerCellStyle = {
 const formatDistance = (value) =>
   Number.isFinite(value) ? value.toFixed(1) : "0.0";
 
-const AthleteSummary = ({ summary, formatHoursMinutes }) => {
+const AthleteSummary = ({ summary, formatHoursMinutes, rangeLabel = "Last 7 Days", windowStats }) => {
   const sessionCounts = summary?.sessionCounts || {};
   const disciplineHours = summary?.disciplineHours || {};
   const disciplineDistance = summary?.disciplineDistance || {};
+  const heading = `${rangeLabel} Summary`;
 
   const totalSessions =
     (sessionCounts.Swim || 0) +
@@ -38,7 +39,7 @@ const AthleteSummary = ({ summary, formatHoursMinutes }) => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
-      <h3 style={{ marginTop: 16, marginBottom: 8, textAlign: "center" }}>Last 7 Days Summary</h3>
+      <h3 style={{ marginTop: 16, marginBottom: 8, textAlign: "center" }}>{heading}</h3>
       <div style={{ overflowX: "auto", width: "100%", display: "flex", justifyContent: "center" }}>
         <table style={{ borderCollapse: "collapse", width: "100%", maxWidth: "650px", textAlign: "center" }}>
           <thead>
@@ -75,6 +76,14 @@ const AthleteSummary = ({ summary, formatHoursMinutes }) => {
           </tbody>
         </table>
       </div>
+      {windowStats && (
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "12px", marginTop: "12px" }}>
+          <span><strong>Total TSS:</strong> {windowStats.totalTss || 0}</span>
+          <span><strong>Longest Swim:</strong> {formatDistance(windowStats.longest?.Swim)} km</span>
+          <span><strong>Longest Bike:</strong> {formatDistance(windowStats.longest?.Bike)} km</span>
+          <span><strong>Longest Run:</strong> {formatDistance(windowStats.longest?.Run)} km</span>
+        </div>
+      )}
     </div>
   );
 };
