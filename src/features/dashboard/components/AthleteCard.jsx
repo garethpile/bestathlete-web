@@ -112,35 +112,46 @@ const AthleteCard = ({
   events = [],
 }) => {
   return (
-    <Card
-      className="maincardDiv"
-      bodyStyle={{ padding: "20px" }}
-      style={{
-        borderRadius: 24,
-        border: "1px solid #e2e8f0",
-        boxShadow: "0 25px 65px rgba(15,23,42,0.09)",
-        background: "#fdfefe",
-      }}
-    >
-      <div
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <Card
+        className="maincardDiv"
+        bodyStyle={{ padding: "20px" }}
         style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 16,
-          marginBottom: 24,
+          borderRadius: 24,
+          border: "1px solid #e2e8f0",
+          boxShadow: "0 25px 65px rgba(15,23,42,0.09)",
+          background: "#fdfefe",
         }}
       >
-        <FitnessCard />
-        <EventPreview events={events} />
-      </div>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 16,
+          }}
+        >
+          <FitnessCard />
+          <EventPreview events={events} />
+        </div>
+      </Card>
 
-      <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>Workouts</h2>
-
-      <DashboardMiniCalendar
-        workouts={workouts}
-        customerAvailabilities={customerAvailabilities}
-      />
-    </Card>
+      <Card
+        className="maincardDiv"
+        bodyStyle={{ padding: "20px" }}
+        style={{
+          borderRadius: 24,
+          border: "1px solid #e2e8f0",
+          boxShadow: "0 20px 50px rgba(15,23,42,0.08)",
+          background: "linear-gradient(135deg,#fefefe 0%,#f7f9ff 100%)",
+        }}
+      >
+        <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>Workouts</h2>
+        <DashboardMiniCalendar
+          workouts={workouts}
+          customerAvailabilities={customerAvailabilities}
+        />
+      </Card>
+    </div>
   );
 };
 

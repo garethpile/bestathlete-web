@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef } from "react";
+import React, { useMemo, useState, useRef, useEffect } from "react";
 import { Modal, Tooltip, Switch } from "antd";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -46,6 +46,26 @@ const DashboardMiniCalendar = ({
   const [centreDate, setCentreDate] = useState(dayjs());
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const dragState = useRef({ startX: null });
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia("(max-width: 768px)").matches : false
+  );
+
+  useEffect(() => {
+    const handler = (event) => setIsMobile(event.matches);
+    const mq = window.matchMedia("(max-width: 768px)");
+    if (mq?.addEventListener) {
+      mq.addEventListener("change", handler);
+    } else if (mq?.addListener) {
+      mq.addListener(handler);
+    }
+    return () => {
+      if (mq?.removeEventListener) {
+        mq.removeEventListener("change", handler);
+      } else if (mq?.removeListener) {
+        mq.removeListener(handler);
+      }
+    };
+  }, []);
 
   const workoutMap = useMemo(() => {
     return workouts.reduce((acc, workout) => {
@@ -107,21 +127,23 @@ const DashboardMiniCalendar = ({
           gap: 12,
         }}
       >
-        <button
-          type="button"
-          onClick={() => handleShift(-1)}
-          style={{
-            border: "1px solid #cbd5f5",
-            borderRadius: 999,
-            width: 36,
-            height: 36,
-            background: "#fff",
-            boxShadow: "0 6px 14px rgba(15,23,42,0.07)",
-            cursor: "pointer",
-          }}
-        >
-          ‹
-        </button>
+        {!isMobile && (
+          <button
+            type="button"
+            onClick={() => handleShift(-1)}
+            style={{
+              border: "1px solid #cbd5f5",
+              borderRadius: 999,
+              width: 36,
+              height: 36,
+              background: "#fff",
+              boxShadow: "0 6px 14px rgba(15,23,42,0.07)",
+              cursor: "pointer",
+            }}
+          >
+            ‹
+          </button>
+        )}
         <div
           style={{
             flex: 1,
@@ -183,10 +205,6 @@ const DashboardMiniCalendar = ({
                 }}
               >
                 <div style={{ fontWeight: 600 }}>{date.format("ddd D MMM")}</div>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ fontSize: 11, color: "#94a3b8" }}>Train</span>
-                  <Switch size="small" defaultChecked />
-                </div>
                 <div
                   style={{
                     width: 26,
@@ -202,6 +220,10 @@ const DashboardMiniCalendar = ({
                   }}
                 >
                   {phaseLetter}
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ fontSize: 11, color: "#94a3b8" }}>Train</span>
+                  <Switch size="small" defaultChecked />
                 </div>
               </div>
 
@@ -284,21 +306,23 @@ const DashboardMiniCalendar = ({
           );
         })}
         </div>
-        <button
-          type="button"
-          onClick={() => handleShift(1)}
-          style={{
-            border: "1px solid #cbd5f5",
-            borderRadius: 999,
-            width: 36,
-            height: 36,
-            background: "#fff",
-            boxShadow: "0 6px 14px rgba(15,23,42,0.07)",
-            cursor: "pointer",
-          }}
-        >
-          ›
-        </button>
+        {!isMobile && (
+          <button
+            type="button"
+            onClick={() => handleShift(1)}
+            style={{
+              border: "1px solid #cbd5f5",
+              borderRadius: 999,
+              width: 36,
+              height: 36,
+              background: "#fff",
+              boxShadow: "0 6px 14px rgba(15,23,42,0.07)",
+              cursor: "pointer",
+            }}
+          >
+            ›
+          </button>
+        )}
       </div>
       <Modal
         title={
