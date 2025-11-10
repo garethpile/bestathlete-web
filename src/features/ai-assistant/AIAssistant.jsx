@@ -1,59 +1,104 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Input, Spin, Tooltip } from "antd";
-import {
-  MessageOutlined,
-  SendOutlined,
-  CloseOutlined,
-  SmileOutlined,
-  MehOutlined,
-  FrownOutlined,
-  ThunderboltOutlined,
-  HeartOutlined,
-} from "@ant-design/icons";
+import { MessageOutlined, SendOutlined, CloseOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
 import dayjs from "dayjs";
 import { assistantSendMessage } from "../../services/assistantServices";
 
 const { TextArea } = Input;
 
-const buildInitialMessage = (firstName) => ({
-  id: `assistant-${Date.now()}`,
-  role: "assistant",
-  content: `Hi${firstName ? ` ${firstName}` : ""}! How are you feeling about your training today?`,
-  createdAt: new Date().toISOString(),
-});
-
-/**
- * Floating AI assistant that sits in the lower-right corner of the app.
- * On open it greets the athlete and forwards subsequent conversation turns
- * to the backend assistant service.
- */
-const SENTIMENT_PRESETS = [
-  { label: "All Good", text: "All good", icon: <SmileOutlined /> },
-  { label: "Body Tired", text: "Body tired", icon: <MehOutlined /> },
-  { label: "Injured", text: "I'm injured", icon: <FrownOutlined /> },
-  { label: "Stressed", text: "Feeling stressed", icon: <ThunderboltOutlined /> },
-  { label: "Struggling mentally", text: "Struggling mentally", icon: <HeartOutlined /> },
+const QUICK_RESPONSE_GROUPS = [
+  { label: "Physically", options: ["Drained", "Tired", "Good", "Great"] },
+  { label: "Mentally", options: ["Struggling", "Good", "Awesome"] },
+  { label: "Injured", options: ["Yes", "No"] },
+  { label: "Sleep", options: ["8+ Hours", "6-8 Hours", "4-5 Hours", "Less than 4"] },
+  { label: "Stress", options: ["High", "Med", "Low"] },
 ];
 
-const AIAssistant = ({ customer }) => {
+const buildInitialMessage = (firstName, workoutSummary) => {
+  const intro = `Hello${firstName ? ` ${firstName}` : ""}`;
+  const summaryText =
+    workoutSummary ||
+    "I haven't seen a recent workout yet—happy to help plan what's next.";
+  const prompt =
+    "Can I revise any of your training for you? If so, please give me a quick status update below.";
+  return {
+    id: `assistant-${Date.now()}`,
+    role: "assistant",
+    content: [intro, summaryText, prompt].join("\n"),
+    createdAt: new Date().toISOString(),
+  };
+};
+
+const formatWorkoutSummary = (workouts = []) => {
+  if (!Array.isArray(workouts) || workouts.length === 0) {
+    return "";
+  }
+
+  const workoutsWithDates = workouts
+    .filter((workout) => workout?.WorkoutDateTime)
+    .sort(
+      (a, b) =>
+        dayjs(b.WorkoutDateTime).valueOf() - dayjs(a.WorkoutDateTime).valueOf()
+    );
+
+  if (!workoutsWithDates.length) {
+    return "";
+  }
+
+  const latestWorkout = workoutsWithDates[0];
+  const latestDay = dayjs(latestWorkout.WorkoutDateTime).format("dddd");
+  const latestType = latestWorkout.WorkoutType || "session";
+  const latestDistanceKm = Number(latestWorkout.WorkoutDistance) / 1000;
+  const latestSummaryParts = [`Latest was a ${latestType} on ${latestDay}`];
+  if (Number.isFinite(latestDistanceKm) && latestDistanceKm > 0.1) {
+    latestSummaryParts.push(`(~${latestDistanceKm.toFixed(1)} km)`);
+  }
+
+  const sevenDaysAgo = dayjs().subtract(7, "day");
+  const recentSessions = workoutsWithDates.filter((workout) =>
+    dayjs(workout.WorkoutDateTime).isAfter(sevenDaysAgo)
+  );
+  const recentSummary =
+    recentSessions.length > 0
+      ? `${recentSessions.length} workout${
+          recentSessions.length === 1 ? "" : "s"
+        } logged in the last 7 days`
+      : "";
+
+  return [recentSummary, latestSummaryParts.join(" ")].filter(Boolean).join(". ");
+};
+
+const AIAssistant = ({ customer, workouts }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [quickSelections, setQuickSelections] = useState({});
+  const [showQuickCheck, setShowQuickCheck] = useState(true);
   const listRef = useRef(null);
   const hasBootstrappedRef = useRef(false);
 
-  const customerId = customer?.idCustomer || null;
-  const athleteFirstName = useMemo(() => customer?.FirstName || "", [customer?.FirstName]);
+  const idCustomer = customer?.idCustomer || null;
+  const athleteFirstName = useMemo(
+    () => customer?.FirstName || "",
+    [customer?.FirstName]
+  );
+  const workoutSummary = useMemo(
+    () => formatWorkoutSummary(workouts),
+    [workouts]
+  );
+  const quickCheckComplete = QUICK_RESPONSE_GROUPS.every(
+    (group) => quickSelections[group.label]
+  );
 
   useEffect(() => {
     if (isOpen && !hasBootstrappedRef.current) {
-      setMessages([buildInitialMessage(athleteFirstName)]);
+      setMessages([buildInitialMessage(athleteFirstName, workoutSummary)]);
       hasBootstrappedRef.current = true;
     }
-  }, [isOpen, athleteFirstName]);
+  }, [isOpen, athleteFirstName, workoutSummary]);
 
   useEffect(() => {
     if (listRef.current) {
@@ -65,10 +110,31 @@ const AIAssistant = ({ customer }) => {
     setIsOpen((prev) => !prev);
   };
 
+  const finalizeQuickSelections = (selections) => {
+    const summary = QUICK_RESPONSE_GROUPS.map(
+      (group) => `${group.label}: ${selections[group.label]}`
+    ).join(" | ");
+    handleSend(`Quick status update -> ${summary}`);
+    setShowQuickCheck(false);
+  };
+
+  const handleQuickSelect = (label, option) => {
+    setQuickSelections((prev) => {
+      const next = { ...prev, [label]: option };
+      const completed = QUICK_RESPONSE_GROUPS.every(
+        (group) => next[group.label]
+      );
+      if (completed) {
+        finalizeQuickSelections(next);
+      }
+      return next;
+    });
+  };
+
   const handleSend = async (presetText) => {
     const textToSend = typeof presetText === "string" ? presetText : inputValue.trim();
     if (!textToSend) return;
-    if (!customerId) {
+    if (!idCustomer) {
       setErrorMessage("We need to load your athlete profile before contacting the coach.");
       return;
     }
@@ -90,7 +156,7 @@ const AIAssistant = ({ customer }) => {
 
     try {
       const assistantReply = await assistantSendMessage({
-        customerId,
+        idCustomer,
         messages: updatedHistory.map(({ role, content }) => ({ role, content })),
       });
 
@@ -128,7 +194,7 @@ const AIAssistant = ({ customer }) => {
           style={{
             width: 360,
             maxWidth: "calc(100vw - 32px)",
-            height: 440,
+            height: 460,
             background: "#ffffff",
             borderRadius: 16,
             boxShadow: "0 12px 32px rgba(15, 23, 42, 0.18)",
@@ -232,29 +298,88 @@ const AIAssistant = ({ customer }) => {
           </div>
 
           <div style={{ padding: "12px 16px", borderTop: "1px solid #e5e7eb" }}>
-            {messages.length === 1 && messages[0].role === "assistant" && (
+            {showQuickCheck && (
               <div
                 style={{
                   marginBottom: 12,
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: 8,
+                  maxHeight: 140,
+                  overflowY: "auto",
+                  paddingRight: 4,
                 }}
               >
-                {SENTIMENT_PRESETS.map((preset) => (
-                  <Button
-                    key={preset.label}
-                    icon={preset.icon}
-                    size="small"
-                    style={{ borderRadius: 999 }}
-                    onClick={() => {
-                      setInputValue(preset.text);
-                      handleSend(preset.text);
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: "#6b7280",
+                    marginBottom: 8,
+                    fontWeight: 500,
+                  }}
+                >
+                  Quick status check
+                </div>
+                {QUICK_RESPONSE_GROUPS.map((group, index) => (
+                  <div
+                    key={group.label}
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 8,
+                      alignItems: "center",
+                      marginBottom: 8,
+                      paddingBottom: 8,
+                      borderBottom:
+                        index === QUICK_RESPONSE_GROUPS.length - 1
+                          ? "none"
+                          : "1px solid #e5e7eb",
                     }}
                   >
-                    {preset.label}
-                  </Button>
+                    <span
+                      style={{
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: "#1f2937",
+                        minWidth: 72,
+                      }}
+                    >
+                      {group.label}:
+                    </span>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 6,
+                        flex: 1,
+                      }}
+                    >
+                      {group.options.map((option) => {
+                        const selected = quickSelections[group.label] === option;
+                        return (
+                          <Button
+                            key={`${group.label}-${option}`}
+                            size="small"
+                            type={selected ? "primary" : "default"}
+                            ghost={false}
+                            style={{
+                              minWidth: 72,
+                              borderRadius: 16,
+                              backgroundColor: selected ? "#2563eb" : "#f3f4f6",
+                              color: selected ? "#ffffff" : "#1f2937",
+                              borderColor: selected ? "#2563eb" : "#e5e7eb",
+                            }}
+                            onClick={() => handleQuickSelect(group.label, option)}
+                          >
+                            {option}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                  </div>
                 ))}
+                {!quickCheckComplete && (
+                  <div style={{ fontSize: 11, color: "#6b7280" }}>
+                    Select one option per row to start chatting.
+                  </div>
+                )}
               </div>
             )}
             <TextArea
@@ -268,14 +393,18 @@ const AIAssistant = ({ customer }) => {
                   handleSend();
                 }
               }}
-              disabled={isSending}
+              disabled={isSending || (showQuickCheck && !quickCheckComplete)}
             />
             <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}>
               <Button
                 type="primary"
                 icon={<SendOutlined />}
                 onClick={() => handleSend()}
-                disabled={isSending || !inputValue.trim()}
+                disabled={
+                  isSending ||
+                  !inputValue.trim() ||
+                  (showQuickCheck && !quickCheckComplete)
+                }
               >
                 Send
               </Button>
@@ -307,10 +436,18 @@ AIAssistant.propTypes = {
     idCustomer: PropTypes.string,
     FirstName: PropTypes.string,
   }),
+  workouts: PropTypes.arrayOf(
+    PropTypes.shape({
+      WorkoutDateTime: PropTypes.string,
+      WorkoutType: PropTypes.string,
+      WorkoutDistance: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    })
+  ),
 };
 
 AIAssistant.defaultProps = {
   customer: null,
+  workouts: [],
 };
 
 export default AIAssistant;

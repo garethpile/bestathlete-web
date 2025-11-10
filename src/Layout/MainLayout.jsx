@@ -15,7 +15,7 @@ import AIAssistant from '../features/ai-assistant/AIAssistant';
 const { Header, Content } = Layout;
 const { useBreakpoint } = Grid;
 
-const MainLayout = ({ customer }) => {
+const MainLayout = ({ customer, workouts, assistantReady }) => {
   const location = useLocation();
   const screens = useBreakpoint();
   const isMobile = !screens.md;
@@ -128,7 +128,9 @@ const MainLayout = ({ customer }) => {
       >
         <Outlet />
       </Content>
-      <AIAssistant customer={customer} />
+      {assistantReady && customer && (
+        <AIAssistant customer={customer} workouts={workouts} />
+      )}
     </Layout>
   );
 };
@@ -138,10 +140,18 @@ MainLayout.propTypes = {
     idCustomer: PropTypes.string,
     FirstName: PropTypes.string,
   }),
+  workouts: PropTypes.arrayOf(PropTypes.shape({
+    WorkoutDateTime: PropTypes.string,
+    WorkoutType: PropTypes.string,
+    WorkoutDistance: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  })),
+  assistantReady: PropTypes.bool,
 };
 
 MainLayout.defaultProps = {
   customer: null,
+  workouts: [],
+  assistantReady: false,
 };
 
 export default MainLayout;

@@ -1,8 +1,8 @@
 /**
  * Service helpers for interacting with the BestAthlete Coach Agent.
  * The agent is exposed via the CoachAgent Lambda in bestathlete-mob-be and
- * expects a payload of `{ message, athleteId }`, where message is the latest
- * user utterance and athleteId is the BestAthlete customer identifier.
+ * expects a payload of `{ message, idCustomer }`, where message is the latest
+ * user utterance and idCustomer is the BestAthlete customer identifier.
  *
  * Configure the endpoint through REACT_APP_ASSISTANT_ENDPOINT, e.g.
  *   REACT_APP_ASSISTANT_ENDPOINT=https://<api-id>.execute-api.eu-west-1.amazonaws.com/ai/coach
@@ -19,13 +19,13 @@ const { REACT_APP_ASSISTANT_ENDPOINT } = process.env;
  * Sends a conversation turn to the assistant service and returns the agent reply.
  *
  * @param {Object} params
- * @param {string} params.customerId - Identifier used by the backend to scope data.
+ * @param {string} params.idCustomer - Identifier used by the backend to scope data.
  * @param {Array<{ role: string, content: string }>} params.messages - Full chat history.
  * @returns {Promise<{ role: string, content: string, [key: string]: any }>}
  */
-export const assistantSendMessage = async ({ customerId, messages }) => {
-  if (!customerId) {
-    throw new Error("assistantSendMessage requires a valid customerId/athleteId");
+export const assistantSendMessage = async ({ idCustomer, messages }) => {
+  if (!idCustomer) {
+    throw new Error("assistantSendMessage requires a valid idCustomer");
   }
 
   if (!Array.isArray(messages)) {
@@ -55,7 +55,7 @@ export const assistantSendMessage = async ({ customerId, messages }) => {
 
   const payload = {
     message: latestUserMessage.content,
-    athleteId: customerId,
+    idCustomer,
     conversation: messages, // CoachAgent currently ignores this, but we send it for future context
   };
 
