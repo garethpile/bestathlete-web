@@ -1,6 +1,6 @@
 import { Auth } from 'aws-amplify';
 import React, { useMemo } from 'react';
-import { Layout, Menu, Grid, Button, Avatar } from 'antd';
+import { Layout, Menu, Grid, Button, Avatar, Dropdown } from 'antd';
 import {
   DashboardOutlined,
   UserOutlined,
@@ -60,7 +60,6 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
       { key: 'calendar', icon: CalendarOutlined, label: 'Calendar', path: '/calendar' },
       { key: 'thirdparty', icon: ApiOutlined, label: 'ThirdParty', path: '/thirdparty' },
       { key: 'administration', icon: DatabaseOutlined, label: 'Admin', path: '/administration' },
-      { key: 'profile', icon: UserOutlined, label: 'Profile', path: '/profile' },
     ],
     []
   );
@@ -116,45 +115,55 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
                 <Menu.Item key="administration" icon={<DatabaseOutlined />}>
                   <Link to="/administration">Administration</Link>
                 </Menu.Item>
-                <Menu.Item key="profile" icon={<UserOutlined />}>
-                  <Link to="/profile">Profile</Link>
-                </Menu.Item>
-                <Menu.Item key="logout" onClick={handleLogout}>
-                  Logout
-                </Menu.Item>
               </Menu>
             </div>
           )}
 
-          <div
-            style={{
-              marginLeft: 'auto',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              padding: '4px 0',
-            }}
+          <Dropdown
+            overlay={
+              <Menu>
+                <Menu.Item key="profile-menu">
+                  <Link to="/profile">Profile</Link>
+                </Menu.Item>
+                <Menu.Item key="logout-menu" onClick={handleLogout}>
+                  Logout
+                </Menu.Item>
+              </Menu>
+            }
+            trigger={['click']}
+            placement="bottomRight"
           >
-            <Avatar
-              size={isMobile ? 36 : 42}
-              style={{ backgroundColor: '#1890ff' }}
-            >
-              {athleteInitials}
-            </Avatar>
-            <div
+            <Button
+              type="text"
               style={{
-                fontSize: isMobile ? 13 : 15,
-                fontWeight: 600,
-                color: '#0f172a',
-                maxWidth: 160,
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-                overflow: 'hidden',
+                marginLeft: 'auto',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '4px 0',
               }}
             >
-              {athleteName}
-            </div>
-          </div>
+              <Avatar
+                size={isMobile ? 36 : 42}
+                style={{ backgroundColor: '#1890ff' }}
+              >
+                {athleteInitials}
+              </Avatar>
+              <div
+                style={{
+                  fontSize: isMobile ? 13 : 15,
+                  fontWeight: 600,
+                  color: '#0f172a',
+                  maxWidth: 160,
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden',
+                }}
+              >
+                {athleteName}
+              </div>
+            </Button>
+          </Dropdown>
         </div>
       </Header>
 
@@ -210,21 +219,6 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
               </Link>
             );
           })}
-          <Button
-            type="text"
-            onClick={handleLogout}
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#ef4444',
-            }}
-          >
-            <LogoutOutlined style={{ fontSize: 18, color: '#ef4444' }} />
-            <span style={{ fontSize: 11 }}>Logout</span>
-          </Button>
         </nav>
       )}
     </Layout>
