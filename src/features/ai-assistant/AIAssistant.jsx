@@ -68,6 +68,10 @@ const AIAssistant = ({ customer }) => {
   const handleSend = async (presetText) => {
     const textToSend = typeof presetText === "string" ? presetText : inputValue.trim();
     if (!textToSend) return;
+    if (!customerId) {
+      setErrorMessage("We need to load your athlete profile before contacting the coach.");
+      return;
+    }
 
     const outgoingMessage = {
       id: `user-${Date.now()}`,

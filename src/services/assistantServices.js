@@ -1,15 +1,14 @@
 /**
- * Service helpers for interacting with the BestAthlete AI assistant.
- * The assistant is expected to sit behind a REST endpoint that proxies to
- * a ChatGPT-style agent capable of issuing function calls into the existing
- * AWS Amplify / DynamoDB backend.
+ * Service helpers for interacting with the BestAthlete Coach Agent.
+ * The agent is exposed via the CoachAgent Lambda in bestathlete-mob-be and
+ * expects a payload of `{ message, athleteId }`, where message is the latest
+ * user utterance and athleteId is the BestAthlete customer identifier.
  *
- * The endpoint URL should be provided via the REACT_APP_ASSISTANT_ENDPOINT
- * environment variable, for example:
- *   REACT_APP_ASSISTANT_ENDPOINT=https://api.example.com/assistant/chat
+ * Configure the endpoint through REACT_APP_ASSISTANT_ENDPOINT, e.g.
+ *   REACT_APP_ASSISTANT_ENDPOINT=https://<api-id>.execute-api.eu-west-1.amazonaws.com/ai/coach
  *
- * Until that endpoint is available this module will fall back to returning a
- * canned response so that the UI can function without breaking.
+ * When the endpoint is not available we keep returning a canned response so
+ * that the UI continues to function in lower environments.
  */
 
 import { getTraceHeaders } from "./traceHelpers";
@@ -25,8 +24,20 @@ const { REACT_APP_ASSISTANT_ENDPOINT } = process.env;
  * @returns {Promise<{ role: string, content: string, [key: string]: any }>}
  */
 export const assistantSendMessage = async ({ customerId, messages }) => {
+  if (!customerId) {
+    throw new Error("assistantSendMessage requires a valid customerId/athleteId");
+  }
+
   if (!Array.isArray(messages)) {
     throw new Error("assistantSendMessage requires an array of messages");
+  }
+
+  const latestUserMessage = [...messages]
+    .reverse()
+    .find((msg) => msg?.role === "user" && typeof msg.content === "string");
+
+  if (!latestUserMessage) {
+    throw new Error("assistantSendMessage could not find a user message to send");
   }
 
   // If no endpoint is configured yet, simulate a minimal assistant response.
@@ -43,8 +54,9 @@ export const assistantSendMessage = async ({ customerId, messages }) => {
   }
 
   const payload = {
-    customerId,
-    messages,
+    message: latestUserMessage.content,
+    athleteId: customerId,
+    conversation: messages, // CoachAgent currently ignores this, but we send it for future context
   };
 
   try {
@@ -67,15 +79,22 @@ export const assistantSendMessage = async ({ customerId, messages }) => {
     const data = await response.json();
 
     /**
-     * The backend is expected to return an object with at least:
-     * { role: "assistant", content: "..." }
-     * Additional metadata (such as drafted workout adjustments) will be passed through.
+     * CoachAgent responds with { chat: string, plan?: object }.
+     * We normalise that into the legacy { role, content } shape so the
+     * rest of the UI can continue to treat it like a chat transcript.
      */
-    if (!data || typeof data.content !== "string") {
-      throw new Error("Assistant response missing a valid content field");
+    const content = typeof data?.chat === "string" ? data.chat : data?.content;
+
+    if (!content) {
+      throw new Error("Assistant response missing a valid chat field");
     }
 
-    return data;
+    return {
+      role: "assistant",
+      content,
+      plan: data?.plan ?? null,
+      raw: data,
+    };
   } catch (error) {
     console.error("[assistantServices] Error while contacting assistant:", error);
     throw error;
