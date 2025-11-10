@@ -16,13 +16,8 @@ const DashboardPage = () => {
     workouts,
     events,
     customerAvailabilities,
-    metrics3DaysSleep,
-    metrics3DaysWeight,
     status,
     error,
-    setCustomerAvailabilities,
-    refreshCustomerAvailabilities,
-    setEvents,
   } = useAppData();
 
   const isLoading = REQUIRED_KEYS.some(
@@ -40,12 +35,6 @@ const DashboardPage = () => {
       workouts={workouts}
       events={events}
       customerAvailabilities={customerAvailabilities}
-      metrics3DaysSleep={metrics3DaysSleep}
-      metrics3DaysWeight={metrics3DaysWeight}
-      setCustomerAvailabilities={setCustomerAvailabilities}
-      refreshCustomerAvailabilities={refreshCustomerAvailabilities}
-      setEvents={setEvents}
-      workoutsNoFeedback={[]}
     />
   );
 };

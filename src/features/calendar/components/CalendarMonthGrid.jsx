@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import dayjs from "dayjs";
+import { Switch } from "antd";
 
 const CalendarMonthGrid = ({
   isMobile,
@@ -74,8 +75,19 @@ const MobileDayDetail = ({ selectedDate, dateCellRender, onSelectDate }) => {
           touchRef.current.active = false;
         }}
       >
-        <div style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "4px" }}>
-          {selectedDate.format("dddd, MMMM D, YYYY")}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 6,
+          }}
+        >
+          <span style={{ fontWeight: 600 }}>{selectedDate.format("ddd D MMM")}</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ fontSize: 11, color: "#94a3b8" }}>Train</span>
+            <Switch size="small" defaultChecked />
+          </div>
         </div>
         {dateCellRender(selectedDate)}
         <div style={{ fontSize: "11px", textAlign: "center", marginTop: "6px", color: "#666" }}>
@@ -178,6 +190,7 @@ const DesktopMonthGrid = ({
             >
               {weekDays.map((date, dayOffset) => {
                 const phase = activeRace ? getPhaseForDate(date, activeRace) : null;
+                const phaseLetter = phase?.name?.[0]?.toUpperCase() || "•";
                 return (
                   <div
                     key={dayOffset}
@@ -202,29 +215,31 @@ const DesktopMonthGrid = ({
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                        color: "#111827",
+                        gap: 8,
+                        marginBottom: 6,
                       }}
                     >
-                      <span>{date.format("D MMM")}</span>
-                      {phase ? (
-                        <div
-                          style={{
-                            fontSize: "11px",
-                            background: phase.color || "#dbeafe",
-                            color: "#0f172a",
-                            borderRadius: "999px",
-                            padding: "2px 10px",
-                            fontWeight: 500,
-                            letterSpacing: "0.2px",
-                          }}
-                        >
-                          {phase.name}
-                        </div>
-                      ) : (
-                        <span />
-                      )}
+                      <div style={{ fontWeight: 600 }}>{date.format("ddd D MMM")}</div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <span style={{ fontSize: 11, color: "#94a3b8" }}>Train</span>
+                        <Switch size="small" defaultChecked />
+                      </div>
+                      <div
+                        style={{
+                          width: 26,
+                          height: 26,
+                          borderRadius: "999px",
+                          background: phase?.color || "#c7d2fe",
+                          color: "#0f172a",
+                          fontWeight: 700,
+                          fontSize: 12,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {phaseLetter}
+                      </div>
                     </div>
                     <div style={{ width: "100%" }}>{dateCellRender(date)}</div>
                   </div>

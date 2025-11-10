@@ -9,6 +9,7 @@ const ThirdParty = lazy(() => import("../features/third-party/ThirdPartyPage"));
 const MainLayout = lazy(() => import("../Layout/MainLayout"));
 const Calendar = lazy(() => import("../features/calendar/CalendarPage"));
 const Administration = lazy(() => import("../features/administration/AdministrationPage"));
+const PrivacyPage = lazy(() => import("../features/privacy/PrivacyPage"));
 
 const RouterConfig = () => {
   const { customer, workouts, status, requiresProfileSetup } = useAppData();
@@ -34,6 +35,7 @@ const RouterConfig = () => {
           <Route path="/thirdparty" element={guard(<ThirdParty />)} />
           <Route path="/administration" element={guard(<Administration />)} />
           <Route path="/calendar" element={guard(<Calendar />)} />
+          <Route path="/privacy" element={guard(<PrivacyPage />)} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

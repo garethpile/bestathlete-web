@@ -130,16 +130,8 @@ const FullCalendarView = ({
           dayjs(value).isSameOrAfter(dayjs(entry.UnavailableStartDate), "day") &&
           dayjs(value).isSameOrBefore(dayjs(entry.UnavailableEndDate), "day")
       );
-      const isToday = dayjs().isSame(value, "day");
-
       return (
-        <div
-          style={
-            isToday
-              ? { backgroundColor: "#fff9db", padding: "4px", borderRadius: "4px" }
-              : {}
-          }
-        >
+        <div>
           {availability && (
             <div
               onClick={() => {

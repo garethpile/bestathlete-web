@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from "react";
-import { Modal, Tooltip } from "antd";
+import React, { useMemo, useState, useRef } from "react";
+import { Modal, Tooltip, Switch } from "antd";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -45,6 +45,7 @@ const DashboardMiniCalendar = ({
 }) => {
   const [centreDate, setCentreDate] = useState(dayjs());
   const [selectedWorkout, setSelectedWorkout] = useState(null);
+  const dragState = useRef({ startX: null });
 
   const workoutMap = useMemo(() => {
     return workouts.reduce((acc, workout) => {
@@ -70,6 +71,25 @@ const DashboardMiniCalendar = ({
     setCentreDate((current) => current.add(direction, "day"));
   };
 
+  const handleDragStart = (event) => {
+    const point = event.touches ? event.touches[0] : event;
+    dragState.current.startX = point.clientX;
+  };
+
+  const handleDragMove = (event) => {
+    if (dragState.current.startX === null) return;
+    const point = event.touches ? event.touches[0] : event;
+    const delta = point.clientX - dragState.current.startX;
+    if (Math.abs(delta) > 60) {
+      handleShift(delta > 0 ? -1 : 1);
+      dragState.current.startX = null;
+    }
+  };
+
+  const handleDragEnd = () => {
+    dragState.current.startX = null;
+  };
+
   return (
     <div
       style={{
@@ -77,50 +97,48 @@ const DashboardMiniCalendar = ({
         marginTop: 24,
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        gap: 12,
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+        }}
+      >
         <button
           type="button"
           onClick={() => handleShift(-1)}
           style={{
-            border: "1px solid #d9d9d9",
-            borderRadius: 6,
-            padding: "4px 10px",
-            background: "#fafafa",
+            border: "1px solid #cbd5f5",
+            borderRadius: 999,
+            width: 36,
+            height: 36,
+            background: "#fff",
+            boxShadow: "0 6px 14px rgba(15,23,42,0.07)",
             cursor: "pointer",
           }}
-          aria-label="Previous day"
         >
           ‹
         </button>
-        <h4 style={{ margin: 0, textAlign: "center" }}>Workouts</h4>
-        <button
-          type="button"
-          onClick={() => handleShift(1)}
+        <div
           style={{
-            border: "1px solid #d9d9d9",
-            borderRadius: 6,
-            padding: "4px 10px",
-            background: "#fafafa",
-            cursor: "pointer",
+            flex: 1,
+            display: "flex",
+            gap: 14,
+            overflowX: "auto",
+            paddingBottom: 6,
+            cursor: "grab",
           }}
-          aria-label="Next day"
+          onMouseDown={handleDragStart}
+          onMouseMove={handleDragMove}
+          onMouseUp={handleDragEnd}
+          onMouseLeave={handleDragEnd}
+          onTouchStart={handleDragStart}
+          onTouchMove={handleDragMove}
+          onTouchEnd={handleDragEnd}
         >
-          ›
-        </button>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          gap: 12,
-          overflowX: "auto",
-          justifyContent: "center",
-          paddingBottom: 4,
-          }}
-      >
         {visibleDays.map((date) => {
           const key = date.format("YYYY-MM-DD");
           const workoutsForDay = workoutMap[key] || [];
@@ -131,22 +149,60 @@ const DashboardMiniCalendar = ({
             date.isSame(dayjs(entry.UnavailableEndDate), "day")
           );
           const isToday = date.isSame(dayjs(), "day");
+          const phaseName = workoutsForDay[0]?.WorkoutPhase || "Build";
+          const phaseLetter = (phaseName?.[0] || "•").toUpperCase();
+          const phaseColors = {
+            B: "#fde047",
+            P: "#fb7185",
+            T: "#34d399",
+            A: "#60a5fa",
+          };
+          const phaseColor = phaseColors[phaseLetter] || "#c4b5fd";
 
           return (
             <div
               key={key}
               style={{
-                minWidth: 220,
-                flex: "0 0 220px",
-                border: "1px solid #e0e0e0",
-                borderRadius: 10,
-                padding: 12,
-                background: isToday ? "#fff7e6" : "#ffffff",
-                boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                minWidth: 240,
+                flex: "0 0 240px",
+                borderRadius: 18,
+                padding: 14,
+                background: isToday
+                  ? "linear-gradient(135deg,#fdf4ff 0%,#eef2ff 100%)"
+                  : "linear-gradient(135deg,#ffffff 0%,#f8fafc 100%)",
+                boxShadow: "0 18px 32px rgba(15,23,42,0.12)",
+                border: "1px solid rgba(148,163,184,0.35)",
               }}
             >
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: 8,
+                  alignItems: "center",
+                }}
+              >
                 <div style={{ fontWeight: 600 }}>{date.format("ddd D MMM")}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ fontSize: 11, color: "#94a3b8" }}>Train</span>
+                  <Switch size="small" defaultChecked />
+                </div>
+                <div
+                  style={{
+                    width: 26,
+                    height: 26,
+                    borderRadius: "999px",
+                    background: phaseColor,
+                    color: "#0f172a",
+                    fontWeight: 700,
+                    fontSize: 12,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {phaseLetter}
+                </div>
               </div>
 
               {availability && (
@@ -166,7 +222,14 @@ const DashboardMiniCalendar = ({
               )}
 
               {workoutsForDay.length === 0 ? (
-                <div style={{ fontSize: 12, color: "#999", textAlign: "center" }}>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: "#9ca3af",
+                    textAlign: "center",
+                    padding: "18px 0",
+                  }}
+                >
                   No workouts scheduled
                 </div>
               ) : (
@@ -180,32 +243,36 @@ const DashboardMiniCalendar = ({
                     <Tooltip title={description} key={`${key}-${index}`}>
                       <div
                         style={{
-                          border: "1px solid #d9d9d9",
-                          borderRadius: 8,
-                          padding: "6px 8px",
-                          marginBottom: 6,
+                          borderRadius: 12,
+                          border: "1px solid rgba(148,163,184,0.35)",
+                          padding: "8px 10px",
+                          marginBottom: 8,
                           background:
-                            workout?.WorkoutState === "Completed" ? "#f6ffed" : "#ffffff",
+                            workout?.WorkoutState === "Completed"
+                              ? "linear-gradient(135deg,#ecfccb 0%,#dcfce7 100%)"
+                              : "#ffffff",
                           display: "flex",
                           flexDirection: "column",
-                          gap: 4,
+                          gap: 6,
+                          boxShadow: "0 10px 18px rgba(15,23,42,0.08)",
+                          cursor: "pointer",
                         }}
                         onClick={() => setSelectedWorkout(workout)}
                       >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                             {icon && <FontAwesomeIcon icon={icon} />}
                             <span style={{ fontSize: 13, fontWeight: 500 }}>
                               {workout?.WorkoutType || "Workout"}
                             </span>
                           </div>
                           {workout?.WorkoutState === "Completed" && (
-                            <span style={{ fontSize: 11, color: "darkgreen", fontWeight: 600 }}>
+                            <span style={{ fontSize: 11, color: "#15803d", fontWeight: 600 }}>
                               Completed
                             </span>
                           )}
                         </div>
-                        <div style={{ fontSize: 12, color: "#666" }}>
+                        <div style={{ fontSize: 12, color: "#475569" }}>
                           ⏱ {duration} &nbsp; | &nbsp; 🏋️ {stressScore} TSS
                         </div>
                       </div>
@@ -216,6 +283,22 @@ const DashboardMiniCalendar = ({
             </div>
           );
         })}
+        </div>
+        <button
+          type="button"
+          onClick={() => handleShift(1)}
+          style={{
+            border: "1px solid #cbd5f5",
+            borderRadius: 999,
+            width: 36,
+            height: 36,
+            background: "#fff",
+            boxShadow: "0 6px 14px rgba(15,23,42,0.07)",
+            cursor: "pointer",
+          }}
+        >
+          ›
+        </button>
       </div>
       <Modal
         title={

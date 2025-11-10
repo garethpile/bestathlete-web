@@ -3,11 +3,10 @@ import React, { useMemo } from 'react';
 import { Layout, Menu, Grid, Button, Avatar, Dropdown } from 'antd';
 import {
   DashboardOutlined,
-  UserOutlined,
   ApiOutlined,
   DatabaseOutlined,
   CalendarOutlined,
-  LogoutOutlined,
+  EyeOutlined,
 } from '@ant-design/icons';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -28,6 +27,7 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
     if (location.pathname.startsWith('/calendar')) return 'calendar';
     if (location.pathname.startsWith('/workouts')) return 'workouts';
     if (location.pathname.startsWith('/administration')) return 'administration';
+    if (location.pathname.startsWith('/privacy')) return 'privacy';
     return 'dashboard';
   };
   const selectedKey = getSelectedKey();
@@ -60,6 +60,7 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
       { key: 'calendar', icon: CalendarOutlined, label: 'Calendar', path: '/calendar' },
       { key: 'thirdparty', icon: ApiOutlined, label: 'ThirdParty', path: '/thirdparty' },
       { key: 'administration', icon: DatabaseOutlined, label: 'Admin', path: '/administration' },
+      { key: 'privacy', icon: EyeOutlined, label: 'Privacy', path: '/privacy' },
     ],
     []
   );
@@ -74,6 +75,7 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
           top: 0,
           zIndex: 1000,
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+          overflow: 'hidden',
         }}
       >
         <div
@@ -96,7 +98,7 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
           </div>
 
           {!isMobile && (
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1, overflow: 'hidden' }}>
               <Menu
                 mode="horizontal"
                 selectedKeys={[selectedKey]}
@@ -104,7 +106,7 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
                 theme="light"
               >
                 <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
-                  <Link to="/">Dashboard</Link>
+                  <Link to="/">Home</Link>
                 </Menu.Item>
                 <Menu.Item key="calendar" icon={<CalendarOutlined />}>
                   <Link to="/calendar">Calendar</Link>
@@ -114,6 +116,9 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
                 </Menu.Item>
                 <Menu.Item key="administration" icon={<DatabaseOutlined />}>
                   <Link to="/administration">Administration</Link>
+                </Menu.Item>
+                <Menu.Item key="privacy" icon={<EyeOutlined />}>
+                  <Link to="/privacy">Privacy</Link>
                 </Menu.Item>
               </Menu>
             </div>
@@ -194,6 +199,7 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
             justifyContent: 'space-around',
             padding: '6px 0',
             zIndex: 1200,
+            overflow: 'hidden',
           }}
         >
           {navItems.map((item) => {
