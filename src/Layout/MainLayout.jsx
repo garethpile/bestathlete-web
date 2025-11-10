@@ -1,6 +1,6 @@
 import { Auth } from 'aws-amplify';
 import React, { useMemo } from 'react';
-import { Layout, Menu, Grid, Button } from 'antd';
+import { Layout, Menu, Grid, Button, Avatar } from 'antd';
 import {
   DashboardOutlined,
   UserOutlined,
@@ -31,6 +31,19 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
     return 'dashboard';
   };
   const selectedKey = getSelectedKey();
+  const athleteName = useMemo(() => {
+    if (!customer) return 'Athlete';
+    const first = customer.FirstName || '';
+    const last = customer.LastName || '';
+    return `${first} ${last}`.trim() || 'Athlete';
+  }, [customer]);
+  const athleteInitials = useMemo(() => {
+    if (!customer) return 'A';
+    const first = customer.FirstName?.[0] || '';
+    const last = customer.LastName?.[0] || '';
+    const initials = `${first}${last}`.toUpperCase();
+    return initials || 'A';
+  }, [customer]);
 
   const handleLogout = async () => {
     try {
@@ -112,6 +125,36 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
               </Menu>
             </div>
           )}
+
+          <div
+            style={{
+              marginLeft: 'auto',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              padding: '4px 0',
+            }}
+          >
+            <Avatar
+              size={isMobile ? 36 : 42}
+              style={{ backgroundColor: '#1890ff' }}
+            >
+              {athleteInitials}
+            </Avatar>
+            <div
+              style={{
+                fontSize: isMobile ? 13 : 15,
+                fontWeight: 600,
+                color: '#0f172a',
+                maxWidth: 160,
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+              }}
+            >
+              {athleteName}
+            </div>
+          </div>
         </div>
       </Header>
 
