@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Button, Input, Spin, Tooltip } from "antd";
+import { Button, Input, Modal, Spin, Tooltip } from "antd";
 import { MessageOutlined, SendOutlined, CloseOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
 import dayjs from "dayjs";
 import { assistantSendMessage } from "../../services/assistantServices";
+import WorkoutManagement from "../workouts/components/WorkoutManagement";
 
 const { TextArea } = Input;
 
@@ -29,6 +30,29 @@ const buildInitialMessage = (firstName, workoutSummary) => {
     createdAt: new Date().toISOString(),
   };
 };
+
+const buildFeedbackPromptMessage = (firstName, workouts) => {
+  const intro = `Hi${firstName ? ` ${firstName}` : ""}, I noticed ${
+    workouts.length > 1 ? "a couple of sessions" : "a session"
+  } from ${workouts
+    .map((workout) => dayjs(workout.WorkoutDateTime).format("ddd, MMM D"))
+    .join(" & ")} without athlete feedback.`;
+  const ask = "Would you like to log how it felt now?";
+  return {
+    id: `assistant-feedback-${Date.now()}`,
+    role: "assistant",
+    content: `${intro} ${ask}`,
+    createdAt: new Date().toISOString(),
+    metadata: { type: "feedbackPrompt" },
+  };
+};
+
+const createMessage = (role, content) => ({
+  id: `${role}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+  role,
+  content,
+  createdAt: new Date().toISOString(),
+});
 
 const formatWorkoutSummary = (workouts = []) => {
   if (!Array.isArray(workouts) || workouts.length === 0) {
@@ -77,8 +101,15 @@ const AIAssistant = ({ customer, workouts }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [quickSelections, setQuickSelections] = useState({});
   const [showQuickCheck, setShowQuickCheck] = useState(true);
+  const [showFeedbackPromptActions, setShowFeedbackPromptActions] = useState(
+    false
+  );
+  const [feedbackModalVisible, setFeedbackModalVisible] = useState(false);
+  const [activeFeedbackWorkout, setActiveFeedbackWorkout] = useState(null);
+  const [activeFeedbackIndex, setActiveFeedbackIndex] = useState(0);
   const listRef = useRef(null);
   const hasBootstrappedRef = useRef(false);
+  const lastPromptKeyRef = useRef("");
 
   const idCustomer = customer?.idCustomer || null;
   const athleteFirstName = useMemo(
@@ -93,12 +124,82 @@ const AIAssistant = ({ customer, workouts }) => {
     (group) => quickSelections[group.label]
   );
 
+  const pendingFeedbackWorkouts = useMemo(() => {
+    const today = dayjs().startOf("day");
+    const yesterday = today.subtract(1, "day");
+
+    return (workouts || [])
+      .filter((workout) => {
+        if (!workout?.WorkoutDateTime) return false;
+        const workoutDay = dayjs(workout.WorkoutDateTime);
+        const isWithinWindow =
+          workoutDay.isSame(today, "day") ||
+          workoutDay.isSame(yesterday, "day");
+        if (!isWithinWindow) return false;
+
+        const state = (workout?.WorkoutState || "").toLowerCase();
+        if (state && state !== "completed") {
+          return false;
+        }
+
+        const feedbackValue = workout?.WorkoutAthleteFeedback;
+        const hasFeedback =
+          feedbackValue !== null &&
+          feedbackValue !== undefined &&
+          String(feedbackValue).trim() !== "" &&
+          String(feedbackValue) !== "0";
+
+        return !hasFeedback;
+      })
+      .sort(
+        (a, b) =>
+          dayjs(a.WorkoutDateTime).valueOf() -
+          dayjs(b.WorkoutDateTime).valueOf()
+      );
+  }, [workouts]);
+
+  const pendingFeedbackKey = useMemo(
+    () =>
+      pendingFeedbackWorkouts
+        .map((workout) => workout.id || workout.WorkoutDateTime)
+        .sort()
+        .join("|"),
+    [pendingFeedbackWorkouts]
+  );
+
   useEffect(() => {
     if (isOpen && !hasBootstrappedRef.current) {
       setMessages([buildInitialMessage(athleteFirstName, workoutSummary)]);
       hasBootstrappedRef.current = true;
     }
   }, [isOpen, athleteFirstName, workoutSummary]);
+
+  useEffect(() => {
+    if (
+      isOpen &&
+      pendingFeedbackWorkouts.length > 0 &&
+      lastPromptKeyRef.current !== pendingFeedbackKey
+    ) {
+      setMessages((prev) => [
+        ...prev,
+        buildFeedbackPromptMessage(athleteFirstName, pendingFeedbackWorkouts),
+      ]);
+      setShowFeedbackPromptActions(true);
+      lastPromptKeyRef.current = pendingFeedbackKey;
+    }
+
+    if (!pendingFeedbackWorkouts.length) {
+      setShowFeedbackPromptActions(false);
+      lastPromptKeyRef.current = "";
+      setFeedbackModalVisible(false);
+      setActiveFeedbackWorkout(null);
+    }
+  }, [
+    isOpen,
+    athleteFirstName,
+    pendingFeedbackWorkouts,
+    pendingFeedbackKey,
+  ]);
 
   useEffect(() => {
     if (listRef.current) {
@@ -178,6 +279,53 @@ const AIAssistant = ({ customer, workouts }) => {
     } finally {
       setIsSending(false);
     }
+  };
+
+  const openFeedbackModalForIndex = (index = 0) => {
+    const target = pendingFeedbackWorkouts[index];
+    if (!target) return;
+    setActiveFeedbackIndex(index);
+    setActiveFeedbackWorkout(target);
+    setFeedbackModalVisible(true);
+  };
+
+  const handleFeedbackPromptResponse = (accept) => {
+    setShowFeedbackPromptActions(false);
+    const userText = accept
+      ? "Yes, I'd like to add workout feedback."
+      : "Not right now.";
+
+    setMessages((prev) => {
+      const next = [...prev, createMessage("user", userText)];
+      const assistantAck = accept
+        ? "Great! Opening the workout feedback form for you."
+        : "No problem — just let me know when you're ready.";
+      return [...next, createMessage("assistant", assistantAck)];
+    });
+
+    if (accept) {
+      openFeedbackModalForIndex(0);
+    }
+  };
+
+  const handleWorkoutModalClose = () => {
+    setFeedbackModalVisible(false);
+    setActiveFeedbackWorkout(null);
+  };
+
+  const handleWorkoutSelectionChange = (index) => {
+    const target = pendingFeedbackWorkouts[index];
+    if (!target) return;
+    setActiveFeedbackIndex(index);
+    setActiveFeedbackWorkout(target);
+  };
+
+  const handleWorkoutManagementSelection = (nextWorkout) => {
+    if (!nextWorkout) {
+      handleWorkoutModalClose();
+      return;
+    }
+    setActiveFeedbackWorkout(nextWorkout);
   };
 
   return (
@@ -293,6 +441,36 @@ const AIAssistant = ({ customer, workouts }) => {
                 }}
               >
                 {errorMessage}
+              </div>
+            )}
+            {showFeedbackPromptActions && pendingFeedbackWorkouts.length > 0 && (
+              <div
+                style={{
+                  marginTop: 8,
+                  background: "#ffffff",
+                  borderRadius: 12,
+                  padding: 12,
+                  boxShadow: "0 8px 16px rgba(15, 23, 42, 0.08)",
+                }}
+              >
+                <div style={{ marginBottom: 8, color: "#0f172a" }}>
+                  Provide feedback now?
+                </div>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <Button
+                    type="primary"
+                    size="small"
+                    onClick={() => handleFeedbackPromptResponse(true)}
+                  >
+                    Yes, let's do it
+                  </Button>
+                  <Button
+                    size="small"
+                    onClick={() => handleFeedbackPromptResponse(false)}
+                  >
+                    Maybe later
+                  </Button>
+                </div>
               </div>
             )}
           </div>
@@ -427,6 +605,42 @@ const AIAssistant = ({ customer, workouts }) => {
           />
         </Tooltip>
       )}
+      <Modal
+        title="Update workout feedback"
+        open={feedbackModalVisible && !!activeFeedbackWorkout}
+        onCancel={handleWorkoutModalClose}
+        footer={null}
+        width={760}
+        destroyOnClose
+      >
+        {pendingFeedbackWorkouts.length > 1 && (
+          <div
+            style={{
+              marginBottom: 12,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 8,
+            }}
+          >
+            {pendingFeedbackWorkouts.map((workout, index) => (
+              <Button
+                key={workout.id || `${workout.WorkoutDateTime}-${index}`}
+                size="small"
+                type={index === activeFeedbackIndex ? "primary" : "default"}
+                onClick={() => handleWorkoutSelectionChange(index)}
+              >
+                {dayjs(workout.WorkoutDateTime).format("ddd D MMM")}
+              </Button>
+            ))}
+          </div>
+        )}
+        {activeFeedbackWorkout && (
+          <WorkoutManagement
+            selectedWorkout={activeFeedbackWorkout}
+            setSelectedWorkout={handleWorkoutManagementSelection}
+          />
+        )}
+      </Modal>
     </div>
   );
 };
@@ -441,6 +655,11 @@ AIAssistant.propTypes = {
       WorkoutDateTime: PropTypes.string,
       WorkoutType: PropTypes.string,
       WorkoutDistance: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      WorkoutAthleteFeedback: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]),
+      WorkoutState: PropTypes.string,
     })
   ),
 };

@@ -72,6 +72,7 @@ const WorkoutManagement = ({ selectedWorkout, setSelectedWorkout }) => {
       WorkoutHydrationLevel: workoutData.workoutHydrationLevel,
       WorkoutCaloriesEatenPerHour:
         workoutData.workoutCaloriesEatenPerHour,
+      WorkoutAthleteFeedback: 1,
     });
 
     if (success) {

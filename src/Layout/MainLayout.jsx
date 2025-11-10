@@ -1,12 +1,13 @@
 import { Auth } from 'aws-amplify';
-import React from 'react';
-import { Layout, Menu, Grid } from 'antd';
+import React, { useMemo } from 'react';
+import { Layout, Menu, Grid, Button } from 'antd';
 import {
   DashboardOutlined,
   UserOutlined,
   ApiOutlined,
   DatabaseOutlined,
   CalendarOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -19,6 +20,7 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
   const location = useLocation();
   const screens = useBreakpoint();
   const isMobile = !screens.md;
+  const mobileNavHeight = 72;
 
   const getSelectedKey = () => {
     if (location.pathname.startsWith('/profile')) return 'profile';
@@ -28,6 +30,27 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
     if (location.pathname.startsWith('/administration')) return 'administration';
     return 'dashboard';
   };
+  const selectedKey = getSelectedKey();
+
+  const handleLogout = async () => {
+    try {
+      await Auth.signOut();
+      window.location.href = '/';
+    } catch (err) {
+      console.error('Error signing out:', err);
+    }
+  };
+
+  const navItems = useMemo(
+    () => [
+      { key: 'dashboard', icon: DashboardOutlined, label: 'Home', path: '/' },
+      { key: 'calendar', icon: CalendarOutlined, label: 'Calendar', path: '/calendar' },
+      { key: 'thirdparty', icon: ApiOutlined, label: 'ThirdParty', path: '/thirdparty' },
+      { key: 'administration', icon: DatabaseOutlined, label: 'Admin', path: '/administration' },
+      { key: 'profile', icon: UserOutlined, label: 'Profile', path: '/profile' },
+    ],
+    []
+  );
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -60,61 +83,35 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
             BestAthlete
           </div>
 
-          <div
-            style={{
-              overflowX: isMobile ? 'auto' : 'unset',
-              overflow: isMobile ? 'auto' : 'unset',
-              whiteSpace: isMobile ? 'nowrap' : 'normal',
-              flex: 1,
-              WebkitOverflowScrolling: isMobile ? 'touch' : 'unset',
-              padding: isMobile ? '4px 0' : '0',
-              backgroundColor: isMobile ? '#fff' : 'transparent',
-            }}
-          >
-            <Menu
-              mode="horizontal"
-              selectedKeys={[getSelectedKey()]}
-              style={{
-                borderBottom: 'none',
-                display: isMobile ? 'inline-flex' : 'flex',
-                minWidth: isMobile ? '600px' : 'unset',
-                width: isMobile ? 'unset' : '100%',
-              }}
-              theme="light"
-            >
-              <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
-                <Link to="/">Dashboard</Link>
-              </Menu.Item>
-
-
-              <Menu.Item key="calendar" icon={<CalendarOutlined />}>
-                <Link to="/calendar">Calendar</Link>
-              </Menu.Item>
-
-              <Menu.Item key="thirdparty" icon={<ApiOutlined />}>
-                <Link to="/thirdparty">ThirdParty</Link>
-              </Menu.Item>
-              
-             <Menu.Item key="administration" icon={<DatabaseOutlined />}>
-                <Link to="/administration">Administration</Link>
-              </Menu.Item>
-
-              <Menu.Item key="profile" icon={<UserOutlined />}>
-                <Link to="/profile">Profile</Link>
-              </Menu.Item>
-
-              <Menu.Item key="logout" onClick={async () => {
-                try {
-                  await Auth.signOut();
-                  window.location.href = '/';
-                } catch (err) {
-                  console.error('Error signing out:', err);
-                }
-              }}>
-                Logout
-              </Menu.Item>
-            </Menu>
-          </div>
+          {!isMobile && (
+            <div style={{ flex: 1 }}>
+              <Menu
+                mode="horizontal"
+                selectedKeys={[selectedKey]}
+                style={{ borderBottom: 'none' }}
+                theme="light"
+              >
+                <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
+                  <Link to="/">Dashboard</Link>
+                </Menu.Item>
+                <Menu.Item key="calendar" icon={<CalendarOutlined />}>
+                  <Link to="/calendar">Calendar</Link>
+                </Menu.Item>
+                <Menu.Item key="thirdparty" icon={<ApiOutlined />}>
+                  <Link to="/thirdparty">ThirdParty</Link>
+                </Menu.Item>
+                <Menu.Item key="administration" icon={<DatabaseOutlined />}>
+                  <Link to="/administration">Administration</Link>
+                </Menu.Item>
+                <Menu.Item key="profile" icon={<UserOutlined />}>
+                  <Link to="/profile">Profile</Link>
+                </Menu.Item>
+                <Menu.Item key="logout" onClick={handleLogout}>
+                  Logout
+                </Menu.Item>
+              </Menu>
+            </div>
+          )}
         </div>
       </Header>
 
@@ -122,6 +119,7 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
         style={{
           margin: '24px 16px',
           padding: 24,
+          paddingBottom: isMobile ? mobileNavHeight + 32 : 24,
           background: '#fff',
           minHeight: 280,
         }}
@@ -130,6 +128,61 @@ const MainLayout = ({ customer, workouts, assistantReady }) => {
       </Content>
       {assistantReady && customer && (
         <AIAssistant customer={customer} workouts={workouts} />
+      )}
+      {isMobile && (
+        <nav
+          style={{
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            background: '#ffffff',
+            borderTop: '1px solid #e5e7eb',
+            display: 'flex',
+            justifyContent: 'space-around',
+            padding: '6px 0',
+            zIndex: 1200,
+          }}
+        >
+          {navItems.map((item) => {
+            const IconComponent = item.icon;
+            const isActive = selectedKey === item.key;
+            const color = isActive ? '#1890ff' : '#6b7280';
+            return (
+              <Link
+                key={item.key}
+                to={item.path}
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textDecoration: 'none',
+                  color,
+                }}
+              >
+                <IconComponent style={{ fontSize: 18, color }} />
+                <div style={{ fontSize: 11, marginTop: 2 }}>{item.label}</div>
+              </Link>
+            );
+          })}
+          <Button
+            type="text"
+            onClick={handleLogout}
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#ef4444',
+            }}
+          >
+            <LogoutOutlined style={{ fontSize: 18, color: '#ef4444' }} />
+            <span style={{ fontSize: 11 }}>Logout</span>
+          </Button>
+        </nav>
       )}
     </Layout>
   );
