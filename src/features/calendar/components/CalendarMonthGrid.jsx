@@ -59,6 +59,10 @@ const DesktopMonthGrid = ({
   const currentWeekStart = today.startOf("week").add(1, "day");
   const startOfMonth = currentWeekStart.subtract(7, "day");
   const disciplines = ["Swim", "Bike", "Run", "Strength"];
+  const emptySummary = {
+    planned: { Swim: 0, Bike: 0, Run: 0, Strength: 0 },
+    completed: { Swim: 0, Bike: 0, Run: 0, Strength: 0 },
+  };
 
   const formatHours = (hours) => {
     if (!Number.isFinite(hours) || hours <= 0) return "0h";
@@ -119,7 +123,9 @@ const DesktopMonthGrid = ({
           const weekDays = Array.from({ length: 7 }, (_, dayOffset) =>
             dayjs(startOfMonth).add(weekIndex * 7 + dayOffset, "day")
           );
-          const summaryData = getWeekSummary(weekDays[0]);
+          const summaryRaw = getWeekSummary(weekDays[0]);
+          const summaryData = summaryRaw || emptySummary;
+          const hasSummaryData = Boolean(summaryRaw);
 
           return (
             <div
@@ -194,55 +200,58 @@ const DesktopMonthGrid = ({
                   boxShadow: "0 10px 18px rgba(15, 23, 42, 0.08)",
                 }}
               >
-                {summaryData ? (
-                  <table
-                    style={{
-                      width: "100%",
-                      borderCollapse: "collapse",
-                      fontSize: 12,
-                      color: "#111827",
-                    }}
-                  >
-                    <thead>
+                <table
+                  style={{
+                    width: "100%",
+                    borderCollapse: "collapse",
+                    fontSize: 12,
+                    color: "#111827",
+                  }}
+                >
+                  <thead>
+                    <tr>
+                      <th style={{ textAlign: "left", paddingBottom: 4 }}></th>
+                      <th style={{ textAlign: "right", paddingBottom: 4 }}>Planned</th>
+                      <th style={{ textAlign: "right", paddingBottom: 4 }}>Completed</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {["Total", ...disciplines].map((discipline) => {
+                      const plannedValue =
+                        discipline === "Total"
+                          ? disciplines.reduce(
+                              (sum, d) => sum + (summaryData.planned[d] || 0),
+                              0
+                            )
+                          : summaryData.planned[discipline] || 0;
+                      const completedValue =
+                        discipline === "Total"
+                          ? disciplines.reduce(
+                              (sum, d) => sum + (summaryData.completed[d] || 0),
+                              0
+                            )
+                          : summaryData.completed[discipline] || 0;
+                      return (
+                        <tr key={`summary-${discipline}`}>
+                          <td style={{ padding: "2px 0" }}>{discipline}</td>
+                          <td style={{ textAlign: "right", padding: "2px 0" }}>
+                            {formatHours(plannedValue)}
+                          </td>
+                          <td style={{ textAlign: "right", padding: "2px 0" }}>
+                            {formatHours(completedValue)}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    {!hasSummaryData && (
                       <tr>
-                        <th style={{ textAlign: "left", paddingBottom: 4 }}></th>
-                        <th style={{ textAlign: "right", paddingBottom: 4 }}>Planned</th>
-                        <th style={{ textAlign: "right", paddingBottom: 4 }}>Completed</th>
+                        <td colSpan={3} style={{ paddingTop: 6, color: "#94a3b8", fontSize: 11 }}>
+                          No workouts logged
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {["Total", ...disciplines].map((discipline) => {
-                        const plannedValue =
-                          discipline === "Total"
-                            ? disciplines.reduce(
-                                (sum, d) => sum + (summaryData.planned[d] || 0),
-                                0
-                              )
-                            : summaryData.planned[discipline] || 0;
-                        const completedValue =
-                          discipline === "Total"
-                            ? disciplines.reduce(
-                                (sum, d) => sum + (summaryData.completed[d] || 0),
-                                0
-                              )
-                            : summaryData.completed[discipline] || 0;
-                        return (
-                          <tr key={`summary-${discipline}`}>
-                            <td style={{ padding: "2px 0" }}>{discipline}</td>
-                            <td style={{ textAlign: "right", padding: "2px 0" }}>
-                              {formatHours(plannedValue)}
-                            </td>
-                            <td style={{ textAlign: "right", padding: "2px 0" }}>
-                              {formatHours(completedValue)}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                ) : (
-                  <div style={{ fontSize: 12, color: "#7c828d" }}>No data</div>
-                )}
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           );

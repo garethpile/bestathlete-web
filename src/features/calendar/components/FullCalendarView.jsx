@@ -76,6 +76,13 @@ const FullCalendarView = ({
     return null;
   }, []);
 
+  const getIsoWeekKey = useCallback((dateValue) => {
+    const value = dayjs(dateValue);
+    const base = value.startOf("week").add(1, "day");
+    const isoAligned = value.day() === 0 ? base.subtract(7, "day") : base;
+    return isoAligned.format("YYYY-MM-DD");
+  }, []);
+
   const workoutMap = useMemo(() => {
     return workouts.reduce((acc, workout) => {
       if (!workout.WorkoutDateTime) return acc;
@@ -97,10 +104,7 @@ const FullCalendarView = ({
       const discipline = getDisciplineFromType(workout.WorkoutType || "");
       if (!discipline) return acc;
 
-      const weekKey = dayjs(workout.WorkoutDateTime)
-        .startOf("week")
-        .add(1, "day")
-        .format("YYYY-MM-DD");
+      const weekKey = getIsoWeekKey(workout.WorkoutDateTime);
 
       const summary = acc[weekKey] || emptyBucket();
       const hours = Math.max(Number(workout.WorkoutMovingTime || 0) / 3600, 0);
@@ -115,7 +119,7 @@ const FullCalendarView = ({
       acc[weekKey] = summary;
       return acc;
     }, {});
-  }, [workouts, getDisciplineFromType]);
+  }, [workouts, getDisciplineFromType, getIsoWeekKey]);
 
   const dateCellRender = useCallback(
     (value) => {
@@ -231,11 +235,8 @@ const FullCalendarView = ({
   const aRace = events.find((e) => e.EventPriority === "A");
 
   const getWeekSummary = useCallback(
-    (weekStart) => {
-      const key = dayjs(weekStart).startOf("week").add(1, "day").format("YYYY-MM-DD");
-      return weekSummaries[key] || null;
-    },
-    [weekSummaries]
+    (weekStart) => weekSummaries[getIsoWeekKey(weekStart)] || null,
+    [weekSummaries, getIsoWeekKey]
   );
 
   return (
