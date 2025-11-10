@@ -49,101 +49,6 @@ export const getCustomer = /* GraphQL */ `
         ApplicationUserOauthTokenExpiryDate
         __typename
       }
-      CustomerTrainingBenchmarks {
-        Last7Days {
-          SwimDuration
-          SwimDistance
-          SwimSessions
-          SwimLongestDistance
-          BikeDuration
-          BikeDistance
-          BikeSessions
-          BikeLongestDistance
-          RunDuration
-          RunDistance
-          RunSessions
-          RunLongestDistance
-          StrengthDuration
-          StrengthSessions
-          TotalTSS
-          __typename
-        }
-        Last30Days {
-          SwimDuration
-          SwimDistance
-          SwimSessions
-          SwimLongestDistance
-          BikeDuration
-          BikeDistance
-          BikeSessions
-          BikeLongestDistance
-          RunDuration
-          RunDistance
-          RunSessions
-          RunLongestDistance
-          StrengthDuration
-          StrengthSessions
-          TotalTSS
-          __typename
-        }
-        Last90Days {
-          SwimDuration
-          SwimDistance
-          SwimSessions
-          SwimLongestDistance
-          BikeDuration
-          BikeDistance
-          BikeSessions
-          BikeLongestDistance
-          RunDuration
-          RunDistance
-          RunSessions
-          RunLongestDistance
-          StrengthDuration
-          StrengthSessions
-          TotalTSS
-          __typename
-        }
-        Last180Days {
-          SwimDuration
-          SwimDistance
-          SwimSessions
-          SwimLongestDistance
-          BikeDuration
-          BikeDistance
-          BikeSessions
-          BikeLongestDistance
-          RunDuration
-          RunDistance
-          RunSessions
-          RunLongestDistance
-          StrengthDuration
-          StrengthSessions
-          TotalTSS
-          __typename
-        }
-        Last365Days {
-          SwimDuration
-          SwimDistance
-          SwimSessions
-          SwimLongestDistance
-          BikeDuration
-          BikeDistance
-          BikeSessions
-          BikeLongestDistance
-          RunDuration
-          RunDistance
-          RunSessions
-          RunLongestDistance
-          StrengthDuration
-          StrengthSessions
-          TotalTSS
-          __typename
-        }
-        LastUpdatedAt
-        LastWorkoutDate
-        __typename
-      }
       createdAt
       updatedAt
       __typename
@@ -161,16 +66,52 @@ export const listCustomers = /* GraphQL */ `
         id
         idCustomer
         LastName
-        FirstName
-        EmailAddress
-        MobileNumber
-        Gender
-        DateOfBirth
-        Country
-        createdAt
-        updatedAt
+      FirstName
+      EmailAddress
+      MobileNumber
+      Gender
+      DateOfBirth
+      Country
+      TrainingDays {
+        MondayTrain
+        MondayTrainHours
+        TuesdayTrain
+        TuesdayTrainHours
+        WednesdayTrain
+        WednesdayTrainHours
+        ThursdayTrain
+        ThursdayTrainHours
+        FridayTrain
+        FridayTrainHours
+        SaturdayTrain
+        SaturdayTrainHours
+        SundayTrain
+        SundayTrainHours
         __typename
       }
+      NonTrainingPeriod {
+        NonTrainingPeriodId
+        StartDate
+        EndDate
+        Valid
+        __typename
+      }
+      ThirdPartyApplications {
+        Application
+        ApplicationSync
+        ApplicationPartyId
+        ApplicationRequestOauthToken
+        ApplicationRequestOauthSecret
+        ApplicationUserOauthToken
+        ApplicationUserOauthSecret
+        ApplicationUserOauthRefreshToken
+        ApplicationUserOauthTokenExpiryDate
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
       nextToken
       __typename
     }
@@ -665,6 +606,42 @@ export const customersByIdCustomer = /* GraphQL */ `
         Gender
         DateOfBirth
         Country
+        TrainingDays {
+          MondayTrain
+          MondayTrainHours
+          TuesdayTrain
+          TuesdayTrainHours
+          WednesdayTrain
+          WednesdayTrainHours
+          ThursdayTrain
+          ThursdayTrainHours
+          FridayTrain
+          FridayTrainHours
+          SaturdayTrain
+          SaturdayTrainHours
+          SundayTrain
+          SundayTrainHours
+          __typename
+        }
+        NonTrainingPeriod {
+          NonTrainingPeriodId
+          StartDate
+          EndDate
+          Valid
+          __typename
+        }
+        ThirdPartyApplications {
+          Application
+          ApplicationSync
+          ApplicationPartyId
+          ApplicationRequestOauthToken
+          ApplicationRequestOauthSecret
+          ApplicationUserOauthToken
+          ApplicationUserOauthSecret
+          ApplicationUserOauthRefreshToken
+          ApplicationUserOauthTokenExpiryDate
+          __typename
+        }
         createdAt
         updatedAt
         __typename
@@ -693,15 +670,51 @@ export const customersByEmailAddress = /* GraphQL */ `
         id
         idCustomer
         LastName
-        FirstName
-        EmailAddress
-        MobileNumber
-        Gender
-        DateOfBirth
-        Country
-        createdAt
-        updatedAt
+      FirstName
+      EmailAddress
+      MobileNumber
+      Gender
+      DateOfBirth
+      Country
+      TrainingDays {
+        MondayTrain
+        MondayTrainHours
+        TuesdayTrain
+        TuesdayTrainHours
+        WednesdayTrain
+        WednesdayTrainHours
+        ThursdayTrain
+        ThursdayTrainHours
+        FridayTrain
+        FridayTrainHours
+        SaturdayTrain
+        SaturdayTrainHours
+        SundayTrain
+        SundayTrainHours
         __typename
+      }
+      NonTrainingPeriod {
+        NonTrainingPeriodId
+        StartDate
+        EndDate
+        Valid
+        __typename
+      }
+      ThirdPartyApplications {
+        Application
+        ApplicationSync
+        ApplicationPartyId
+        ApplicationRequestOauthToken
+        ApplicationRequestOauthSecret
+        ApplicationUserOauthToken
+        ApplicationUserOauthSecret
+        ApplicationUserOauthRefreshToken
+        ApplicationUserOauthTokenExpiryDate
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
       }
       nextToken
       __typename
