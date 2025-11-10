@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import dayjs from "dayjs";
 
 const CalendarMonthGrid = ({
@@ -14,6 +14,7 @@ const CalendarMonthGrid = ({
     <MobileDayDetail
       selectedDate={selectedDate}
       dateCellRender={dateCellRender}
+      onSelectDate={onSelectDate}
     />
   ) : (
     <DesktopMonthGrid
@@ -27,25 +28,63 @@ const CalendarMonthGrid = ({
   );
 };
 
-const MobileDayDetail = ({ selectedDate, dateCellRender }) => (
-  <div className="scrollable-detail">
-    <div
-      key={selectedDate.format("YYYY-MM-DD")}
-      style={{
-        backgroundColor: "#fff9db",
-        border: "1px solid #ccc",
-        borderRadius: "4px",
-        marginBottom: "8px",
-        padding: "8px",
-      }}
-    >
-      <div style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "4px" }}>
-        {selectedDate.format("dddd, MMMM D, YYYY")}
+const SWIPE_THRESHOLD = 40;
+
+const MobileDayDetail = ({ selectedDate, dateCellRender, onSelectDate }) => {
+  const touchRef = useRef({ x: 0, y: 0, active: false });
+
+  const handleTouchStart = (event) => {
+    const touch = event.touches[0];
+    touchRef.current = { x: touch.clientX, y: touch.clientY, active: true };
+  };
+
+  const handleTouchEnd = (event) => {
+    if (!touchRef.current.active || typeof onSelectDate !== "function") {
+      touchRef.current.active = false;
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - touchRef.current.x;
+    const deltaY = touch.clientY - touchRef.current.y;
+    touchRef.current.active = false;
+
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD || Math.abs(deltaX) < Math.abs(deltaY)) {
+      return;
+    }
+
+    const nextDate = deltaX < 0 ? selectedDate.add(1, "day") : selectedDate.subtract(1, "day");
+    onSelectDate(nextDate);
+  };
+
+  return (
+    <div className="scrollable-detail">
+      <div
+        key={selectedDate.format("YYYY-MM-DD")}
+        style={{
+          backgroundColor: "#fff9db",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+          marginBottom: "8px",
+          padding: "8px",
+        }}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={() => {
+          touchRef.current.active = false;
+        }}
+      >
+        <div style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "4px" }}>
+          {selectedDate.format("dddd, MMMM D, YYYY")}
+        </div>
+        {dateCellRender(selectedDate)}
+        <div style={{ fontSize: "11px", textAlign: "center", marginTop: "6px", color: "#666" }}>
+          Swipe to move between days
+        </div>
       </div>
-      {dateCellRender(selectedDate)}
     </div>
-  </div>
-);
+  );
+};
 
 const DesktopMonthGrid = ({
   selectedDate,
