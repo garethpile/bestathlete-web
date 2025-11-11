@@ -29,7 +29,7 @@ const CalendarHeaderControls = ({
       >
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <button
-            onClick={() => onChangeDate(selectedDate.subtract(7, "day"))}
+            onClick={() => onChangeDate(selectedDate.subtract(1, "month"))}
             style={{
               fontSize: "16px",
               padding: "2px 6px",
@@ -38,12 +38,12 @@ const CalendarHeaderControls = ({
               backgroundColor: "#f0f0f0",
               cursor: "pointer",
             }}
-            aria-label="Previous week"
+            aria-label="Previous month"
           >
             ↑
           </button>
           <button
-            onClick={() => onChangeDate(selectedDate.add(7, "day"))}
+            onClick={() => onChangeDate(selectedDate.add(1, "month"))}
             style={{
               fontSize: "16px",
               padding: "2px 6px",
@@ -52,25 +52,12 @@ const CalendarHeaderControls = ({
               backgroundColor: "#f0f0f0",
               cursor: "pointer",
             }}
-            aria-label="Next week"
+            aria-label="Next month"
           >
             ↓
           </button>
+          <span style={{ fontWeight: 600, fontSize: 14 }}>{selectedDate.format("MMMM YYYY")}</span>
         </div>
-        <input
-          type="month"
-          value={selectedDate.format("YYYY-MM")}
-          onChange={(e) => {
-            const newDate = dayjs(e.target.value);
-            onChangeDate(newDate);
-          }}
-          style={{
-            fontSize: "14px",
-            padding: "4px",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-          }}
-        />
       </div>
       {isMobile && (
         <MobileWeekOverview

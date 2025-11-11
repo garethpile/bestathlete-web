@@ -10,6 +10,7 @@ import {
   faGolfBallTee,
 } from "@fortawesome/free-solid-svg-icons";
 import WorkoutNoFeedbackCard from "../../shared/components/WorkoutNoFeedbackCard";
+import TrainToggleModal from "../../shared/components/TrainToggleModal";
 
 const getWorkoutIcon = (type = "") => {
   const lowered = type.toLowerCase();
@@ -39,6 +40,8 @@ const formatMovingTime = (seconds) => {
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 };
 
+const TRAIN_STORAGE_KEY = "trainStates";
+
 const DashboardMiniCalendar = ({
   workouts = [],
   customerAvailabilities = [],
@@ -49,6 +52,17 @@ const DashboardMiniCalendar = ({
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== "undefined" ? window.matchMedia("(max-width: 768px)").matches : false
   );
+  const [trainStates, setTrainStates] = useState(() => {
+    if (typeof window === "undefined") return {};
+    try {
+      const saved = window.localStorage.getItem(TRAIN_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : {};
+    } catch (error) {
+      console.error("Unable to load train states", error);
+      return {};
+    }
+  });
+  const [trainModalInfo, setTrainModalInfo] = useState({ open: false, date: null, key: null });
 
   useEffect(() => {
     const handler = (event) => setIsMobile(event.matches);
@@ -108,6 +122,51 @@ const DashboardMiniCalendar = ({
 
   const handleDragEnd = () => {
     dragState.current.startX = null;
+  };
+
+  const persistTrainStates = (next) => {
+    setTrainStates(next);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(TRAIN_STORAGE_KEY, JSON.stringify(next));
+    }
+  };
+
+  const isTrainOn = (key) => (trainStates[key]?.on ?? trainStates[key] ?? true);
+
+  const openTrainModal = (dateObj, key) => {
+    setTrainModalInfo({ open: true, date: dateObj, key });
+  };
+
+  const handleTrainToggle = (dateObj, checked) => {
+    const key = dateObj.format("YYYY-MM-DD");
+    if (checked) {
+      persistTrainStates({ ...trainStates, [key]: { on: true } });
+      return;
+    }
+    persistTrainStates({ ...trainStates, [key]: { on: false } });
+    openTrainModal(dateObj, key);
+  };
+
+  const closeTrainModal = () => {
+    if (trainModalInfo.key) {
+      persistTrainStates({ ...trainStates, [trainModalInfo.key]: { on: true } });
+    }
+    setTrainModalInfo({ open: false, date: null, key: null });
+  };
+
+  const handleTrainModalConfirm = ({ start, end, reason }) => {
+    const next = { ...trainStates };
+    let cursor = dayjs(start);
+    const last = dayjs(end);
+    while (cursor.isSameOrBefore(last, "day")) {
+      next[cursor.format("YYYY-MM-DD")] = {
+        on: false,
+        reason: reason || "Unavailable",
+      };
+      cursor = cursor.add(1, "day");
+    }
+    persistTrainStates(next);
+    setTrainModalInfo({ open: false, date: null, key: null });
   };
 
   return (
@@ -204,26 +263,40 @@ const DashboardMiniCalendar = ({
                   alignItems: "center",
                 }}
               >
-                <div style={{ fontWeight: 600 }}>{date.format("ddd D MMM")}</div>
                 <div
                   style={{
-                    width: 26,
-                    height: 26,
-                    borderRadius: "999px",
-                    background: phaseColor,
-                    color: "#0f172a",
-                    fontWeight: 700,
-                    fontSize: 12,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    fontWeight: 600,
+                    fontSize: 11,
+                    whiteSpace: "nowrap",
                   }}
                 >
-                  {phaseLetter}
+                  {date.format("ddd D MMM")}
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <Tooltip title={phaseName}>
+                    <div
+                      style={{
+                        width: 14,
+                        height: 14,
+                        borderRadius: "999px",
+                        background: phaseColor,
+                        color: "#0f172a",
+                        fontWeight: 700,
+                        fontSize: 9,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {phaseLetter}
+                    </div>
+                  </Tooltip>
                   <span style={{ fontSize: 11, color: "#94a3b8" }}>Train</span>
-                  <Switch size="small" defaultChecked />
+                  <Switch
+                    size="small"
+                    checked={isTrainOn(key)}
+                    onChange={(checked) => handleTrainToggle(date, checked)}
+                  />
                 </div>
               </div>
 
@@ -244,16 +317,32 @@ const DashboardMiniCalendar = ({
               )}
 
               {workoutsForDay.length === 0 ? (
-                <div
-                  style={{
-                    fontSize: 12,
-                    color: "#9ca3af",
-                    textAlign: "center",
-                    padding: "18px 0",
-                  }}
-                >
-                  No workouts scheduled
-                </div>
+                trainStates[key]?.reason ? (
+                  <div
+                    style={{
+                      fontSize: 12,
+                      color: "#fff",
+                      textAlign: "center",
+                      padding: "10px 8px",
+                      borderRadius: 12,
+                      background: "linear-gradient(135deg,#fee2e2 0%,#f87171 100%)",
+                      border: "1px solid rgba(248,113,113,0.45)",
+                    }}
+                  >
+                    {trainStates[key].reason}
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      fontSize: 12,
+                      color: "#9ca3af",
+                      textAlign: "center",
+                      padding: "18px 0",
+                    }}
+                  >
+                    No workouts scheduled
+                  </div>
+                )
               ) : (
                 workoutsForDay.map((workout, index) => {
                   const icon = getWorkoutIcon(workout?.WorkoutType);
@@ -349,6 +438,12 @@ const DashboardMiniCalendar = ({
       >
         {selectedWorkout && <WorkoutNoFeedbackCard workout={selectedWorkout} />}
       </Modal>
+      <TrainToggleModal
+        open={trainModalInfo.open}
+        initialDate={trainModalInfo.date}
+        onCancel={closeTrainModal}
+        onConfirm={handleTrainModalConfirm}
+      />
     </div>
   );
 };

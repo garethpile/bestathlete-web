@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import dayjs from "dayjs";
-import { Switch } from "antd";
+import { Switch, Tooltip } from "antd";
 
 const CalendarMonthGrid = ({
   isMobile,
@@ -10,12 +10,18 @@ const CalendarMonthGrid = ({
   activeRace,
   getPhaseForDate,
   getWeekSummary,
+  getTrainState,
+  onTrainToggle,
 }) => {
   return isMobile ? (
     <MobileDayDetail
       selectedDate={selectedDate}
       dateCellRender={dateCellRender}
       onSelectDate={onSelectDate}
+      getTrainState={getTrainState}
+      onTrainToggle={onTrainToggle}
+      activeRace={activeRace}
+      getPhaseForDate={getPhaseForDate}
     />
   ) : (
     <DesktopMonthGrid
@@ -25,13 +31,15 @@ const CalendarMonthGrid = ({
       activeRace={activeRace}
       getPhaseForDate={getPhaseForDate}
       getWeekSummary={getWeekSummary}
+      getTrainState={getTrainState}
+      onTrainToggle={onTrainToggle}
     />
   );
 };
 
 const SWIPE_THRESHOLD = 40;
 
-const MobileDayDetail = ({ selectedDate, dateCellRender, onSelectDate }) => {
+const MobileDayDetail = ({ selectedDate, dateCellRender, onSelectDate, getTrainState, onTrainToggle, activeRace, getPhaseForDate }) => {
   const touchRef = useRef({ x: 0, y: 0, active: false });
 
   const handleTouchStart = (event) => {
@@ -58,6 +66,9 @@ const MobileDayDetail = ({ selectedDate, dateCellRender, onSelectDate }) => {
     onSelectDate(nextDate);
   };
 
+  const phase = activeRace ? getPhaseForDate(selectedDate, activeRace) : null;
+  const phaseLetter = phase?.name?.[0]?.toUpperCase() || "•";
+
   return (
     <div className="scrollable-detail">
       <div
@@ -81,12 +92,35 @@ const MobileDayDetail = ({ selectedDate, dateCellRender, onSelectDate }) => {
             justifyContent: "space-between",
             alignItems: "center",
             marginBottom: 6,
+            gap: 6,
           }}
         >
-          <span style={{ fontWeight: 600 }}>{selectedDate.format("ddd D MMM")}</span>
+          <span style={{ fontWeight: 600, fontSize: 13 }}>{selectedDate.format("ddd D MMM")}</span>
+          <Tooltip title={phase?.name || "Training phase"}>
+            <div
+              style={{
+                width: 14,
+                height: 14,
+                borderRadius: "999px",
+                background: phase?.color || "#c7d2fe",
+                color: "#0f172a",
+                fontWeight: 700,
+                fontSize: 9,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {phaseLetter}
+            </div>
+          </Tooltip>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <span style={{ fontSize: 11, color: "#94a3b8" }}>Train</span>
-            <Switch size="small" defaultChecked />
+            <Switch
+              size="small"
+              checked={getTrainState(selectedDate)}
+              onChange={(checked) => onTrainToggle(selectedDate, checked)}
+            />
           </div>
         </div>
         {dateCellRender(selectedDate)}
@@ -105,10 +139,13 @@ const DesktopMonthGrid = ({
   activeRace,
   getPhaseForDate,
   getWeekSummary,
+  getTrainState,
+  onTrainToggle,
 }) => {
   const today = dayjs();
-  const currentWeekStart = today.startOf("week").add(1, "day");
-  const startOfMonth = currentWeekStart.subtract(7, "day");
+  const baseDate = dayjs(selectedDate);
+  const monthStart = baseDate.startOf("month");
+  const startOfGrid = monthStart.startOf("week").add(1, "day");
   const disciplines = ["Swim", "Bike", "Run", "Strength"];
   const emptySummary = {
     planned: { Swim: 0, Bike: 0, Run: 0, Strength: 0 },
@@ -172,7 +209,7 @@ const DesktopMonthGrid = ({
         </div>
         {Array.from({ length: 4 }, (_, weekIndex) => {
           const weekDays = Array.from({ length: 7 }, (_, dayOffset) =>
-            dayjs(startOfMonth).add(weekIndex * 7 + dayOffset, "day")
+            dayjs(startOfGrid).add(weekIndex * 7 + dayOffset, "day")
           );
           const summaryRaw = getWeekSummary(weekDays[0]);
           const summaryData = summaryRaw || emptySummary;
@@ -219,26 +256,40 @@ const DesktopMonthGrid = ({
                         marginBottom: 6,
                       }}
                     >
-                      <div style={{ fontWeight: 600 }}>{date.format("ddd D MMM")}</div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <span style={{ fontSize: 11, color: "#94a3b8" }}>Train</span>
-                        <Switch size="small" defaultChecked />
-                      </div>
                       <div
                         style={{
-                          width: 26,
-                          height: 26,
-                          borderRadius: "999px",
-                          background: phase?.color || "#c7d2fe",
-                          color: "#0f172a",
-                          fontWeight: 700,
-                          fontSize: 12,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
+                          fontWeight: 600,
+                          fontSize: 11,
+                          whiteSpace: "nowrap",
                         }}
                       >
-                        {phaseLetter}
+                        {date.format("ddd D MMM")}
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <Tooltip title={phase?.name || "Training phase"}>
+                          <div
+                            style={{
+                              width: 14,
+                              height: 14,
+                              borderRadius: "999px",
+                              background: phase?.color || "#c7d2fe",
+                              color: "#0f172a",
+                              fontWeight: 700,
+                              fontSize: 9,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            {phaseLetter}
+                          </div>
+                        </Tooltip>
+                        <span style={{ fontSize: 11, color: "#94a3b8" }}>Train</span>
+                        <Switch
+                          size="small"
+                          checked={getTrainState(date)}
+                          onChange={(checked) => onTrainToggle(date, checked)}
+                        />
                       </div>
                     </div>
                     <div style={{ width: "100%" }}>{dateCellRender(date)}</div>

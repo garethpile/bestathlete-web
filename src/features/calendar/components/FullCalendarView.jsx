@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Card, Tooltip, Modal } from "antd";
+import { Card, Tooltip, Modal, Switch } from "antd";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
@@ -13,7 +13,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import WorkoutNoFeedbackCard from "../../shared/components/WorkoutNoFeedbackCard";
 import UnavailabilityModal from "../../shared/components/UnavailabilityModal";
-import { customerAvailabilityDelete } from "../../../services/customerAvailabilityServices";
+import TrainToggleModal from "../../shared/components/TrainToggleModal";
+import {
+  customerAvailabilityDelete,
+  customerAvailabilitiesGetByIdCustomer,
+} from "../../../services/customerAvailabilityServices";
+import { workoutsGetIDDateTime } from "../../../services/workoutServices";
+import { Spin } from "antd";
 import CalendarHeaderControls from "./CalendarHeaderControls";
 import CalendarMonthGrid from "./CalendarMonthGrid";
 
@@ -36,7 +42,27 @@ const getPhaseForDate = (date, aRace) => {
   );
 };
 
+const TRAIN_STORAGE_KEY = "trainStates";
+
+const parseApiArray = (response) => {
+  if (!response) return [];
+  if (Array.isArray(response)) return response;
+  const body = response.body;
+  if (Array.isArray(body)) return body;
+  if (typeof body === "string") {
+    try {
+      const parsed = JSON.parse(body);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  if (body && typeof body === "object") return body;
+  return [];
+};
+
 const FullCalendarView = ({
+  customer,
   workouts = [],
   events = [],
   customerAvailabilities,
@@ -45,10 +71,23 @@ const FullCalendarView = ({
   const [availabilities, setAvailabilities] = useState(
     Array.isArray(customerAvailabilities) ? customerAvailabilities : []
   );
+  const [workoutEntries, setWorkoutEntries] = useState(workouts);
   const [selectedAvailability, setSelectedAvailability] = useState(null);
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [isMobile, setIsMobile] = useState(typeof window !== "undefined" ? window.innerWidth <= 600 : false);
+  const [trainStates, setTrainStates] = useState(() => {
+    if (typeof window === "undefined") return {};
+    try {
+      const saved = window.localStorage.getItem(TRAIN_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : {};
+    } catch (error) {
+      console.error("Unable to load train states", error);
+      return {};
+    }
+  });
+  const [trainModalInfo, setTrainModalInfo] = useState({ open: false, date: null, key: null });
+  const [isMonthLoading, setIsMonthLoading] = useState(false);
 
   useEffect(() => {
     setAvailabilities(
@@ -57,10 +96,94 @@ const FullCalendarView = ({
   }, [customerAvailabilities]);
 
   useEffect(() => {
+    setWorkoutEntries(workouts);
+  }, [workouts]);
+
+  useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 600);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const persistTrainStates = useCallback((next) => {
+    setTrainStates(next);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(TRAIN_STORAGE_KEY, JSON.stringify(next));
+    }
+  }, []);
+
+  const isTrainOn = useCallback(
+    (key) => trainStates[key]?.on ?? trainStates[key] ?? true,
+    [trainStates]
+  );
+
+  const openTrainModal = useCallback((dateObj, key) => {
+    setTrainModalInfo({ open: true, date: dayjs(dateObj), key });
+  }, []);
+
+  const closeTrainModal = useCallback(() => {
+    if (trainModalInfo.key) {
+      persistTrainStates({ ...trainStates, [trainModalInfo.key]: { on: true } });
+    }
+    setTrainModalInfo({ open: false, date: null, key: null });
+  }, [persistTrainStates, trainModalInfo.key, trainStates]);
+
+  const handleTrainModalConfirm = useCallback(
+    ({ start, end, reason }) => {
+      const next = { ...trainStates };
+      let cursor = dayjs(start);
+      const last = dayjs(end);
+      while (cursor.isSameOrBefore(last, "day")) {
+        next[cursor.format("YYYY-MM-DD")] = {
+          on: false,
+          reason: reason || "Unavailable",
+        };
+        cursor = cursor.add(1, "day");
+      }
+      persistTrainStates(next);
+      setTrainModalInfo({ open: false, date: null, key: null });
+    },
+    [persistTrainStates, trainStates]
+  );
+
+  const handleTrainToggle = useCallback(
+    (dateObj, checked) => {
+      const key = dayjs(dateObj).format("YYYY-MM-DD");
+      if (checked) {
+        persistTrainStates({ ...trainStates, [key]: { on: true } });
+        return;
+      }
+      persistTrainStates({ ...trainStates, [key]: { on: false } });
+      openTrainModal(dateObj, key);
+    },
+    [openTrainModal, persistTrainStates, trainStates]
+  );
+
+  const fetchMonthData = useCallback(
+    async (targetDate) => {
+      if (!customer?.idCustomer) return;
+      setIsMonthLoading(true);
+      try {
+        const start = targetDate.startOf("month").format("YYYY-MM-DD");
+        const end = targetDate.endOf("month").format("YYYY-MM-DD");
+        const workoutsResp = await workoutsGetIDDateTime(customer.idCustomer, start, end);
+        setWorkoutEntries(parseApiArray(workoutsResp));
+        const availabilityResp = await customerAvailabilitiesGetByIdCustomer(customer.idCustomer);
+        setAvailabilities(parseApiArray(availabilityResp));
+      } catch (error) {
+        console.error("Failed to load calendar month data", error);
+      } finally {
+        setIsMonthLoading(false);
+      }
+    },
+    [customer?.idCustomer]
+  );
+
+  const monthKey = selectedDate.format("YYYY-MM");
+
+  useEffect(() => {
+    fetchMonthData(selectedDate);
+  }, [fetchMonthData, monthKey]);
 
   const getDisciplineFromType = useCallback((type = "") => {
     const lowered = type.toLowerCase();
@@ -84,14 +207,14 @@ const FullCalendarView = ({
   }, []);
 
   const workoutMap = useMemo(() => {
-    return workouts.reduce((acc, workout) => {
+    return workoutEntries.reduce((acc, workout) => {
       if (!workout.WorkoutDateTime) return acc;
       const date = dayjs(workout.WorkoutDateTime).startOf("day").format("YYYY-MM-DD");
       acc[date] = acc[date] || [];
       acc[date].push(workout);
       return acc;
     }, {});
-  }, [workouts]);
+  }, [workoutEntries]);
 
   const weekSummaries = useMemo(() => {
     const emptyBucket = () => ({
@@ -99,7 +222,7 @@ const FullCalendarView = ({
       completed: { Swim: 0, Bike: 0, Run: 0, Strength: 0 },
     });
 
-    return workouts.reduce((acc, workout) => {
+    return workoutEntries.reduce((acc, workout) => {
       if (!workout.WorkoutDateTime) return acc;
       const discipline = getDisciplineFromType(workout.WorkoutType || "");
       if (!discipline) return acc;
@@ -119,7 +242,9 @@ const FullCalendarView = ({
       acc[weekKey] = summary;
       return acc;
     }, {});
-  }, [workouts, getDisciplineFromType, getIsoWeekKey]);
+  }, [workoutEntries, getDisciplineFromType, getIsoWeekKey]);
+
+  const aRace = events.find((e) => e.EventPriority === "A");
 
   const dateCellRender = useCallback(
     (value) => {
@@ -130,6 +255,7 @@ const FullCalendarView = ({
           dayjs(value).isSameOrAfter(dayjs(entry.UnavailableStartDate), "day") &&
           dayjs(value).isSameOrBefore(dayjs(entry.UnavailableEndDate), "day")
       );
+      const train = trainStates[dateKey];
       return (
         <div>
           {availability && (
@@ -153,7 +279,23 @@ const FullCalendarView = ({
             </div>
           )}
           {listData.length === 0 ? (
-            <div style={{ fontSize: 12, color: "#999" }}>No Workouts</div>
+            train?.reason ? (
+              <div
+                style={{
+                  fontSize: 12,
+                  color: "#fff",
+                  textAlign: "center",
+                  padding: "8px 6px",
+                  borderRadius: 10,
+                  background: "linear-gradient(135deg,#fee2e2 0%,#f87171 100%)",
+                  border: "1px solid rgba(248,113,113,0.45)",
+                }}
+              >
+                {train.reason}
+              </div>
+            ) : (
+              <div style={{ fontSize: 12, color: "#999" }}>No Workouts</div>
+            )
           ) : (
             listData.map((item, index) => {
               const timeStr = item.WorkoutMovingTime
@@ -221,10 +363,8 @@ const FullCalendarView = ({
         </div>
       );
     },
-    [availabilities, workoutMap]
+    [availabilities, workoutMap, trainStates]
   );
-
-  const aRace = events.find((e) => e.EventPriority === "A");
 
   const getWeekSummary = useCallback(
     (weekStart) => weekSummaries[getIsoWeekKey(weekStart)] || null,
@@ -233,13 +373,14 @@ const FullCalendarView = ({
 
   return (
     <Card className="maincardDiv">
-      <CalendarHeaderControls
-        selectedDate={selectedDate}
-        onChangeDate={setSelectedDate}
-        isMobile={isMobile}
-        activeRace={aRace}
-        getPhaseForDate={getPhaseForDate}
-      />
+      <Spin spinning={isMonthLoading}>
+        <CalendarHeaderControls
+          selectedDate={selectedDate}
+          onChangeDate={setSelectedDate}
+          isMobile={isMobile}
+          activeRace={aRace}
+          getPhaseForDate={getPhaseForDate}
+        />
       <style>{`
         .scrollable-detail {
           height: 60vh;
@@ -257,15 +398,18 @@ const FullCalendarView = ({
           padding: 8px;
         }
       `}</style>
-      <CalendarMonthGrid
-        isMobile={isMobile}
-        selectedDate={selectedDate}
-        onSelectDate={setSelectedDate}
-        dateCellRender={dateCellRender}
-        activeRace={aRace}
-        getPhaseForDate={getPhaseForDate}
-        getWeekSummary={getWeekSummary}
-      />
+        <CalendarMonthGrid
+          isMobile={isMobile}
+          selectedDate={selectedDate}
+          onSelectDate={setSelectedDate}
+          dateCellRender={dateCellRender}
+          activeRace={aRace}
+          getPhaseForDate={getPhaseForDate}
+          getWeekSummary={getWeekSummary}
+          getTrainState={(date) => isTrainOn(dayjs(date).format("YYYY-MM-DD"))}
+          onTrainToggle={(dateObj, checked) => handleTrainToggle(dateObj, checked)}
+        />
+      </Spin>
       <Modal
         title={
           selectedWorkout ? (
@@ -318,6 +462,12 @@ const FullCalendarView = ({
           setIsAvailabilityModalOpen(false);
           setSelectedAvailability(null);
         }}
+      />
+      <TrainToggleModal
+        open={trainModalInfo.open}
+        initialDate={trainModalInfo.date}
+        onCancel={closeTrainModal}
+        onConfirm={handleTrainModalConfirm}
       />
     </Card>
   );
