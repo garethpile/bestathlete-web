@@ -110,6 +110,7 @@ const AthleteCard = ({
   workouts = [],
   customerAvailabilities = [],
   events = [],
+  rollingAverages = null,
 }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -125,12 +126,12 @@ const AthleteCard = ({
       >
         <div
           style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 16,
-          }}
-        >
-          <FitnessCard />
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 16,
+        }}
+      >
+          <FitnessCard rollingAverages={rollingAverages} />
           <EventPreview events={events} />
         </div>
       </Card>

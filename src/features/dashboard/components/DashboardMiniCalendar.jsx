@@ -205,7 +205,7 @@ const DashboardMiniCalendar = ({
         )}
         <div
           style={{
-            flex: 1,
+            flex: isMobile ? 1 : "0 0 auto",
             display: "flex",
             gap: 14,
             overflowX: "auto",

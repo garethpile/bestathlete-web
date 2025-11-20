@@ -17,6 +17,7 @@ import {
   metricsGet3DaysSleep,
   metricsGet3DaysWeight,
 } from "../../services/metricServices";
+import { rollingAveragesGetByCustomer } from "../../services/rollingAverageServices";
 
 const AppDataContext = createContext(null);
 
@@ -27,6 +28,7 @@ const initialData = {
   customerAvailabilities: [],
   metrics3DaysWeight: [],
   metrics3DaysSleep: [],
+  rollingAverages: null,
 };
 
 const initialStatus = {
@@ -36,10 +38,13 @@ const initialStatus = {
   customerAvailabilities: "idle",
   metrics3DaysWeight: "idle",
   metrics3DaysSleep: "idle",
+  rollingAverages: "idle",
 };
 
 const parseBody = (response) =>
   Array.isArray(response?.body) ? response.body : [];
+
+const parseBodyObject = (response) => response?.body ?? null;
 
 const TRAINING_DAY_TEMPLATE = {
   MondayTrain: false,
@@ -203,6 +208,11 @@ export const AppDataProvider = ({ children }) => {
               customerData.idCustomer || username
             ),
           parseBody
+        ),
+        updateSegment(
+          "rollingAverages",
+          () => rollingAveragesGetByCustomer(customerData.idCustomer || username),
+          parseBodyObject
         ),
       ]);
     } catch (loadError) {

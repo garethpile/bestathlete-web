@@ -1055,3 +1055,68 @@ export const customerAvailabilitiesByIdCustomer = /* GraphQL */ `
     }
   }
 `;
+export const rollingAveragesByIdCustomer = /* GraphQL */ `
+  query RollingAveragesByIdCustomer(
+    $idCustomer: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelRollingAverageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    rollingAveragesByIdCustomer(
+      idCustomer: $idCustomer
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        idCustomer
+        Window30Days {
+          Sessions
+          TotalDistance
+          TotalMovingTime
+          AvgDistance
+          AvgMovingTime
+          AvgHeartRate
+          AvgStressScore
+          AvgCalories
+          AvgRPE
+          __typename
+        }
+        Window60Days {
+          Sessions
+          TotalDistance
+          TotalMovingTime
+          AvgDistance
+          AvgMovingTime
+          AvgHeartRate
+          AvgStressScore
+          AvgCalories
+          AvgRPE
+          __typename
+        }
+        Window90Days {
+          Sessions
+          TotalDistance
+          TotalMovingTime
+          AvgDistance
+          AvgMovingTime
+          AvgHeartRate
+          AvgStressScore
+          AvgCalories
+          AvgRPE
+          __typename
+        }
+        LastUpdatedAt
+        LastWorkoutDate
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;

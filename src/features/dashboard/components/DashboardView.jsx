@@ -7,6 +7,7 @@ const Dashboard = ({
   customerAvailabilities = [],
   events = [],
   workouts,
+  rollingAverages,
 }) => {
   return (
     <div className="bodyDiv" style={{ padding: "16px" }}>
@@ -17,6 +18,7 @@ const Dashboard = ({
             workouts={workouts}
             customerAvailabilities={customerAvailabilities}
             events={events}
+            rollingAverages={rollingAverages}
           />
         </Col>
 

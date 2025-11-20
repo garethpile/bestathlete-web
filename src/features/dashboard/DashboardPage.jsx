@@ -8,6 +8,7 @@ const REQUIRED_KEYS = [
   "workouts",
   "events",
   "customerAvailabilities",
+  "rollingAverages",
 ];
 
 const DashboardPage = () => {
@@ -16,6 +17,7 @@ const DashboardPage = () => {
     workouts,
     events,
     customerAvailabilities,
+    rollingAverages,
     status,
     error,
   } = useAppData();
@@ -30,12 +32,13 @@ const DashboardPage = () => {
   }
 
   return (
-    <DashboardView
-      customer={customer}
-      workouts={workouts}
-      events={events}
-      customerAvailabilities={customerAvailabilities}
-    />
+      <DashboardView
+        customer={customer}
+        workouts={workouts}
+        events={events}
+        customerAvailabilities={customerAvailabilities}
+        rollingAverages={rollingAverages}
+      />
   );
 };
 
