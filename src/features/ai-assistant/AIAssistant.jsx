@@ -123,6 +123,9 @@ const AIAssistant = ({ customer, workouts }) => {
   const quickCheckComplete = QUICK_RESPONSE_GROUPS.every(
     (group) => quickSelections[group.label]
   );
+  const missingQuickCheckLabels = QUICK_RESPONSE_GROUPS.filter(
+    (group) => !quickSelections[group.label]
+  ).map((group) => group.label);
 
   const pendingFeedbackWorkouts = useMemo(() => {
     const today = dayjs().startOf("day");
@@ -493,7 +496,8 @@ const AIAssistant = ({ customer, workouts }) => {
                     fontWeight: 500,
                   }}
                 >
-                  Quick status check
+                  Quick status check ({QUICK_RESPONSE_GROUPS.length - missingQuickCheckLabels.length}/
+                  {QUICK_RESPONSE_GROUPS.length})
                 </div>
                 {QUICK_RESPONSE_GROUPS.map((group, index) => (
                   <div
@@ -554,15 +558,31 @@ const AIAssistant = ({ customer, workouts }) => {
                   </div>
                 ))}
                 {!quickCheckComplete && (
-                  <div style={{ fontSize: 11, color: "#6b7280" }}>
-                    Select one option per row to start chatting.
+                  <div
+                    style={{
+                      position: "sticky",
+                      bottom: 0,
+                      padding: "6px 8px",
+                      borderRadius: 6,
+                      background: "#fff7ed",
+                      border: "1px solid #fed7aa",
+                      fontSize: 11,
+                      color: "#9a3412",
+                    }}
+                  >
+                    Still required: {missingQuickCheckLabels.join(", ")}. Scroll up
+                    in this panel to complete them.
                   </div>
                 )}
               </div>
             )}
             <TextArea
               rows={2}
-              placeholder="Tell me how you're feeling today..."
+              placeholder={
+                showQuickCheck && !quickCheckComplete
+                  ? `Complete ${missingQuickCheckLabels.join(", ")} above to unlock Send. You can type here meanwhile.`
+                  : "Tell me how you're feeling today..."
+              }
               value={inputValue}
               onChange={(event) => setInputValue(event.target.value)}
               onPressEnter={(event) => {
@@ -571,7 +591,7 @@ const AIAssistant = ({ customer, workouts }) => {
                   handleSend();
                 }
               }}
-              disabled={isSending || (showQuickCheck && !quickCheckComplete)}
+              disabled={isSending}
             />
             <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}>
               <Button
